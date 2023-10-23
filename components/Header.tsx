@@ -12,17 +12,17 @@ function Header() {
         >
           Accountant
         </Link>
-        <Link
-          href={"https://github.com/Gai-H/accountant"}
-          target={"_blank"}
+        <Button
+          variant={"outline"}
+          size={"icon"}
         >
-          <Button
-            variant={"outline"}
-            size={"icon"}
+          <Link
+            href={"https://github.com/Gai-H/accountant"}
+            target={"_blank"}
           >
             <Github className={"h-4 w-4"} />
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     </header>
   )

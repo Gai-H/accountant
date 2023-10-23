@@ -4,7 +4,7 @@ import { Github, Plus } from "lucide-react"
 
 function Header() {
   return (
-    <header className={"sticky top-0 w-full border-b"}>
+    <header className={"sticky top-0 w-full border-b px-6"}>
       <div className={"flex h-14 items-center lg:mx-auto lg:w-3/5"}>
         <Link
           href={"/"}

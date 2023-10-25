@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Plus } from "lucide-react"
 import { currencies } from "@/lib/currency"
 import { users } from "@/lib/users"
+import PageTitle from "@/components/page-title"
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "必須項目です" }).max(100, { message: "最大100文字です" }),
@@ -46,7 +47,7 @@ function Form() {
         autoComplete="off"
       >
         <div className="flex justify-between">
-          <h1 className="text-2xl font-bold">記録を追加する</h1>
+          <PageTitle>記録を追加する</PageTitle>
           <Button
             type="submit"
             className="md:hidden md:w-32"

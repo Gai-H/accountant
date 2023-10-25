@@ -1,10 +1,10 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Github, Plus } from "lucide-react"
+import { Github } from "lucide-react"
 
 function Header() {
   return (
-    <header className={"sticky top-0 w-full border-b px-6"}>
+    <header className={"sticky top-0 w-full border-b bg-inherit px-6"}>
       <div className={"flex h-14 items-center lg:mx-auto lg:w-3/5"}>
         <Link
           href={"/"}

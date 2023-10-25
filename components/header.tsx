@@ -8,28 +8,40 @@ function Header() {
       <div className={"flex h-14 items-center lg:mx-auto lg:w-3/5"}>
         <Link
           href={"/"}
-          className={"mr-4 text-lg font-semibold"}
+          className={"mr-4 text-xl font-semibold"}
         >
           Accountant
         </Link>
+        <span className="hidden md:inline">
+          <Button
+            variant={"outline"}
+            size={"icon"}
+          >
+            <Link
+              href={"https://github.com/Gai-H/accountant"}
+              target={"_blank"}
+            >
+              <Github className={"h-4 w-4"} />
+            </Link>
+          </Button>
+        </span>
         <Button
-          className="ml-auto mr-4"
-          asChild
-        >
-          <Link href="/create">
-            <Plus className="mr-2 h-4 w-4" />
-            記録を追加
-          </Link>
-        </Button>
-        <Button
-          variant={"outline"}
-          size={"icon"}
+          variant={"link"}
+          className="ml-auto mr-1"
         >
           <Link
-            href={"https://github.com/Gai-H/accountant"}
-            target={"_blank"}
+            href={"/"}
+            className="text-md border-b"
           >
-            <Github className={"h-4 w-4"} />
+            全員の記録
+          </Link>
+        </Button>
+        <Button variant={"link"}>
+          <Link
+            href={"/user"}
+            className="text-md border-b"
+          >
+            個人の記録
           </Link>
         </Button>
       </div>

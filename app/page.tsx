@@ -8,7 +8,7 @@ export default async function Home() {
   return (
     <>
       <div className="mb-2 flex justify-between">
-        <PageTitle>記録一覧</PageTitle>
+        <PageTitle>全員の記録</PageTitle>
         <Button
           className="ml-auto"
           asChild

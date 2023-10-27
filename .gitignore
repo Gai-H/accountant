@@ -36,3 +36,5 @@ next-env.d.ts
 
 # node (asdf)
 .tool-versions
+
+.env

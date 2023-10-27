@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import Header from "@/components/header"
 
 const fontSans = FontSans({
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",

@@ -15,8 +15,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import PageTitle from "@/components/page-title"
 import { currencies } from "@/lib/currency"
-import { users } from "@/lib/users"
 import schema from "./schema"
+import useSWR from "swr"
+import { Response } from "@/types/api"
+import { User } from "@/types/firebase"
 
 function Form() {
   const [sending, setSending] = useState<boolean>(false)
@@ -160,6 +162,8 @@ function CurrencyFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
 }
 
 function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
+  const { data, error, isLoading } = useSWR<Response<User[]>, any, string>("/api/users/all", (url) => fetch(url).then((res) => res.json()))
+
   return (
     <FormField
       control={control}
@@ -189,15 +193,35 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
                   <SelectValue placeholder="人" />
                 </SelectTrigger>
                 <SelectContent>
-                  {users.map((user) => (
+                  {(error || (data && data.message === "error")) && (
                     <SelectItem
-                      value={user}
-                      key={`from-selectitem-${user}`}
-                      disabled={field.value.some((item) => item.id === user)}
+                      value="error"
+                      disabled
+                      key="from-selectitem-error"
                     >
-                      {user}
+                      Error
                     </SelectItem>
-                  ))}
+                  )}
+                  {isLoading && (
+                    <SelectItem
+                      value="loading"
+                      disabled
+                      key="from-selectitem-loading"
+                    >
+                      Loading...
+                    </SelectItem>
+                  )}
+                  {data &&
+                    data.message === "ok" &&
+                    data.data.map((user) => (
+                      <SelectItem
+                        value={user.id}
+                        key={`from-selectitem-${user.id}`}
+                        disabled={field.value.some((item) => item.id === user.id)}
+                      >
+                        {user.displayName}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <Input
@@ -224,7 +248,7 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
           <Button
             variant="secondary"
             type="button"
-            disabled={field.value?.length === users.length}
+            disabled={error || isLoading || (data && data.message === "error") ? field.value?.length === 1 : field.value?.length === data?.data.length}
             onClick={() => field.onChange([...field.value, { discordId: "", amount: Number.MIN_SAFE_INTEGER }])}
             className="block w-32"
           >
@@ -239,6 +263,7 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
 function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   const { field: fromField } = useController({ name: "from" })
   const [split, setSplit] = useState<boolean>(true)
+  const { data, error, isLoading } = useSWR<Response<User[]>, any, string>("/api/users/all", (url) => fetch(url).then((res) => res.json()))
 
   const getSplitAmount = (numberOfToPeople: number) => {
     const fromValues: z.infer<typeof schema>["from"] = fromField.value
@@ -300,15 +325,35 @@ function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
                   <SelectValue placeholder="人" />
                 </SelectTrigger>
                 <SelectContent>
-                  {users.map((user) => (
+                  {(error || (data && data.message === "error")) && (
                     <SelectItem
-                      value={user}
-                      key={`from-selectitem-${user}`}
-                      disabled={field.value.some((item) => item.id === user)}
+                      value="error"
+                      disabled
+                      key="from-selectitem-error"
                     >
-                      {user}
+                      Error
                     </SelectItem>
-                  ))}
+                  )}
+                  {isLoading && (
+                    <SelectItem
+                      value="loading"
+                      disabled
+                      key="from-selectitem-loading"
+                    >
+                      Loading...
+                    </SelectItem>
+                  )}
+                  {data &&
+                    data.message === "ok" &&
+                    data.data.map((user) => (
+                      <SelectItem
+                        value={user.id}
+                        key={`from-selectitem-${user.id}`}
+                        disabled={field.value.some((item) => item.id === user.id)}
+                      >
+                        {user.displayName}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               <Input
@@ -345,7 +390,7 @@ function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
           <Button
             variant="secondary"
             type="button"
-            disabled={field.value?.length === users.length}
+            disabled={error || isLoading || (data && data.message === "error") ? field.value?.length === 1 : field.value?.length === data?.data.length}
             onClick={() => {
               const updated = [...field.value, { discordId: "", amount: Number.MIN_SAFE_INTEGER }]
               if (split) {

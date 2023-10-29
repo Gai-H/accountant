@@ -1,12 +1,24 @@
 import { getUsers } from "@/lib/firebase/username"
 import { NextResponse } from "next/server"
+import { User } from "@/types/firebase"
+import { Response } from "@/types/api"
 
 const dynamic = "force-dynamic"
 
-async function GET() {
+async function GET(): Promise<NextResponse<Response<User[]>>> {
   const users = await getUsers()
 
-  return NextResponse.json(users)
+  const res: Response<User[]> =
+    users == null
+      ? {
+          message: "error",
+        }
+      : {
+          message: "ok",
+          data: users,
+        }
+
+  return NextResponse.json(res)
 }
 
 export { GET, dynamic }

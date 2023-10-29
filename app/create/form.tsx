@@ -48,10 +48,12 @@ function Form() {
     <ShadcnForm {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-3"
         autoComplete="off"
       >
-        <fieldset disabled={sending}>
+        <fieldset
+          disabled={sending}
+          className="flex flex-col gap-3"
+        >
           <div className="flex justify-between">
             <PageTitle>記録を追加する</PageTitle>
             <Button

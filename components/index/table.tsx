@@ -1,33 +1,12 @@
+"use client"
+
+import useSWR, { Fetcher } from "swr"
 import { Table, TableBody, TableHead, TableCell, TableHeader, TableRow } from "@/components/ui/table"
 import Avatar from "../avatar"
 import Timestamp from "../timestamp"
 import Amount from "../amount"
-
-type Payment = {
-  timestamp: number
-  title: string
-  amount: number
-  currency: string
-  from: string
-  to: string
-}
-
-type Response = {
-  message: string
-  data?: Payment[]
-}
-
-async function getData(): Promise<Response> {
-  const res = await fetch("https://script.google.com/macros/s/AKfycbwp6jG58oHrgrs06Cqot6g13-vtYhMCVFy2YLg4te5i8q8PQDjwz6AiJOoyHYJXUirsNQ/exec")
-
-  if (!res.ok) {
-    return {
-      message: "Failed to fetch data",
-    }
-  }
-
-  return res.json()
-}
+import { Transaction } from "@/types/firebase"
+import { Response } from "@/types/api"
 
 type AvatarsProps = {
   names: string
@@ -46,52 +25,58 @@ function Avatars({ names }: AvatarsProps) {
   )
 }
 
-async function MainTable() {
-  const data = await getData()
+const fetcher: Fetcher<Response<Transaction[]>, string> = (...args) => fetch(...args).then((res) => res.json())
+
+function MainTable() {
+  const { data: res, error, isLoading } = useSWR<Response<Transaction[]>>("/api/transactions/all", fetcher, { refreshInterval: 10000 })
+
+  const getFromSum = (transaction: Transaction) => {
+    return transaction.from.map((f) => f.amount).reduce((a, b) => a + b, 0)
+  }
+
+  if (error || (res && res.message === "error")) return <div className="text-center">Failed to load</div>
+
+  if (isLoading) return <div className="text-center">Loading...</div>
 
   return (
     <>
-      {data.data ? (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>時間</TableHead>
-                <TableHead>項目</TableHead>
-                <TableHead>金額</TableHead>
-                <TableHead>From</TableHead>
-                <TableHead>To</TableHead>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>時間</TableHead>
+              <TableHead>項目</TableHead>
+              <TableHead>金額</TableHead>
+              <TableHead>From</TableHead>
+              <TableHead>To</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {res?.data.map((row) => (
+              <TableRow key={row.timestamp}>
+                <TableCell>
+                  <Timestamp timestamp={row.timestamp} />
+                </TableCell>
+                <TableCell className="shrink-0 font-semibold">
+                  <div>{row.title}</div>
+                </TableCell>
+                <TableCell>
+                  <Amount
+                    amount={getFromSum(row)}
+                    currency={row.currency}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Avatars names={row.from.map((f) => f.discordId).join(",")} />
+                </TableCell>
+                <TableCell>
+                  <Avatars names={row.to.join(",")} />
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.data.map((row) => (
-                <TableRow key={row.timestamp}>
-                  <TableCell>
-                    <Timestamp timestamp={row.timestamp} />
-                  </TableCell>
-                  <TableCell className="shrink-0 font-semibold">
-                    <div>{row.title}</div>
-                  </TableCell>
-                  <TableCell>
-                    <Amount
-                      amount={row.amount}
-                      currency={row.currency}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Avatars names={row.from} />
-                  </TableCell>
-                  <TableCell>
-                    <Avatars names={row.to} />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      ) : (
-        <div className="text-center">{data.message}</div>
-      )}
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </>
   )
 }

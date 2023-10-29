@@ -67,10 +67,10 @@ function MainTable() {
                   />
                 </TableCell>
                 <TableCell>
-                  <Avatars names={row.from.map((f) => f.discordId).join(",")} />
+                  <Avatars names={row.from.map((f) => f.id).join(",")} />
                 </TableCell>
                 <TableCell>
-                  <Avatars names={row.to.join(",")} />
+                  <Avatars names={row.to.map((f) => f.id).join(",")} />
                 </TableCell>
               </TableRow>
             ))}

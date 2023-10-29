@@ -1,24 +1,22 @@
 import { Currency } from "@/lib/currency"
 
-// includes ".", "#", "$", "/", "[", or "]" unique
-type DiscordId = string
-
-// non-unique
-type DisplayName = string
-
 export type Transaction = {
   timestamp: number
   title: string
   currency: Currency
   from: {
-    discordId: DiscordId
+    id: string
     amount: number
   }[]
-  to: DiscordId[]
+  to: {
+    id: string
+    amount: number
+  }[]
   description?: string
+  addedBy: string
 }
 
 export type User = {
-  discordId: DiscordId
-  displayName: DisplayName
+  id: string
+  displayName: string
 }

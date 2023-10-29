@@ -6,7 +6,7 @@ import { useState } from "react"
 import { useController, useForm, UseFormReturn } from "react-hook-form"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Plus, Trash2 } from "lucide-react"
+import { Plus, Trash2, Loader2 } from "lucide-react"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form as ShadcnForm } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -16,55 +16,12 @@ import { Checkbox } from "@/components/ui/checkbox"
 import PageTitle from "@/components/page-title"
 import { currencies } from "@/lib/currency"
 import { users } from "@/lib/users"
-
-const formSchema = z
-  .object({
-    title: z.string().min(1, { message: "必須項目です" }).max(100, { message: "最大100文字です" }),
-    description: z.string().max(2000, { message: "最大2000文字です" }).optional(),
-    currency: z.enum(currencies as any),
-    from: z
-      .array(
-        z.object({
-          discordId: z.string(),
-          amount: z.number(),
-        }),
-      )
-      .min(1, { message: "必須項目です" })
-      .superRefine((values, ctx) => {
-        for (const value of values) {
-          if (value.discordId === "") ctx.addIssue({ code: z.ZodIssueCode.custom, message: "未選択の人の欄があります" })
-          if (value.amount === Number.MIN_SAFE_INTEGER) ctx.addIssue({ code: z.ZodIssueCode.custom, message: "未入力の金額の欄があります" })
-          if (value.amount === 0) ctx.addIssue({ code: z.ZodIssueCode.custom, message: "金額の欄には0以外を入力してください" })
-        }
-      }),
-    to: z
-      .array(
-        z.object({
-          discordId: z.string(),
-          amount: z.number(),
-        }),
-      )
-      .min(1, { message: "必須項目です" })
-      .superRefine((values, ctx) => {
-        for (const value of values) {
-          if (value.discordId === "") ctx.addIssue({ code: z.ZodIssueCode.custom, message: "未選択の人の欄があります" })
-          if (value.amount === Number.MIN_SAFE_INTEGER) ctx.addIssue({ code: z.ZodIssueCode.custom, message: "未入力の金額の欄があります" })
-          if (value.amount === 0) ctx.addIssue({ code: z.ZodIssueCode.custom, message: "金額の欄には0以外を入力してください" })
-        }
-      }),
-  })
-  .refine(
-    (values) => {
-      const fromAmount = values.from.reduce((prev, current) => prev + current.amount, 0)
-      const toAmount = values.to.reduce((prev, current) => prev + current.amount, 0)
-      return fromAmount === toAmount
-    },
-    { message: "貸し借りの金額が一致しません", path: ["to"] },
-  )
+import schema from "./schema"
 
 function Form() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [sending, setSending] = useState<boolean>(false)
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
     defaultValues: {
       title: "",
       description: "",
@@ -74,8 +31,17 @@ function Form() {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values)
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    setSending(true)
+    const res = await fetch("/api/transactions/create", { method: "POST", body: JSON.stringify(values) })
+    const json = await res.json()
+    if (json.message === "ok") {
+      alert("記録を追加しました")
+      form.reset()
+    } else {
+      alert("エラーが発生しました")
+    }
+    setSending(false)
   }
 
   return (
@@ -85,33 +51,45 @@ function Form() {
         className="flex flex-col gap-3"
         autoComplete="off"
       >
-        <div className="flex justify-between">
-          <PageTitle>記録を追加する</PageTitle>
-          <Button
-            type="submit"
-            className="md:hidden md:w-32"
-          >
-            <Plus className="mr-1 h-4 w-4" />
-            追加
-          </Button>
-        </div>
-        <div className="md:w-80">
-          <TitleFormField {...form} />
-        </div>
-        <div className="w-24">
-          <CurrencyFormField {...form} />
-        </div>
-        <FromFormField {...form} />
-        <ToFormField {...form} />
-        <div className="md:w-[40em]">
-          <DescriptionFormField {...form} />
-        </div>
-        <Button
-          type="submit"
-          className="hidden md:mt-5 md:inline md:w-32"
-        >
-          追加
-        </Button>
+        <fieldset disabled={sending}>
+          <div className="flex justify-between">
+            <PageTitle>記録を追加する</PageTitle>
+            <Button
+              type="submit"
+              className="md:hidden md:w-32"
+            >
+              <Plus className="mr-1 h-4 w-4" />
+              追加
+            </Button>
+          </div>
+          <div className="md:w-80">
+            <TitleFormField {...form} />
+          </div>
+          <div className="w-24">
+            <CurrencyFormField {...form} />
+          </div>
+          <FromFormField {...form} />
+          <ToFormField {...form} />
+          <div className="md:w-[40em]">
+            <DescriptionFormField {...form} />
+          </div>
+          <div className="hidden md:mt-5 md:block">
+            <Button
+              disabled={sending}
+              type="submit"
+              className="w-32"
+            >
+              {sending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  追加中...
+                </>
+              ) : (
+                <>追加</>
+              )}
+            </Button>
+          </div>
+        </fieldset>
       </form>
     </ShadcnForm>
   )
@@ -121,7 +99,7 @@ export default Form
 
 const LABEL_CSS = "text-lg font-semibold text-inherit"
 
-function TitleFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) {
+function TitleFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   return (
     <FormField
       control={control}
@@ -144,7 +122,7 @@ function TitleFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) 
   )
 }
 
-function CurrencyFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) {
+function CurrencyFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   return (
     <FormField
       control={control}
@@ -179,7 +157,7 @@ function CurrencyFormField({ control }: UseFormReturn<z.infer<typeof formSchema>
   )
 }
 
-function FromFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) {
+function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   return (
     <FormField
       control={control}
@@ -200,10 +178,10 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) {
                 key={`from-select-${index}`}
                 onValueChange={(value) => {
                   const newFieldValue = [...field.value]
-                  newFieldValue[index].discordId = value
+                  newFieldValue[index].id = value
                   field.onChange(newFieldValue)
                 }}
-                value={field.value[index].discordId}
+                value={field.value[index].id}
               >
                 <SelectTrigger className="w-24">
                   <SelectValue placeholder="人" />
@@ -213,7 +191,7 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) {
                     <SelectItem
                       value={user}
                       key={`from-selectitem-${user}`}
-                      disabled={field.value.some((item) => item.discordId === user)}
+                      disabled={field.value.some((item) => item.id === user)}
                     >
                       {user}
                     </SelectItem>
@@ -256,12 +234,12 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) {
   )
 }
 
-function ToFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) {
+function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   const { field: fromField } = useController({ name: "from" })
   const [split, setSplit] = useState<boolean>(true)
 
   const getSplitAmount = (numberOfToPeople: number) => {
-    const fromValues: z.infer<typeof formSchema>["from"] = fromField.value
+    const fromValues: z.infer<typeof schema>["from"] = fromField.value
     if (fromValues.some((f) => f.amount === Number.MIN_SAFE_INTEGER)) return Number.MIN_SAFE_INTEGER
     const fromAmountSum = fromValues.reduce((prev, current) => prev + current.amount, 0)
     if (fromAmountSum === 0) return 0 // ゼロ除算
@@ -311,10 +289,10 @@ function ToFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) {
                 key={`from-select-${index}`}
                 onValueChange={(value) => {
                   const newFieldValue = [...field.value]
-                  newFieldValue[index].discordId = value
+                  newFieldValue[index].id = value
                   field.onChange(newFieldValue)
                 }}
-                value={field.value[index].discordId}
+                value={field.value[index].id}
               >
                 <SelectTrigger className="w-24">
                   <SelectValue placeholder="人" />
@@ -324,7 +302,7 @@ function ToFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) {
                     <SelectItem
                       value={user}
                       key={`from-selectitem-${user}`}
-                      disabled={field.value.some((item) => item.discordId === user)}
+                      disabled={field.value.some((item) => item.id === user)}
                     >
                       {user}
                     </SelectItem>
@@ -385,7 +363,7 @@ function ToFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) {
   )
 }
 
-function DescriptionFormField({ control }: UseFormReturn<z.infer<typeof formSchema>>) {
+function DescriptionFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   return (
     <FormField
       control={control}

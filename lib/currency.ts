@@ -1,3 +1,1 @@
-export type Currency = "JPY" | "PHP"
-
-export const currencies: Currency[] = ["JPY", "PHP"]
+export const currencies = ["JPY", "PHP"] as const

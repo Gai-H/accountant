@@ -3,6 +3,8 @@ import { NextResponse } from "next/server"
 import { Response } from "@/types/api"
 import { Transaction } from "@/types/firebase"
 
+const dynamic = "force-dynamic"
+
 async function GET(): Promise<NextResponse<Response<Transaction[]>>> {
   const transactions = await getTransactions()
 
@@ -19,4 +21,4 @@ async function GET(): Promise<NextResponse<Response<Transaction[]>>> {
   return NextResponse.json(res)
 }
 
-export { GET }
+export { GET, dynamic }

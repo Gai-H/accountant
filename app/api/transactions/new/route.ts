@@ -1,4 +1,4 @@
-import { insertTransaction } from "@/lib/firebase/transactions"
+import { insertTransaction } from "../transactions"
 import { Transaction } from "@/types/firebase"
 import { NextRequest, NextResponse } from "next/server"
 

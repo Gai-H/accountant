@@ -1,5 +1,5 @@
 import { User } from "@/types/firebase"
-import db from "@/lib/firebase/firebase"
+import db from "@/app/api/firebase"
 
 const CACHE_DURATION = 1000 * 60 * 3 // 3 minutes
 

@@ -98,12 +98,8 @@ function Form() {
         <div className="md:w-80">
           <TitleFormField {...form} />
         </div>
-        <div className="md:w-80">
-          <div className="flex items-end gap-2">
-            <div className="w-24 shrink-0">
-              <CurrencyFormField {...form} />
-            </div>
-          </div>
+        <div className="w-24">
+          <CurrencyFormField {...form} />
         </div>
         <FromFormField {...form} />
         <ToFormField {...form} />

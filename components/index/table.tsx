@@ -28,8 +28,8 @@ function MainTable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>時間</TableHead>
-              <TableHead>項目</TableHead>
+              <TableHead className="w-52">時間</TableHead>
+              <TableHead className="shrink-0">項目</TableHead>
               <TableHead>金額</TableHead>
               <TableHead>From</TableHead>
               <TableHead>To</TableHead>

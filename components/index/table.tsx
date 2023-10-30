@@ -9,10 +9,8 @@ import Amount from "../amount"
 import { Transaction } from "@/types/firebase"
 import { Response } from "@/types/api"
 
-const fetcher: Fetcher<Response<Transaction[]>, string> = (...args) => fetch(...args).then((res) => res.json())
-
 function MainTable() {
-  const { data: res, error, isLoading } = useSWR<Response<Transaction[]>>("/api/transactions/all", fetcher, { refreshInterval: 10000 })
+  const { data: res, error, isLoading } = useSWR<Response<Transaction[]>>("/api/transactions/all", { refreshInterval: 10000 })
 
   const getFromSum = (transaction: Transaction) => {
     return transaction.from.map((f) => f.amount).reduce((a, b) => a + b, 0)

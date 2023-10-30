@@ -162,7 +162,7 @@ function CurrencyFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
 }
 
 function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
-  const { data, error, isLoading } = useSWR<Response<User[]>, any, string>("/api/users/all", (url) => fetch(url).then((res) => res.json()))
+  const { data, error, isLoading } = useSWR<Response<User[]>>("/api/users/all")
 
   return (
     <FormField
@@ -263,7 +263,7 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
 function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   const { field: fromField } = useController({ name: "from" })
   const [split, setSplit] = useState<boolean>(true)
-  const { data, error, isLoading } = useSWR<Response<User[]>, any, string>("/api/users/all", (url) => fetch(url).then((res) => res.json()))
+  const { data, error, isLoading } = useSWR<Response<User[]>>("/api/users/all")
 
   const getSplitAmount = (numberOfToPeople: number) => {
     const fromValues: z.infer<typeof schema>["from"] = fromField.value

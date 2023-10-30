@@ -1,24 +1,38 @@
 import { getUsers } from "../users"
 import { NextResponse } from "next/server"
-import { User } from "@/types/firebase"
+import { UsersAllResponse } from "@/types/firebase"
 import { Response } from "@/types/api"
 
 const dynamic = "force-dynamic"
 
-async function GET(): Promise<NextResponse<Response<User[]>>> {
+async function GET(): Promise<NextResponse<Response<UsersAllResponse>>> {
   const users = await getUsers()
 
-  const res: Response<User[]> =
-    users == null
-      ? {
-          message: "error",
-        }
-      : {
-          message: "ok",
-          data: users,
-        }
+  if (users == null) {
+    return NextResponse.json(
+      {
+        message: "error",
+      },
+      {
+        status: 500,
+      },
+    )
+  }
 
-  return NextResponse.json(res)
+  const res: UsersAllResponse = {}
+  users.forEach(({ id, global_name, image_url }) => {
+    res[id] = { global_name, image_url }
+  })
+
+  return NextResponse.json(
+    {
+      message: "ok",
+      data: res,
+    },
+    {
+      status: 200,
+    },
+  )
 }
 
 export { GET, dynamic }

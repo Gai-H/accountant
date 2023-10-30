@@ -22,7 +22,7 @@ export const updateUsers = async () => {
     const val = data.val()
     const newCache = []
     for (const key in val) {
-      newCache.push(val[key])
+      newCache.push({ ...val[key], id: key })
     }
     cache = newCache
     lastUpdated = Date.now()

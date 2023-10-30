@@ -18,7 +18,7 @@ import { currencies } from "@/lib/currency"
 import schema from "./schema"
 import useSWR from "swr"
 import { Response } from "@/types/api"
-import { User } from "@/types/firebase"
+import { User, UsersAllResponse } from "@/types/firebase"
 
 function Form() {
   const [sending, setSending] = useState<boolean>(false)
@@ -162,7 +162,7 @@ function CurrencyFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
 }
 
 function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
-  const { data, error, isLoading } = useSWR<Response<User[]>>("/api/users/all")
+  const { data, error, isLoading } = useSWR<Response<UsersAllResponse>>("/api/users/all")
 
   return (
     <FormField
@@ -213,13 +213,13 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
                   )}
                   {data &&
                     data.message === "ok" &&
-                    data.data.map((user) => (
+                    Object.keys(data.data).map((id) => (
                       <SelectItem
-                        value={user.id}
-                        key={`from-selectitem-${user.id}`}
-                        disabled={field.value.some((item) => item.id === user.id)}
+                        value={id}
+                        key={`from-selectitem-${id}`}
+                        disabled={field.value.some((item) => item.id === id)}
                       >
-                        {user.displayName}
+                        {data.data[id].global_name}
                       </SelectItem>
                     ))}
                 </SelectContent>
@@ -248,7 +248,7 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
           <Button
             variant="secondary"
             type="button"
-            disabled={error || isLoading || (data && data.message === "error") ? field.value?.length === 1 : field.value?.length === data?.data.length}
+            disabled={error || isLoading || (data && data.message === "error") || data === undefined ? field.value?.length === 1 : field.value?.length === Object.keys(data.data).length}
             onClick={() => field.onChange([...field.value, { discordId: "", amount: Number.MIN_SAFE_INTEGER }])}
             className="block w-32"
           >
@@ -263,7 +263,7 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
 function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   const { field: fromField } = useController({ name: "from" })
   const [split, setSplit] = useState<boolean>(true)
-  const { data, error, isLoading } = useSWR<Response<User[]>>("/api/users/all")
+  const { data, error, isLoading } = useSWR<Response<UsersAllResponse>>("/api/users/all")
 
   const getSplitAmount = (numberOfToPeople: number) => {
     const fromValues: z.infer<typeof schema>["from"] = fromField.value
@@ -345,13 +345,13 @@ function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
                   )}
                   {data &&
                     data.message === "ok" &&
-                    data.data.map((user) => (
+                    Object.keys(data.data).map((id) => (
                       <SelectItem
-                        value={user.id}
-                        key={`from-selectitem-${user.id}`}
-                        disabled={field.value.some((item) => item.id === user.id)}
+                        value={id}
+                        key={`to-selectitem-${id}`}
+                        disabled={field.value.some((item) => item.id === id)}
                       >
-                        {user.displayName}
+                        {data.data[id].global_name}
                       </SelectItem>
                     ))}
                 </SelectContent>
@@ -390,7 +390,7 @@ function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
           <Button
             variant="secondary"
             type="button"
-            disabled={error || isLoading || (data && data.message === "error") ? field.value?.length === 1 : field.value?.length === data?.data.length}
+            disabled={error || isLoading || (data && data.message === "error") || data === undefined ? field.value?.length === 1 : field.value?.length === Object.keys(data.data).length}
             onClick={() => {
               const updated = [...field.value, { discordId: "", amount: Number.MIN_SAFE_INTEGER }]
               if (split) {

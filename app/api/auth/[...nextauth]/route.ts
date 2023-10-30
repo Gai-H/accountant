@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth"
-import DiscordProvider from "next-auth/providers/discord"
+import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord"
+import db from "@/app/api/firebase"
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -12,13 +13,6 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    session: async ({ session, token }) => {
-      session.accessToken = token.accessToken
-      if (session.user) {
-        session.user.id = token.id
-      }
-      return session
-    },
     jwt: async ({ token, account, profile }) => {
       if (account && account.access_token) {
         token.accessToken = account.access_token
@@ -28,9 +22,21 @@ export const authOptions: NextAuthOptions = {
       }
       return token
     },
-    async signIn({ account }) {
-      if (account == null || account.access_token == null) return false
-      return await isJoinGuild(account.access_token)
+    session: async ({ session, token }) => {
+      session.accessToken = token.accessToken
+      if (session.user) {
+        session.user.id = token.id
+      }
+      return session
+    },
+    async signIn({ account, profile }) {
+      if (account == null || account.access_token == null || profile === undefined) return false
+
+      // check if user is in guild
+      if (!(await isJoinGuild(account.access_token))) return false
+
+      // add user to database
+      return await insertUser(profile as DiscordProfile)
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
@@ -63,4 +69,22 @@ const isJoinGuild = async (accessToken: string): Promise<boolean> => {
     return guilds.some((guild: Guild) => guild.id === (process.env.DISCORD_GUILD_ID as string))
   }
   return false
+}
+
+const insertUser = async (profile: DiscordProfile): Promise<boolean> => {
+  const ref = db.ref("users")
+  await ref.child(profile.id).set(
+    {
+      global_name: profile.global_name,
+      image_url: profile.image_url,
+      lastLogin: Date.now() / 1000,
+    },
+    (error) => {
+      if (error) {
+        console.error("Failed to insert user: " + error)
+        return false
+      }
+    },
+  )
+  return true
 }

@@ -1,16 +1,13 @@
 import { Avatar as ShadcnAvatar, AvatarFallback } from "@/components/ui/avatar"
 
 type Props = {
-  name: string
+  id: string
 }
 
-function Avatar({ name }: Props) {
+function Avatar({ id }: Props) {
   return (
-    <ShadcnAvatar
-      className="inline-block h-9 w-9"
-      title={name}
-    >
-      <AvatarFallback>{name.substring(0, 3)}</AvatarFallback>
+    <ShadcnAvatar className="inline-block h-9 w-9">
+      <AvatarFallback>{id.substring(0, 3)}</AvatarFallback>
     </ShadcnAvatar>
   )
 }

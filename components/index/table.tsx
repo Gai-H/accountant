@@ -22,38 +22,38 @@ function MainTable() {
   return (
     <>
       <div className="rounded-md border">
-        <Table>
-          <TableHeader>
+        <Table className="border-separate border-spacing-0">
+          <TableHeader className="sticky top-0 z-10 bg-background">
             <TableRow>
-              <TableHead className="w-52">時間</TableHead>
-              <TableHead className="shrink-0">項目</TableHead>
-              <TableHead>金額</TableHead>
-              <TableHead>From</TableHead>
-              <TableHead>To</TableHead>
+              <TableHead className="w-52 rounded-t-md border-b">時間</TableHead>
+              <TableHead className="shrink-0 border-b">項目</TableHead>
+              <TableHead className="border-b">金額</TableHead>
+              <TableHead className="border-b">From</TableHead>
+              <TableHead className="rounded-t-md border-b">To</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {res.map((row) => (
+            {res.map((row, idx) => (
               <TableRow key={row.timestamp}>
-                <TableCell>
+                <TableCell className={idx !== res.length - 1 ? "border-b" : ""}>
                   <Timestamp timestamp={row.timestamp} />
                 </TableCell>
-                <TableCell className="shrink-0 font-semibold">
+                <TableCell className={`shrink-0 font-semibold ${idx !== res.length - 1 ? "border-b" : ""}`}>
                   <div>{row.title}</div>
                 </TableCell>
-                <TableCell>
+                <TableCell className={idx !== res.length - 1 ? "border-b" : ""}>
                   <Amount
                     amount={getFromSum(row)}
                     currency={row.currency}
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell className={idx !== res.length - 1 ? "border-b" : ""}>
                   <Avatars
                     data={row.from}
                     currency={row.currency}
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell className={idx !== res.length - 1 ? "border-b" : ""}>
                   <Avatars
                     data={row.to}
                     currency={row.currency}

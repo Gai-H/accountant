@@ -4,7 +4,10 @@ type Props = {
 }
 
 function Amount({ amount, currency }: Props) {
-  const formatter = new Intl.NumberFormat("ja-JP")
+  const formatter = new Intl.NumberFormat("ja-JP", {
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+  })
 
   return (
     <div>

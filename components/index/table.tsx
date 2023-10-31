@@ -99,8 +99,10 @@ function Avatars({ data, currency }: AvatarsProps) {
             </TooltipTrigger>
             <TooltipContent>
               <div className="mb-1 text-center font-semibold">{res ? res[d.id].global_name : "Loading..."}</div>
-              {Number.isInteger(d.amount) ? d.amount : d.amount.toFixed(2)}
-              <span className="ml-1">{currency}</span>
+              <Amount
+                amount={d.amount}
+                currency={currency}
+              />{" "}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

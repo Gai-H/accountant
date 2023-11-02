@@ -1,14 +1,14 @@
 import { getTransactions } from "../transactions"
 import { NextResponse } from "next/server"
 import { Response } from "@/types/api"
-import { Transaction } from "@/types/firebase"
+import { Transactions } from "@/types/firebase"
 
 const dynamic = "force-dynamic"
 
-async function GET(): Promise<NextResponse<Response<Transaction[]>>> {
+async function GET(): Promise<NextResponse<Response<Transactions>>> {
   const transactions = await getTransactions()
 
-  const res: Response<Transaction[]> =
+  const res: Response<Transactions> =
     transactions == null
       ? {
           message: "error",

@@ -16,6 +16,10 @@ export type Transaction = {
   addedBy: string
 }
 
+export type Transactions = {
+  [id: string]: Transaction
+}
+
 export type User = {
   id: string
   global_name: string

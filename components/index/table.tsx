@@ -6,10 +6,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Timestamp from "../timestamp"
 import Amount from "../amount"
-import { Transaction, UsersAllResponse } from "@/types/firebase"
+import { Transaction, Transactions, UsersAllResponse } from "@/types/firebase"
 
 function MainTable() {
-  const { data: res, error, isLoading } = useSWR<Transaction[]>("/api/transactions/all", { refreshInterval: 10000 })
+  const { data: res, error, isLoading } = useSWR<Transactions>("/api/transactions/all", { refreshInterval: 10000 })
 
   const getFromSum = (transaction: Transaction) => {
     return transaction.from.map((f) => f.amount).reduce((a, b) => a + b, 0)
@@ -33,34 +33,36 @@ function MainTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {res.map((row, idx) => (
-              <TableRow key={row.timestamp}>
-                <TableCell className={idx !== res.length - 1 ? "border-b" : ""}>
-                  <Timestamp timestamp={row.timestamp} />
-                </TableCell>
-                <TableCell className={`shrink-0 font-semibold ${idx !== res.length - 1 ? "border-b" : ""}`}>
-                  <div>{row.title}</div>
-                </TableCell>
-                <TableCell className={idx !== res.length - 1 ? "border-b" : ""}>
-                  <Amount
-                    amount={getFromSum(row)}
-                    currency={row.currency}
-                  />
-                </TableCell>
-                <TableCell className={idx !== res.length - 1 ? "border-b" : ""}>
-                  <Avatars
-                    data={row.from}
-                    currency={row.currency}
-                  />
-                </TableCell>
-                <TableCell className={idx !== res.length - 1 ? "border-b" : ""}>
-                  <Avatars
-                    data={row.to}
-                    currency={row.currency}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
+            {Object.keys(res)
+              .reverse()
+              .map((key, idx) => (
+                <TableRow key={res[key].timestamp}>
+                  <TableCell className={idx !== Object.keys(res).length - 1 ? "border-b" : ""}>
+                    <Timestamp timestamp={res[key].timestamp} />
+                  </TableCell>
+                  <TableCell className={`shrink-0 font-semibold ${idx !== Object.keys(res).length - 1 ? "border-b" : ""}`}>
+                    <div>{res[key].title}</div>
+                  </TableCell>
+                  <TableCell className={idx !== Object.keys(res).length - 1 ? "border-b" : ""}>
+                    <Amount
+                      amount={getFromSum(res[key])}
+                      currency={res[key].currency}
+                    />
+                  </TableCell>
+                  <TableCell className={idx !== Object.keys(res).length - 1 ? "border-b" : ""}>
+                    <Avatars
+                      data={res[key].from}
+                      currency={res[key].currency}
+                    />
+                  </TableCell>
+                  <TableCell className={idx !== Object.keys(res).length - 1 ? "border-b" : ""}>
+                    <Avatars
+                      data={res[key].to}
+                      currency={res[key].currency}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </div>

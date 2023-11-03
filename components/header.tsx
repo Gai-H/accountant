@@ -13,17 +13,17 @@ function Header() {
           Accountant
         </Link>
         <span className="hidden md:inline">
-          <Button
-            variant={"outline"}
-            size={"icon"}
+          <Link
+            href={"https://github.com/Gai-H/accountant"}
+            target={"_blank"}
           >
-            <Link
-              href={"https://github.com/Gai-H/accountant"}
-              target={"_blank"}
+            <Button
+              variant={"outline"}
+              size={"icon"}
             >
               <Github className={"h-4 w-4"} />
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </span>
         <Button
           variant={"link"}

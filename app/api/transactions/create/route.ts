@@ -32,7 +32,7 @@ async function POST(req: NextRequest): Promise<NextResponse<Response<null>>> {
       },
     )
   }
-  const transaction: Transaction = { ...(json as z.infer<typeof schema>), addedBy: session.user.name as string, timestamp: Date.now() / 1000 }
+  const transaction: Transaction = { ...(json as z.infer<typeof schema>), addedBy: session.user.id, timestamp: Date.now() / 1000 }
 
   const res = await insertTransaction(transaction)
 

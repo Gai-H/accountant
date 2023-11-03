@@ -30,8 +30,8 @@ function MainTable() {
               <TableHead className="w-52 rounded-t-md border-b">時間</TableHead>
               <TableHead className="shrink-0 border-b">項目</TableHead>
               <TableHead className="border-b">金額</TableHead>
-              <TableHead className="border-b">From</TableHead>
-              <TableHead className="border-b">To</TableHead>
+              <TableHead className="border-b">貸した人</TableHead>
+              <TableHead className="border-b">借りた人</TableHead>
               <TableHead className="w-20 rounded-t-md border-b"></TableHead>
             </TableRow>
           </TableHeader>

@@ -4,9 +4,11 @@ import useSWR from "swr"
 import { Table, TableBody, TableHead, TableCell, TableHeader, TableRow } from "@/components/ui/table"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import Timestamp from "../timestamp"
 import Amount from "../amount"
 import { Transaction, Transactions, UsersAllResponse } from "@/types/firebase"
+import Link from "next/link"
 
 function MainTable() {
   const { data: res, error, isLoading } = useSWR<Transactions>("/api/transactions/all", { refreshInterval: 10000 })
@@ -29,7 +31,8 @@ function MainTable() {
               <TableHead className="shrink-0 border-b">項目</TableHead>
               <TableHead className="border-b">金額</TableHead>
               <TableHead className="border-b">From</TableHead>
-              <TableHead className="rounded-t-md border-b">To</TableHead>
+              <TableHead className="border-b">To</TableHead>
+              <TableHead className="w-20 rounded-t-md border-b"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -60,6 +63,11 @@ function MainTable() {
                       data={res[key].to}
                       currency={res[key].currency}
                     />
+                  </TableCell>
+                  <TableCell className={idx !== Object.keys(res).length - 1 ? "border-b" : ""}>
+                    <Link href={`/transaction/${key}`}>
+                      <Button variant="secondary">詳細</Button>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}

@@ -64,21 +64,21 @@ function Page({ params: { slug } }: PageProps) {
             currency={transaction.currency}
           />
         </div>
-        <div className="md:hidden">
+        <div className="flex gap-2 md:hidden">
           <ItemTitle>貸した人</ItemTitle>
           <FromToTable
             data={transaction.from}
             currency={transaction.currency}
           />
         </div>
-        <div className="md:hidden">
+        <div className="flex gap-2 md:hidden">
           <ItemTitle>借りた人</ItemTitle>
           <FromToTable
             data={transaction.to}
             currency={transaction.currency}
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex gap-2">
           <ItemTitle>説明</ItemTitle>
           {transaction.description ? <div>{transaction.description}</div> : <div className="italic">なし</div>}
         </div>
@@ -94,7 +94,7 @@ type ItemTitleProps = {
 }
 
 function ItemTitle({ children }: ItemTitleProps) {
-  return <h2 className="block w-[4.5rem] text-lg font-semibold">{children}</h2>
+  return <h2 className="block w-[4.5rem] shrink-0 text-lg font-semibold">{children}</h2>
 }
 
 type AvatarWithNameProps = {
@@ -130,14 +130,14 @@ type FromToTableProps = {
 
 function FromToTable({ data, currency }: FromToTableProps) {
   return (
-    <table className="h-fit border-separate border-spacing-2">
+    <table className="h-fit border-separate">
       <tbody>
         {data.map((f) => (
           <tr key={f.id}>
-            <td>
+            <td className="pb-2 pr-4">
               <AvatarWithName id={f.id} />
             </td>
-            <td>
+            <td className="pb-2 pr-4">
               <Amount
                 amount={f.amount}
                 currency={currency}

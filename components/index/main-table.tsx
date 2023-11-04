@@ -1,14 +1,12 @@
-"use client"
-
+import Link from "next/link"
 import useSWR from "swr"
 import { Table, TableBody, TableHead, TableCell, TableHeader, TableRow } from "@/components/ui/table"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import Timestamp from "../timestamp"
-import Amount from "../amount"
+import Timestamp from "@/components/timestamp"
+import Amount from "@/components/amount"
 import { Transaction, Transactions, UsersAllResponse } from "@/types/firebase"
-import Link from "next/link"
 
 function MainTable() {
   const { data: res, error, isLoading } = useSWR<Transactions>("/api/transactions/all", { refreshInterval: 10000 })

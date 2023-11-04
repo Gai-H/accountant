@@ -22,47 +22,47 @@ function MainTable() {
   return (
     <>
       <div className="rounded-md border">
-        <Table className="border-separate border-spacing-0">
-          <TableHeader className="sticky top-0 z-10 bg-background">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableHead className="w-52 rounded-t-md border-b">時間</TableHead>
-              <TableHead className="shrink-0 border-b">項目</TableHead>
-              <TableHead className="border-b">金額</TableHead>
-              <TableHead className="border-b">貸した人</TableHead>
-              <TableHead className="border-b">借りた人</TableHead>
-              <TableHead className="w-20 rounded-t-md border-b"></TableHead>
+              <TableHead className="w-52">時間</TableHead>
+              <TableHead className="shrink-0">項目</TableHead>
+              <TableHead>金額</TableHead>
+              <TableHead>貸した人</TableHead>
+              <TableHead>借りた人</TableHead>
+              <TableHead className="w-20"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {Object.keys(res)
               .reverse()
-              .map((key, idx) => (
+              .map((key) => (
                 <TableRow key={res[key].timestamp}>
-                  <TableCell className={idx !== Object.keys(res).length - 1 ? "border-b" : ""}>
+                  <TableCell>
                     <Timestamp timestamp={res[key].timestamp} />
                   </TableCell>
-                  <TableCell className={`shrink-0 font-semibold ${idx !== Object.keys(res).length - 1 ? "border-b" : ""}`}>
+                  <TableCell className="shrink-0 font-semibold">
                     <div>{res[key].title}</div>
                   </TableCell>
-                  <TableCell className={idx !== Object.keys(res).length - 1 ? "border-b" : ""}>
+                  <TableCell>
                     <Amount
                       amount={getFromSum(res[key])}
                       currency={res[key].currency}
                     />
                   </TableCell>
-                  <TableCell className={idx !== Object.keys(res).length - 1 ? "border-b" : ""}>
+                  <TableCell>
                     <Avatars
                       data={res[key].from}
                       currency={res[key].currency}
                     />
                   </TableCell>
-                  <TableCell className={idx !== Object.keys(res).length - 1 ? "border-b" : ""}>
+                  <TableCell>
                     <Avatars
                       data={res[key].to}
                       currency={res[key].currency}
                     />
                   </TableCell>
-                  <TableCell className={idx !== Object.keys(res).length - 1 ? "border-b" : ""}>
+                  <TableCell>
                     <Link href={`/transaction/${key}`}>
                       <Button variant="secondary">詳細</Button>
                     </Link>

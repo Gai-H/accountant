@@ -28,43 +28,45 @@ function PersonsTable() {
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-52">時間</TableHead>
-          <TableHead>項目</TableHead>
-          {Object.keys(users).map((key) => (
-            <TableHead key={key}>{users[key].global_name}</TableHead>
-          ))}
-          <TableHead className="w-20"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {Object.keys(transactions)
-          .reverse()
-          .map((key) => (
-            <TableRow key={transactions[key].timestamp}>
-              <TableCell>
-                <Timestamp timestamp={transactions[key].timestamp} />
-              </TableCell>
-              <TableCell className="shrink-0 font-semibold">{transactions[key].title}</TableCell>
-              {Object.keys(users).map((userKey) => (
-                <TableCell key={userKey}>
-                  <Amount
-                    amount={getBorrowedAmounts(transactions[key], userKey)}
-                    currency={transactions[key].currency}
-                  />
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-52">時間</TableHead>
+            <TableHead>項目</TableHead>
+            {Object.keys(users).map((key) => (
+              <TableHead key={key}>{users[key].global_name}</TableHead>
+            ))}
+            <TableHead className="w-20"></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Object.keys(transactions)
+            .reverse()
+            .map((key) => (
+              <TableRow key={transactions[key].timestamp}>
+                <TableCell>
+                  <Timestamp timestamp={transactions[key].timestamp} />
                 </TableCell>
-              ))}
-              <TableCell>
-                <Link href={`/transaction/${key}`}>
-                  <Button variant="secondary">詳細</Button>
-                </Link>
-              </TableCell>
-            </TableRow>
-          ))}
-      </TableBody>
-    </Table>
+                <TableCell className="shrink-0 font-semibold">{transactions[key].title}</TableCell>
+                {Object.keys(users).map((userKey) => (
+                  <TableCell key={userKey}>
+                    <Amount
+                      amount={getBorrowedAmounts(transactions[key], userKey)}
+                      currency={transactions[key].currency}
+                    />
+                  </TableCell>
+                ))}
+                <TableCell>
+                  <Link href={`/transaction/${key}`}>
+                    <Button variant="secondary">詳細</Button>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    </div>
   )
 }
 

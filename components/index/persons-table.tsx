@@ -35,7 +35,12 @@ function PersonsTable() {
             <TableHead className="w-52">時間</TableHead>
             <TableHead>項目</TableHead>
             {Object.keys(users).map((key) => (
-              <TableHead key={key}>{users[key].global_name}</TableHead>
+              <TableHead
+                key={key}
+                className="text-center"
+              >
+                {users[key].global_name}
+              </TableHead>
             ))}
             <TableHead className="w-20"></TableHead>
           </TableRow>
@@ -50,11 +55,17 @@ function PersonsTable() {
                 </TableCell>
                 <TableCell className="shrink-0 font-semibold">{transactions[key].title}</TableCell>
                 {Object.keys(users).map((userKey) => (
-                  <TableCell key={userKey}>
-                    <Amount
-                      amount={getBorrowedAmounts(transactions[key], userKey)}
-                      currency={transactions[key].currency}
-                    />
+                  <TableCell
+                    key={userKey}
+                    className="text-right"
+                  >
+                    {getBorrowedAmounts(transactions[key], userKey) !== 0 && (
+                      <Amount
+                        amount={getBorrowedAmounts(transactions[key], userKey)}
+                        currency={transactions[key].currency}
+                        colored={true}
+                      />
+                    )}
                   </TableCell>
                 ))}
                 <TableCell>

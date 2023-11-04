@@ -27,7 +27,7 @@ function MainTable() {
             <TableRow>
               <TableHead className="w-52">時間</TableHead>
               <TableHead className="shrink-0">項目</TableHead>
-              <TableHead>金額</TableHead>
+              <TableHead className="text-center">金額</TableHead>
               <TableHead>貸した人</TableHead>
               <TableHead>借りた人</TableHead>
               <TableHead className="w-20"></TableHead>
@@ -44,7 +44,7 @@ function MainTable() {
                   <TableCell className="shrink-0 font-semibold">
                     <div>{res[key].title}</div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-right">
                     <Amount
                       amount={getFromSum(res[key])}
                       currency={res[key].currency}

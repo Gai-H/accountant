@@ -6,10 +6,14 @@ import PageTitle from "@/components/page-title"
 import { Button } from "@/components/ui/button"
 import { Plus, ArrowLeftRight } from "lucide-react"
 import Link from "next/link"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 export default function Home() {
-  const [isMainTable, setIsMainTable] = useState<boolean>(true)
+  const [isMainTable, setIsMainTable] = useState<boolean>(localStorage.getItem("isMainTable") === "true" || false)
+
+  useEffect(() => {
+    localStorage.setItem("isMainTable", isMainTable.toString())
+  }, [isMainTable])
 
   return (
     <>

@@ -1,9 +1,7 @@
-import { Currency } from "@/lib/currency"
-
 export type Transaction = {
   timestamp: number
   title: string
-  currency: Currency
+  currency: string
   from: {
     id: string
     amount: number
@@ -32,4 +30,13 @@ export type UsersAllResponse = {
     global_name: string
     image_url: string
   }
+}
+
+export type Currency = {
+  oneInJPY: number
+  symbol: string
+}
+
+export type Currencies = {
+  [id: string]: Currency
 }

@@ -3,6 +3,7 @@
 "use client"
 
 import { useState } from "react"
+import useSWR from "swr"
 import { useController, useForm, UseFormReturn } from "react-hook-form"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -14,10 +15,8 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import PageTitle from "@/components/page-title"
-import { currencies } from "@/lib/currency"
 import schema from "./schema"
-import useSWR from "swr"
-import { UsersAllResponse } from "@/types/firebase"
+import { Currencies, UsersAllResponse } from "@/types/firebase"
 
 function Form() {
   const [sending, setSending] = useState<boolean>(false)
@@ -26,7 +25,6 @@ function Form() {
     defaultValues: {
       title: "",
       description: "",
-      currency: currencies[0],
       from: [],
       to: [],
     },
@@ -126,6 +124,8 @@ function TitleFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
 }
 
 function CurrencyFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
+  const { data: currencies } = useSWR<Currencies>("/api/currencies/all")
+
   return (
     <FormField
       control={control}
@@ -143,14 +143,18 @@ function CurrencyFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {currencies.map((currency) => (
-                <SelectItem
-                  value={currency}
-                  key={currency}
-                >
-                  {currency}
-                </SelectItem>
-              ))}
+              {currencies ? (
+                Object.keys(currencies).map((currency) => (
+                  <SelectItem
+                    value={currency}
+                    key={currency}
+                  >
+                    {currency}
+                  </SelectItem>
+                ))
+              ) : (
+                <SelectItem value="loading">Loading...</SelectItem>
+              )}
             </SelectContent>
           </Select>
           {/* <FormMessage /> */}

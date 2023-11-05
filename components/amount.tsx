@@ -12,10 +12,10 @@ function Amount({ amount, currency, colored }: Props) {
 
   return (
     <div>
-      {colored && amount > 0 && <span className="mr-1 text-green-600">{formatter.format(amount)}</span>}
-      {colored && amount < 0 && <span className="mr-1 text-red-600">{formatter.format(amount)}</span>}
-      {(!colored || amount == 0) && <span className="mr-1">{formatter.format(amount)}</span>}
-      <span className="inline-block w-7">{currency}</span>
+      <span className="mr-1 inline-block">{currency === "JPY" ? "¥" : "₱"}</span>
+      {colored && amount > 0 && <span className="text-green-600">{formatter.format(amount)}</span>}
+      {colored && amount < 0 && <span className="text-red-600">{formatter.format(amount)}</span>}
+      {(!colored || amount == 0) && <span>{formatter.format(amount)}</span>}
     </div>
   )
 }

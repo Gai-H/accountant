@@ -9,7 +9,11 @@ import Link from "next/link"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 export default function Home() {
-  const [isMainTable, setIsMainTable] = useState<boolean>(localStorage.getItem("isMainTable") === "true" || false)
+  const [isMainTable, setIsMainTable] = useState<boolean>(true)
+
+  useEffect(() => {
+    setIsMainTable(localStorage.getItem("isMainTable") === "true")
+  }, [])
 
   useEffect(() => {
     localStorage.setItem("isMainTable", isMainTable.toString())

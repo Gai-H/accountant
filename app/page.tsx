@@ -1,29 +1,21 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import Link from "next/link"
 import MainTable from "@/components/index/main-table"
 import PersonsTable from "@/components/index/persons-table"
 import PageTitle from "@/components/page-title"
 import { Button } from "@/components/ui/button"
 import { Plus, ArrowLeftRight } from "lucide-react"
-import Link from "next/link"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
 
 export default function Home() {
-  const [isMainTable, setIsMainTable] = useState<boolean>(true)
-
-  useEffect(() => {
-    setIsMainTable(localStorage.getItem("isMainTable") === "true")
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem("isMainTable", isMainTable.toString())
-  }, [isMainTable])
+  const { isMainTable, toggleMainTable } = useMainTable()
 
   return (
     <>
       <div className="mb-2 flex justify-between">
         <PageTitle>全員の記録</PageTitle>
-        <TableToggleButton setIsMainTable={setIsMainTable} />
+        <TableToggleButton toggleMainTable={toggleMainTable} />
         <Button asChild>
           <Link href="/create">
             <Plus className="mr-2 h-4 w-4" />
@@ -36,17 +28,39 @@ export default function Home() {
   )
 }
 
-type TableToggleButtonProps = {
-  setIsMainTable: Dispatch<SetStateAction<boolean>>
+type UseMainTable = {
+  isMainTable: boolean
+  toggleMainTable: () => void
 }
 
-function TableToggleButton({ setIsMainTable }: TableToggleButtonProps) {
+const useMainTable = (): UseMainTable => {
+  const [isMainTable, setIsMainTable] = useState<boolean>(true)
+
+  useEffect(() => {
+    setIsMainTable(localStorage.getItem("isMainTable") === "true")
+  }, [])
+
+  const toggleMainTable = () => {
+    setIsMainTable((v) => {
+      localStorage.setItem("isMainTable", (!v).toString())
+      return !v
+    })
+  }
+
+  return { isMainTable, toggleMainTable }
+}
+
+type TableToggleButtonProps = {
+  toggleMainTable: () => void
+}
+
+function TableToggleButton({ toggleMainTable }: TableToggleButtonProps) {
   return (
     <>
       <Button
         className="ml-auto mr-2 hidden md:inline-flex"
         variant="outline"
-        onClick={() => setIsMainTable((v) => !v)}
+        onClick={toggleMainTable}
       >
         <ArrowLeftRight className="mr-2 h-4 w-4" />
         テーブルを切替
@@ -55,7 +69,7 @@ function TableToggleButton({ setIsMainTable }: TableToggleButtonProps) {
         className="ml-auto mr-2 md:hidden"
         variant="outline"
         size="icon"
-        onClick={() => setIsMainTable((v) => !v)}
+        onClick={toggleMainTable}
       >
         <ArrowLeftRight className="h-4 w-4" />
       </Button>

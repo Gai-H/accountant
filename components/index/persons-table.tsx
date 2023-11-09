@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Amount from "@/components/amount"
 import { Button } from "@/components/ui/button"
 import Timestamp from "@/components/timestamp"
+import { TooltipProvider, TooltipTrigger, Tooltip, TooltipContent } from "@/components/ui/tooltip"
 import { Transaction, Transactions, UsersAllResponse } from "@/types/firebase"
 
 function PersonsTable() {
@@ -13,19 +14,6 @@ function PersonsTable() {
   if (error) return <div className="text-center">Failed to load</div>
 
   if (isLoading || !transactions || !users) return <div className="text-center">Loading...</div>
-
-  const getBorrowedAmounts = (t: Transaction, userId: string): number => {
-    const lend = t.from
-      .filter((f) => f.id === userId)
-      .map((f) => f.amount)
-      .reduce((a, b) => a + b, 0)
-    const borrowed = t.to
-      .filter((f) => f.id === userId)
-      .map((f) => f.amount)
-      .reduce((a, b) => a + b, 0)
-
-    return -1 * lend + borrowed
-  }
 
   return (
     <div className="rounded-md border">
@@ -55,18 +43,11 @@ function PersonsTable() {
                 </TableCell>
                 <TableCell className="shrink-0 font-semibold">{transactions[key].title}</TableCell>
                 {Object.keys(users).map((userKey) => (
-                  <TableCell
+                  <PersonsTableCell
                     key={userKey}
-                    className="text-right"
-                  >
-                    {getBorrowedAmounts(transactions[key], userKey) !== 0 && (
-                      <Amount
-                        amount={getBorrowedAmounts(transactions[key], userKey)}
-                        currency={transactions[key].currency}
-                        colored={true}
-                      />
-                    )}
-                  </TableCell>
+                    transaction={transactions[key]}
+                    userId={userKey}
+                  />
                 ))}
                 <TableCell>
                   <Link href={`/transaction/${key}`}>
@@ -82,3 +63,66 @@ function PersonsTable() {
 }
 
 export default PersonsTable
+
+type PersonsTableCellProps = {
+  transaction: Transaction
+  userId: string
+}
+
+function PersonsTableCell({ transaction, userId }: PersonsTableCellProps) {
+  const lend = transaction.from
+    .filter((f) => f.id === userId)
+    .map((f) => f.amount)
+    .reduce((a, b) => a + b, 0)
+  const borrowed = transaction.to
+    .filter((f) => f.id === userId)
+    .map((f) => f.amount)
+    .reduce((a, b) => a + b, 0)
+  const involved = lend !== 0 || borrowed !== 0
+
+  return (
+    <TableCell className="text-right">
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            {involved && (
+              <Amount
+                amount={-1 * lend + borrowed}
+                currency={transaction.currency}
+                colored={true}
+              />
+            )}
+          </TooltipTrigger>
+          <TooltipContent>
+            {involved && (
+              <table className="h-fit border-separate">
+                <tbody>
+                  <tr className="mb-2">
+                    <td className="mr-4">貸した額</td>
+                    <td>
+                      <Amount
+                        amount={lend === 0 ? 0 : -1 * lend}
+                        currency={transaction.currency}
+                        colored={true}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="mr-4">借りた額</td>
+                    <td>
+                      <Amount
+                        amount={borrowed}
+                        currency={transaction.currency}
+                        colored={true}
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            )}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </TableCell>
+  )
+}

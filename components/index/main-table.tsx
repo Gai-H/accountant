@@ -6,18 +6,40 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import Timestamp from "@/components/timestamp"
 import Amount from "@/components/amount"
-import { Transaction, Transactions, UsersAllResponse } from "@/types/firebase"
+import { Currencies, Transactions, UsersAllResponse } from "@/types/firebase"
 
 function MainTable() {
-  const { data: res, error, isLoading } = useSWR<Transactions>("/api/transactions/all", { refreshInterval: 10000 })
+  const { data: res, error: resError, isLoading: resIsLoading } = useSWR<Transactions>("/api/transactions/all", { refreshInterval: 10000 })
+  const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies/all")
 
-  const getFromSum = (transaction: Transaction) => {
-    return transaction.from.map((f) => f.amount).reduce((a, b) => a + b, 0)
-  }
+  if (resError || currenciesError) return <div className="text-center">Failed to load</div>
 
-  if (error) return <div className="text-center">Failed to load</div>
+  if (resIsLoading || currenciesIsLoading || !res || !currencies) return <div className="text-center">Loading...</div>
 
-  if (isLoading || !res) return <div className="text-center">Loading...</div>
+  const totalAmountByTransaction: {
+    [key: string]: {
+      amount: number
+      currency: string
+    }
+  } = Object.keys(res).reduce((acc, key) => {
+    return {
+      ...acc,
+      [key]: {
+        amount: res[key].from.map((f) => f.amount).reduce((a, b) => a + b, 0),
+        currency: res[key].currency,
+      },
+    }
+  }, {})
+
+  const totalAmountByCurrency: {
+    [currency: string]: number
+  } = Object.keys(totalAmountByTransaction).reduce((acc, key) => {
+    return {
+      ...acc,
+      [totalAmountByTransaction[key].currency]:
+        totalAmountByTransaction[key].currency in acc ? acc[totalAmountByTransaction[key].currency as keyof typeof acc] + totalAmountByTransaction[key].amount : totalAmountByTransaction[key].amount,
+    }
+  }, {})
 
   return (
     <>
@@ -34,6 +56,22 @@ function MainTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
+            <TableRow className="bg-slate-100">
+              <TableCell />
+              <TableCell className="shrink-0 font-semibold">合計</TableCell>
+              <TableCell className="text-right">
+                {Object.keys(currencies).map((currency) => (
+                  <Amount
+                    key={currency}
+                    amount={totalAmountByCurrency[currency] ?? 0}
+                    currency={currency}
+                  />
+                ))}
+              </TableCell>
+              <TableCell />
+              <TableCell />
+              <TableCell />
+            </TableRow>
             {Object.keys(res)
               .reverse()
               .map((key) => (
@@ -46,8 +84,8 @@ function MainTable() {
                   </TableCell>
                   <TableCell className="text-right">
                     <Amount
-                      amount={getFromSum(res[key])}
-                      currency={res[key].currency}
+                      amount={totalAmountByTransaction[key].amount}
+                      currency={totalAmountByTransaction[key].currency}
                     />
                   </TableCell>
                   <TableCell>

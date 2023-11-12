@@ -5,15 +5,20 @@ import Amount from "@/components/amount"
 import { Button } from "@/components/ui/button"
 import Timestamp from "@/components/timestamp"
 import { TooltipProvider, TooltipTrigger, Tooltip, TooltipContent } from "@/components/ui/tooltip"
-import { Transaction, Transactions, UsersAllResponse } from "@/types/firebase"
+import { Currencies, Transaction, Transactions, UsersAllResponse } from "@/types/firebase"
 
 function PersonsTable() {
-  const { data: transactions, error, isLoading } = useSWR<Transactions>("/api/transactions/all", { refreshInterval: 10000 })
-  const { data: users } = useSWR<UsersAllResponse>("/api/users/all")
+  const { data: transactions, error: transactionsError, isLoading: transactionsIsLoading } = useSWR<Transactions>("/api/transactions/all", { refreshInterval: 10000 })
+  const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users/all")
+  const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies/all")
 
-  if (error) return <div className="text-center">Failed to load</div>
+  if (transactionsError || usersError || currenciesError) {
+    return <div className="text-center">Failed to load</div>
+  }
 
-  if (isLoading || !transactions || !users) return <div className="text-center">Loading...</div>
+  if (transactionsIsLoading || usersIsLoading || currenciesIsLoading || !transactions || !users || !currencies) {
+    return <div className="text-center">Loading...</div>
+  }
 
   return (
     <div className="rounded-md border">
@@ -34,23 +39,36 @@ function PersonsTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
+          <TableRow className="bg-slate-100">
+            <TableCell />
+            <TableCell className="shrink-0 font-semibold">合計</TableCell>
+            {Object.keys(users).map((userId) => (
+              <PersonsTableTotalAmountTableCell
+                key={userId}
+                transactions={transactions}
+                currencies={currencies}
+                userId={userId}
+              />
+            ))}
+            <TableCell />
+          </TableRow>
           {Object.keys(transactions)
             .reverse()
-            .map((key) => (
-              <TableRow key={transactions[key].timestamp}>
+            .map((transactionId) => (
+              <TableRow key={transactions[transactionId].timestamp}>
                 <TableCell>
-                  <Timestamp timestamp={transactions[key].timestamp} />
+                  <Timestamp timestamp={transactions[transactionId].timestamp} />
                 </TableCell>
-                <TableCell className="shrink-0 font-semibold">{transactions[key].title}</TableCell>
-                {Object.keys(users).map((userKey) => (
+                <TableCell className="shrink-0 font-semibold">{transactions[transactionId].title}</TableCell>
+                {Object.keys(users).map((userId) => (
                   <PersonsTableCell
-                    key={userKey}
-                    transaction={transactions[key]}
-                    userId={userKey}
+                    key={userId}
+                    transaction={transactions[transactionId]}
+                    userId={userId}
                   />
                 ))}
                 <TableCell>
-                  <Link href={`/transaction/${key}`}>
+                  <Link href={`/transaction/${transactionId}`}>
                     <Button variant="secondary">詳細</Button>
                   </Link>
                 </TableCell>
@@ -64,20 +82,59 @@ function PersonsTable() {
 
 export default PersonsTable
 
+type PersonsTableTotalAmountTableCellProps = {
+  transactions: Transactions
+  currencies: Currencies
+  userId: string
+}
+
+function PersonsTableTotalAmountTableCell({ transactions, currencies, userId }: PersonsTableTotalAmountTableCellProps) {
+  const totalAmounts = Object.values(transactions).reduce(
+    (acc, transaction) => {
+      const lend = getLendAmount(transaction, userId)
+      const borrowed = getBorrowedAmount(transaction, userId)
+      const involved = lend !== 0 || borrowed !== 0
+
+      if (!involved) {
+        return acc
+      }
+
+      const currencyId = transaction.currency
+      const amount = -1 * lend + borrowed
+
+      if (!acc[currencyId]) {
+        acc[currencyId] = 0
+      }
+
+      acc[currencyId] += amount
+
+      return acc
+    },
+    {} as { [currencyId: string]: number },
+  )
+
+  return (
+    <TableCell className="text-right">
+      {Object.keys(currencies).map((currencyId) => (
+        <Amount
+          key={currencyId}
+          amount={totalAmounts[currencyId] ?? 0}
+          currency={currencyId}
+          colored={true}
+        />
+      ))}
+    </TableCell>
+  )
+}
+
 type PersonsTableCellProps = {
   transaction: Transaction
   userId: string
 }
 
 function PersonsTableCell({ transaction, userId }: PersonsTableCellProps) {
-  const lend = transaction.from
-    .filter((f) => f.id === userId)
-    .map((f) => f.amount)
-    .reduce((a, b) => a + b, 0)
-  const borrowed = transaction.to
-    .filter((f) => f.id === userId)
-    .map((f) => f.amount)
-    .reduce((a, b) => a + b, 0)
+  const lend = getLendAmount(transaction, userId)
+  const borrowed = getBorrowedAmount(transaction, userId)
   const involved = lend !== 0 || borrowed !== 0
 
   return (
@@ -125,4 +182,18 @@ function PersonsTableCell({ transaction, userId }: PersonsTableCellProps) {
       </TooltipProvider>
     </TableCell>
   )
+}
+
+const getLendAmount = (transaction: Transaction, userId: string): number => {
+  return transaction.from
+    .filter((f) => f.id === userId)
+    .map((f) => f.amount)
+    .reduce((a, b) => a + b, 0)
+}
+
+const getBorrowedAmount = (transaction: Transaction, userId: string): number => {
+  return transaction.to
+    .filter((f) => f.id === userId)
+    .map((f) => f.amount)
+    .reduce((a, b) => a + b, 0)
 }

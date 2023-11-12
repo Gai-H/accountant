@@ -1,11 +1,10 @@
-import { currencies } from "@/lib/currency"
 import * as z from "zod"
 
 const schema = z
   .object({
     title: z.string().min(1, { message: "必須項目です" }).max(100, { message: "最大100文字です" }),
     description: z.string().max(2000, { message: "最大2000文字です" }).optional(),
-    currency: z.enum(currencies),
+    currency: z.string(),
     from: z
       .array(
         z.object({

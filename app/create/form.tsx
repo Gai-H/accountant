@@ -2,9 +2,9 @@
 
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import useSWR from "swr"
-import { useController, useForm, UseFormReturn } from "react-hook-form"
+import { useController, useForm, UseFormReturn, useWatch } from "react-hook-form"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus, Trash2, Loader2 } from "lucide-react"
@@ -29,6 +29,13 @@ function Form() {
       to: [],
     },
   })
+
+  const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users/all")
+  const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies/all")
+
+  if (usersError || currenciesError) return <div className="text-center">Failed to Load</div>
+
+  if (usersIsLoading || currenciesIsLoading || !users || !currencies) return <div className="text-center">Loading...</div>
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     setSending(true)
@@ -67,10 +74,19 @@ function Form() {
             <TitleFormField {...form} />
           </div>
           <div className="w-24">
-            <CurrencyFormField {...form} />
+            <CurrencyFormField
+              {...form}
+              currencies={currencies}
+            />
           </div>
-          <FromFormField {...form} />
-          <ToFormField {...form} />
+          <FromFormField
+            {...form}
+            users={users}
+          />
+          <ToFormField
+            {...form}
+            users={users}
+          />
           <div className="md:w-[40em]">
             <DescriptionFormField {...form} />
           </div>
@@ -123,9 +139,11 @@ function TitleFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   )
 }
 
-function CurrencyFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
-  const { data: currencies } = useSWR<Currencies>("/api/currencies/all")
+type CurrencyFormFieldProps = UseFormReturn<z.infer<typeof schema>> & {
+  currencies: Currencies
+}
 
+function CurrencyFormField({ control, currencies }: CurrencyFormFieldProps) {
   return (
     <FormField
       control={control}
@@ -143,18 +161,14 @@ function CurrencyFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {currencies ? (
-                Object.keys(currencies).map((currency) => (
-                  <SelectItem
-                    value={currency}
-                    key={currency}
-                  >
-                    {currency}
-                  </SelectItem>
-                ))
-              ) : (
-                <SelectItem value="loading">Loading...</SelectItem>
-              )}
+              {Object.keys(currencies).map((currency) => (
+                <SelectItem
+                  value={currency}
+                  key={currency}
+                >
+                  {currency}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           {/* <FormMessage /> */}
@@ -164,9 +178,11 @@ function CurrencyFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   )
 }
 
-function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
-  const { data: users, error, isLoading } = useSWR<UsersAllResponse>("/api/users/all")
+type FromFormFieldProps = UseFormReturn<z.infer<typeof schema>> & {
+  users: UsersAllResponse
+}
 
+function FromFormField({ control, users }: FromFormFieldProps) {
   return (
     <FormField
       control={control}
@@ -196,34 +212,15 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
                   <SelectValue placeholder="人" />
                 </SelectTrigger>
                 <SelectContent>
-                  {error && (
+                  {Object.keys(users).map((id) => (
                     <SelectItem
-                      value="error"
-                      disabled
-                      key="from-selectitem-error"
+                      value={id}
+                      key={`from-selectitem-${id}`}
+                      disabled={field.value.some((item) => item.id === id)}
                     >
-                      Error
+                      {users[id].global_name}
                     </SelectItem>
-                  )}
-                  {(isLoading || !users) && (
-                    <SelectItem
-                      value="loading"
-                      disabled
-                      key="from-selectitem-loading"
-                    >
-                      Loading...
-                    </SelectItem>
-                  )}
-                  {users &&
-                    Object.keys(users).map((id) => (
-                      <SelectItem
-                        value={id}
-                        key={`from-selectitem-${id}`}
-                        disabled={field.value.some((item) => item.id === id)}
-                      >
-                        {users[id].global_name}
-                      </SelectItem>
-                    ))}
+                  ))}
                 </SelectContent>
               </Select>
               <Input
@@ -250,8 +247,8 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
           <Button
             variant="secondary"
             type="button"
-            disabled={error || isLoading || !users ? field.value?.length === 1 : field.value?.length === Object.keys(users).length}
-            onClick={() => field.onChange([...field.value, { discordId: "", amount: Number.MIN_SAFE_INTEGER }])}
+            disabled={field.value?.length === Object.keys(users).length}
+            onClick={() => field.onChange([...field.value, { id: "", amount: Number.MIN_SAFE_INTEGER }])}
             className="block w-32"
           >
             貸す人を追加
@@ -262,18 +259,40 @@ function FromFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   )
 }
 
-function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
-  const { field: fromField } = useController({ name: "from" })
+type ToFormFieldProps = UseFormReturn<z.infer<typeof schema>> & {
+  users: UsersAllResponse
+}
+
+function ToFormField({ control, users }: ToFormFieldProps) {
+  const fromFieldValue = useWatch<z.infer<typeof schema>, "from">({ name: "from" })
+  const { field: toField } = useController<z.infer<typeof schema>, "to">({ name: "to" })
   const [split, setSplit] = useState<boolean>(true)
-  const { data: users, error, isLoading } = useSWR<UsersAllResponse>("/api/users/all")
 
   const getSplitAmount = (numberOfToPeople: number) => {
-    const fromValues: z.infer<typeof schema>["from"] = fromField.value
+    const fromValues: z.infer<typeof schema>["from"] = fromFieldValue
     if (fromValues.some((f) => f.amount === Number.MIN_SAFE_INTEGER)) return Number.MIN_SAFE_INTEGER
     const fromAmountSum = fromValues.reduce((prev, current) => prev + current.amount, 0)
     if (fromAmountSum === 0) return 0 // ゼロ除算
     return fromAmountSum / numberOfToPeople
   }
+
+  useEffect(() => {
+    if (split) {
+      const splitAmount = getSplitAmount(toField.value.length)
+      toField.onChange(toField.value.map((item) => ({ ...item, amount: splitAmount })))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromFieldValue])
+
+  useEffect(() => {
+    if (split) {
+      const splitAmount = getSplitAmount(toField.value.length)
+      toField.onChange(toField.value.map((item) => ({ ...item, amount: splitAmount })))
+    } else {
+      toField.onChange(toField.value.map((item) => ({ ...item, amount: Number.MIN_SAFE_INTEGER })))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [split])
 
   return (
     <FormField
@@ -292,14 +311,6 @@ function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
               checked={split}
               onCheckedChange={(checked) => {
                 setSplit(checked === "indeterminate" ? false : checked)
-                if (checked === "indeterminate" || checked === false) {
-                  // チェックが消えたとき、割り勘で入力された小数が残ると嫌なので金額をリセット
-                  field.onChange(field.value.map((item) => ({ ...item, amount: Number.MIN_SAFE_INTEGER })))
-                } else {
-                  // チェックがついたときに割り勘する
-                  const splitAmount = getSplitAmount(field.value.length)
-                  field.onChange(field.value.map((item) => ({ ...item, amount: splitAmount })))
-                }
               }}
             />
             <label
@@ -327,34 +338,15 @@ function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
                   <SelectValue placeholder="人" />
                 </SelectTrigger>
                 <SelectContent>
-                  {error && (
+                  {Object.keys(users).map((id) => (
                     <SelectItem
-                      value="error"
-                      disabled
-                      key="from-selectitem-error"
+                      value={id}
+                      key={`to-selectitem-${id}`}
+                      disabled={field.value.some((item) => item.id === id)}
                     >
-                      Error
+                      {users[id].global_name}
                     </SelectItem>
-                  )}
-                  {(isLoading || !users) && (
-                    <SelectItem
-                      value="loading"
-                      disabled
-                      key="from-selectitem-loading"
-                    >
-                      Loading...
-                    </SelectItem>
-                  )}
-                  {users &&
-                    Object.keys(users).map((id) => (
-                      <SelectItem
-                        value={id}
-                        key={`to-selectitem-${id}`}
-                        disabled={field.value.some((item) => item.id === id)}
-                      >
-                        {users[id].global_name}
-                      </SelectItem>
-                    ))}
+                  ))}
                 </SelectContent>
               </Select>
               <Input
@@ -391,9 +383,9 @@ function ToFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
           <Button
             variant="secondary"
             type="button"
-            disabled={error || isLoading || !users ? field.value?.length === 1 : field.value?.length === Object.keys(users).length}
+            disabled={field.value?.length === Object.keys(users).length}
             onClick={() => {
-              const updated = [...field.value, { discordId: "", amount: Number.MIN_SAFE_INTEGER }]
+              const updated = [...field.value, { id: "", amount: Number.MIN_SAFE_INTEGER }]
               if (split) {
                 const splitAmount = getSplitAmount(updated.length)
                 field.onChange(updated.map((item) => ({ ...item, amount: splitAmount })))

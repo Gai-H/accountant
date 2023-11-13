@@ -19,18 +19,20 @@ import schema from "./schema"
 import { Currencies, UsersAllResponse } from "@/types/firebase"
 import { useToast } from "@/components/ui/use-toast"
 
+const defaultValues: z.infer<typeof schema> = {
+  title: "",
+  description: "",
+  from: [],
+  to: [],
+  currency: "",
+}
+
 function Form() {
   const [sending, setSending] = useState<boolean>(false)
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      title: "",
-      description: "",
-      from: [],
-      to: [],
-    },
+    defaultValues,
   })
-
   const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users/all")
   const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies/all")
   const { toast } = useToast()
@@ -162,7 +164,7 @@ function CurrencyFormField({ control, currencies }: CurrencyFormFieldProps) {
           <FormLabel className={LABEL_CSS}>通貨</FormLabel>
           <Select
             onValueChange={field.onChange}
-            defaultValue={field.value}
+            value={field.value}
           >
             <FormControl>
               <SelectTrigger>

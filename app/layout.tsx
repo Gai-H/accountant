@@ -5,6 +5,7 @@ import Header from "@/components/header"
 import SessionProvider from "./session-provider"
 import SWR from "./swr"
 import { cn } from "@/lib/utils"
+import { Toaster } from "@/components/ui/toaster"
 
 const fontSans = FontSans({
   weight: ["400", "500", "600", "700"],
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SWR>
             <Header />
             <main className="p-5 lg:mx-auto lg:w-3/5 lg:p-10">{children}</main>
+            <Toaster />
           </SWR>
         </SessionProvider>
       </body>

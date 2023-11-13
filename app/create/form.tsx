@@ -17,6 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import PageTitle from "@/components/page-title"
 import schema from "./schema"
 import { Currencies, UsersAllResponse } from "@/types/firebase"
+import { useToast } from "@/components/ui/use-toast"
 
 function Form() {
   const [sending, setSending] = useState<boolean>(false)
@@ -32,6 +33,7 @@ function Form() {
 
   const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users/all")
   const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies/all")
+  const { toast } = useToast()
 
   if (usersError || currenciesError) return <div className="text-center">Failed to Load</div>
 
@@ -42,10 +44,17 @@ function Form() {
     const res = await fetch("/api/transactions/create", { method: "POST", body: JSON.stringify(values) })
     const json = await res.json()
     if (json.message === "ok") {
-      alert("記録を追加しました")
-      form.reset()
+      toast({
+        title: "記録を追加しました",
+      })
+      form.reset(defaultValues)
+      form.setValue("currency", undefined as unknown as string)
     } else {
-      alert("エラーが発生しました")
+      toast({
+        title: "エラーが発生しました",
+        description: json.error,
+        variant: "destructive",
+      })
     }
     setSending(false)
   }

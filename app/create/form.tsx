@@ -183,7 +183,14 @@ function CurrencyFormField({ control, currencies }: CurrencyFormFieldProps) {
                   <SelectValue placeholder="通貨" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent
+                ref={(ref) => {
+                  if (!ref) return
+                  ref.ontouchstart = (e) => {
+                    e.preventDefault()
+                  }
+                }}
+              >
                 {Object.keys(currencies).map((currency) => (
                   <SelectItem
                     value={currency}
@@ -234,7 +241,14 @@ function FromFormField({ control, users }: FromFormFieldProps) {
                 <SelectTrigger className="w-24">
                   <SelectValue placeholder="人" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent
+                  ref={(ref) => {
+                    if (!ref) return
+                    ref.ontouchstart = (e) => {
+                      e.preventDefault()
+                    }
+                  }}
+                >
                   {Object.keys(users).map((id) => (
                     <SelectItem
                       value={id}
@@ -360,7 +374,14 @@ function ToFormField({ control, users }: ToFormFieldProps) {
                 <SelectTrigger className="w-24">
                   <SelectValue placeholder="人" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent
+                  ref={(ref) => {
+                    if (!ref) return
+                    ref.ontouchstart = (e) => {
+                      e.preventDefault()
+                    }
+                  }}
+                >
                   {Object.keys(users).map((id) => (
                     <SelectItem
                       value={id}

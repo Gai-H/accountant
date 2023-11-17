@@ -74,22 +74,30 @@ function Form() {
           <div className="flex justify-between">
             <PageTitle>記録を追加する</PageTitle>
             <Button
+              disabled={sending}
               type="submit"
               className="md:hidden md:w-32"
             >
-              <Plus className="mr-1 h-4 w-4" />
-              追加
+              {sending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  追加中...
+                </>
+              ) : (
+                <>
+                  <Plus className="mr-1 h-4 w-4" />
+                  追加
+                </>
+              )}
             </Button>
           </div>
           <div className="md:w-80">
             <TitleFormField {...form} />
           </div>
-          <div className="w-24">
-            <CurrencyFormField
-              {...form}
-              currencies={currencies}
-            />
-          </div>
+          <CurrencyFormField
+            {...form}
+            currencies={currencies}
+          />
           <FromFormField
             {...form}
             users={users}
@@ -161,28 +169,39 @@ function CurrencyFormField({ control, currencies }: CurrencyFormFieldProps) {
       name="currency"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className={LABEL_CSS}>通貨</FormLabel>
-          <Select
-            onValueChange={field.onChange}
-            value={field.value}
-          >
-            <FormControl>
-              <SelectTrigger>
-                <SelectValue placeholder="通貨" />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {Object.keys(currencies).map((currency) => (
-                <SelectItem
-                  value={currency}
-                  key={currency}
-                >
-                  {currency}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {/* <FormMessage /> */}
+          <div className="flex items-center gap-2">
+            <FormLabel className={LABEL_CSS}>通貨</FormLabel>
+            <FormMessage />
+          </div>
+          <div className="md:w-32">
+            <Select
+              onValueChange={(value) => field.onChange(value)}
+              value={field.value}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="通貨" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent
+                ref={(ref) => {
+                  if (!ref) return
+                  ref.ontouchstart = (e) => {
+                    e.preventDefault()
+                  }
+                }}
+              >
+                {Object.keys(currencies).map((currency) => (
+                  <SelectItem
+                    value={currency}
+                    key={currency}
+                  >
+                    {currency}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </FormItem>
       )}
     />
@@ -222,7 +241,14 @@ function FromFormField({ control, users }: FromFormFieldProps) {
                 <SelectTrigger className="w-24">
                   <SelectValue placeholder="人" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent
+                  ref={(ref) => {
+                    if (!ref) return
+                    ref.ontouchstart = (e) => {
+                      e.preventDefault()
+                    }
+                  }}
+                >
                   {Object.keys(users).map((id) => (
                     <SelectItem
                       value={id}
@@ -348,7 +374,14 @@ function ToFormField({ control, users }: ToFormFieldProps) {
                 <SelectTrigger className="w-24">
                   <SelectValue placeholder="人" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent
+                  ref={(ref) => {
+                    if (!ref) return
+                    ref.ontouchstart = (e) => {
+                      e.preventDefault()
+                    }
+                  }}
+                >
                   {Object.keys(users).map((id) => (
                     <SelectItem
                       value={id}

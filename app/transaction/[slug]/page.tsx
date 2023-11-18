@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 import { notFound, useRouter } from "next/navigation"
 import { Loader2, Trash2 } from "lucide-react"
 import Amount from "@/components/amount"
@@ -210,6 +210,7 @@ function RemoveButton({ id }: RemoveButtonProps) {
                     duration: 4000,
                   })
                 }, 100)
+                mutate("/api/transactions/all")
                 router.push("/")
               } else {
                 setTimeout(() => {

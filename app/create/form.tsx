@@ -3,7 +3,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 import { useController, useForm, UseFormReturn, useWatch } from "react-hook-form"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -51,6 +51,7 @@ function Form() {
       })
       form.reset(defaultValues)
       form.setValue("currency", undefined as unknown as string)
+      mutate("/api/transactions/all")
     } else {
       toast({
         title: "エラーが発生しました",

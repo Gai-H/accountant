@@ -88,7 +88,7 @@ function Page({ params: { slug } }: PageProps) {
         </div>
         <div className="flex gap-2">
           <ItemTitle>説明</ItemTitle>
-          {transaction.description ? <div className="text-lg">{transaction.description}</div> : <div className="text-lg italic">なし</div>}
+          {transaction.description ? <div className="whitespace-pre-line text-lg">{transaction.description}</div> : <div className="text-lg italic">なし</div>}
         </div>
         <RemoveButton id={slug} />
       </div>
@@ -141,19 +141,21 @@ function FromToTable({ data, currency }: FromToTableProps) {
   return (
     <table className="h-fit border-separate">
       <tbody>
-        {data.map((f) => (
-          <tr key={f.id}>
-            <td className="pb-2 pr-4">
-              <AvatarWithName id={f.id} />
-            </td>
-            <td className="pb-2 pr-4">
-              <Amount
-                amount={f.amount}
-                currency={currency}
-              />
-            </td>
-          </tr>
-        ))}
+        {[...data]
+          .sort((a, b) => a.id.localeCompare(b.id))
+          .map((f) => (
+            <tr key={f.id}>
+              <td className="pb-2 pr-4">
+                <AvatarWithName id={f.id} />
+              </td>
+              <td className="pb-2 pr-4">
+                <Amount
+                  amount={f.amount}
+                  currency={currency}
+                />
+              </td>
+            </tr>
+          ))}
       </tbody>
     </table>
   )
@@ -208,7 +210,7 @@ function RemoveButton({ id }: RemoveButtonProps) {
                     duration: 4000,
                   })
                 }, 100)
-                router.back()
+                router.push("/")
               } else {
                 setTimeout(() => {
                   toast({

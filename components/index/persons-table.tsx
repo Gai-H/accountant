@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Amount from "@/components/amount"
 import { Button } from "@/components/ui/button"
 import Timestamp from "@/components/timestamp"
-import { TooltipProvider, TooltipTrigger, Tooltip, TooltipContent } from "@/components/ui/tooltip"
+import Pop from "@/components/pop"
 import { Currencies, Transaction, Transactions, UsersAllResponse } from "@/types/firebase"
 
 function PersonsTable() {
@@ -22,7 +22,7 @@ function PersonsTable() {
 
   return (
     <div className="rounded-md border">
-      <Table>
+      <Table className="whitespace-nowrap">
         <TableHeader>
           <TableRow>
             <TableHead className="w-52">時間</TableHead>
@@ -41,7 +41,7 @@ function PersonsTable() {
         <TableBody>
           <TableRow className="bg-slate-100">
             <TableCell />
-            <TableCell className="shrink-0 font-semibold">合計</TableCell>
+            <TableCell className="font-semibold">合計</TableCell>
             {Object.keys(users).map((userId) => (
               <PersonsTableTotalAmountTableCell
                 key={userId}
@@ -59,7 +59,7 @@ function PersonsTable() {
                 <TableCell>
                   <Timestamp timestamp={transactions[transactionId].timestamp} />
                 </TableCell>
-                <TableCell className="shrink-0 font-semibold">{transactions[transactionId].title}</TableCell>
+                <TableCell className="font-semibold">{transactions[transactionId].title}</TableCell>
                 {Object.keys(users).map((userId) => (
                   <PersonsTableCell
                     key={userId}
@@ -139,47 +139,49 @@ function PersonsTableCell({ transaction, userId }: PersonsTableCellProps) {
 
   return (
     <TableCell className="text-right">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            {involved && (
-              <Amount
-                amount={-1 * lend + borrowed}
-                currency={transaction.currency}
-                colored={true}
-              />
-            )}
-          </TooltipTrigger>
-          <TooltipContent>
-            {involved && (
-              <table className="h-fit border-separate">
-                <tbody>
-                  <tr className="mb-2">
-                    <td className="mr-4">貸した額</td>
-                    <td>
-                      <Amount
-                        amount={lend === 0 ? 0 : -1 * lend}
-                        currency={transaction.currency}
-                        colored={true}
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="mr-4">借りた額</td>
-                    <td>
-                      <Amount
-                        amount={borrowed}
-                        currency={transaction.currency}
-                        colored={true}
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            )}
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Pop
+        trigger={
+          involved ? (
+            <Amount
+              amount={-1 * lend + borrowed}
+              currency={transaction.currency}
+              colored={true}
+            />
+          ) : (
+            <></>
+          )
+        }
+        content={
+          involved ? (
+            <table className="h-fit border-separate">
+              <tbody>
+                <tr className="mb-2">
+                  <td className="mr-4">貸した額</td>
+                  <td>
+                    <Amount
+                      amount={lend === 0 ? 0 : -1 * lend}
+                      currency={transaction.currency}
+                      colored={true}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td className="mr-4">借りた額</td>
+                  <td>
+                    <Amount
+                      amount={borrowed}
+                      currency={transaction.currency}
+                      colored={true}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          ) : (
+            <></>
+          )
+        }
+      />
     </TableCell>
   )
 }

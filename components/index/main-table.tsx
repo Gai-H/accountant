@@ -1,11 +1,11 @@
 import Link from "next/link"
 import useSWR from "swr"
 import { Table, TableBody, TableHead, TableCell, TableHeader, TableRow } from "@/components/ui/table"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import Timestamp from "@/components/timestamp"
 import Amount from "@/components/amount"
+import Pop from "@/components/pop"
 import { Currencies, Transactions, UsersAllResponse } from "@/types/firebase"
 
 function MainTable() {
@@ -44,11 +44,11 @@ function MainTable() {
   return (
     <>
       <div className="rounded-md border">
-        <Table>
+        <Table className="whitespace-nowrap">
           <TableHeader>
             <TableRow>
               <TableHead className="w-52">時間</TableHead>
-              <TableHead className="shrink-0">項目</TableHead>
+              <TableHead>項目</TableHead>
               <TableHead className="text-center">金額</TableHead>
               <TableHead>貸した人</TableHead>
               <TableHead>借りた人</TableHead>
@@ -58,7 +58,7 @@ function MainTable() {
           <TableBody>
             <TableRow className="bg-slate-100">
               <TableCell />
-              <TableCell className="shrink-0 font-semibold">合計</TableCell>
+              <TableCell className="font-semibold">合計</TableCell>
               <TableCell className="text-right">
                 {Object.keys(currencies).map((currency) => (
                   <Amount
@@ -79,7 +79,7 @@ function MainTable() {
                   <TableCell>
                     <Timestamp timestamp={res[key].timestamp} />
                   </TableCell>
-                  <TableCell className="shrink-0 font-semibold">
+                  <TableCell className="font-semibold">
                     <div>{res[key].title}</div>
                   </TableCell>
                   <TableCell className="text-right">
@@ -129,10 +129,12 @@ function Avatars({ data, currency }: AvatarsProps) {
 
   return (
     <div className="flex gap-2">
-      {data.map((d) => (
-        <TooltipProvider key={d.id}>
-          <Tooltip>
-            <TooltipTrigger>
+      {[...data]
+        .sort((a, b) => a.id.localeCompare(b.id))
+        .map((d) => (
+          <Pop
+            key={d.id}
+            trigger={
               <Avatar className="inline-block h-9 w-9">
                 {res && (
                   <AvatarImage
@@ -142,17 +144,18 @@ function Avatars({ data, currency }: AvatarsProps) {
                 )}
                 {res ? <AvatarFallback>{res[d.id].global_name.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
               </Avatar>
-            </TooltipTrigger>
-            <TooltipContent>
-              <div className="mb-1 text-center font-semibold">{res ? res[d.id].global_name : "Loading..."}</div>
-              <Amount
-                amount={d.amount}
-                currency={currency}
-              />{" "}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      ))}
+            }
+            content={
+              <>
+                <div className="mb-1 text-center font-semibold">{res ? res[d.id].global_name : "Loading..."}</div>
+                <Amount
+                  amount={d.amount}
+                  currency={currency}
+                />
+              </>
+            }
+          />
+        ))}
     </div>
   )
 }

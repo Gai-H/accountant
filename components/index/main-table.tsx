@@ -129,30 +129,32 @@ function Avatars({ data, currency }: AvatarsProps) {
 
   return (
     <div className="flex gap-2">
-      {data.map((d) => (
-        <TooltipProvider key={d.id}>
-          <Tooltip>
-            <TooltipTrigger>
-              <Avatar className="inline-block h-9 w-9">
-                {res && (
-                  <AvatarImage
-                    src={res[d.id].image_url}
-                    alt={res[d.id].global_name}
-                  />
-                )}
-                {res ? <AvatarFallback>{res[d.id].global_name.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
-              </Avatar>
-            </TooltipTrigger>
-            <TooltipContent>
-              <div className="mb-1 text-center font-semibold">{res ? res[d.id].global_name : "Loading..."}</div>
-              <Amount
-                amount={d.amount}
-                currency={currency}
-              />{" "}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      ))}
+      {[...data]
+        .sort((a, b) => a.id.localeCompare(b.id))
+        .map((d) => (
+          <TooltipProvider key={d.id}>
+            <Tooltip>
+              <TooltipTrigger>
+                <Avatar className="inline-block h-9 w-9">
+                  {res && (
+                    <AvatarImage
+                      src={res[d.id].image_url}
+                      alt={res[d.id].global_name}
+                    />
+                  )}
+                  {res ? <AvatarFallback>{res[d.id].global_name.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
+                </Avatar>
+              </TooltipTrigger>
+              <TooltipContent>
+                <div className="mb-1 text-center font-semibold">{res ? res[d.id].global_name : "Loading..."}</div>
+                <Amount
+                  amount={d.amount}
+                  currency={currency}
+                />{" "}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ))}
     </div>
   )
 }

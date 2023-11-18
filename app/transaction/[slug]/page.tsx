@@ -141,19 +141,21 @@ function FromToTable({ data, currency }: FromToTableProps) {
   return (
     <table className="h-fit border-separate">
       <tbody>
-        {data.map((f) => (
-          <tr key={f.id}>
-            <td className="pb-2 pr-4">
-              <AvatarWithName id={f.id} />
-            </td>
-            <td className="pb-2 pr-4">
-              <Amount
-                amount={f.amount}
-                currency={currency}
-              />
-            </td>
-          </tr>
-        ))}
+        {[...data]
+          .sort((a, b) => a.id.localeCompare(b.id))
+          .map((f) => (
+            <tr key={f.id}>
+              <td className="pb-2 pr-4">
+                <AvatarWithName id={f.id} />
+              </td>
+              <td className="pb-2 pr-4">
+                <Amount
+                  amount={f.amount}
+                  currency={currency}
+                />
+              </td>
+            </tr>
+          ))}
       </tbody>
     </table>
   )

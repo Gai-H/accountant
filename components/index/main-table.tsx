@@ -1,11 +1,11 @@
 import Link from "next/link"
 import useSWR from "swr"
 import { Table, TableBody, TableHead, TableCell, TableHeader, TableRow } from "@/components/ui/table"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import Timestamp from "@/components/timestamp"
 import Amount from "@/components/amount"
+import Pop from "@/components/pop"
 import { Currencies, Transactions, UsersAllResponse } from "@/types/firebase"
 
 function MainTable() {
@@ -132,28 +132,29 @@ function Avatars({ data, currency }: AvatarsProps) {
       {[...data]
         .sort((a, b) => a.id.localeCompare(b.id))
         .map((d) => (
-          <TooltipProvider key={d.id}>
-            <Tooltip>
-              <TooltipTrigger>
-                <Avatar className="inline-block h-9 w-9">
-                  {res && (
-                    <AvatarImage
-                      src={res[d.id].image_url}
-                      alt={res[d.id].global_name}
-                    />
-                  )}
-                  {res ? <AvatarFallback>{res[d.id].global_name.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
-                </Avatar>
-              </TooltipTrigger>
-              <TooltipContent>
+          <Pop
+            key={d.id}
+            trigger={
+              <Avatar className="inline-block h-9 w-9">
+                {res && (
+                  <AvatarImage
+                    src={res[d.id].image_url}
+                    alt={res[d.id].global_name}
+                  />
+                )}
+                {res ? <AvatarFallback>{res[d.id].global_name.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
+              </Avatar>
+            }
+            content={
+              <>
                 <div className="mb-1 text-center font-semibold">{res ? res[d.id].global_name : "Loading..."}</div>
                 <Amount
                   amount={d.amount}
                   currency={currency}
-                />{" "}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+                />
+              </>
+            }
+          />
         ))}
     </div>
   )

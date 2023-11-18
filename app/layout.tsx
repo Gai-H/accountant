@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
+import SWR from "./swr"
+import { Analytics } from "@vercel/analytics/react"
+import SessionProvider from "./session-provider"
+import { cn } from "@/lib/utils"
+import Header from "@/components/header"
+import { Toaster } from "@/components/ui/toaster"
 import { Noto_Sans_JP as FontSans } from "next/font/google"
 import "./globals.css"
-import Header from "@/components/header"
-import SessionProvider from "./session-provider"
-import SWR from "./swr"
-import { cn } from "@/lib/utils"
-import { Toaster } from "@/components/ui/toaster"
 
 const fontSans = FontSans({
   weight: ["400", "500", "600", "700"],
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header />
             <main className="p-5 lg:mx-auto lg:w-3/5 lg:p-10">{children}</main>
             <Toaster />
+            <Analytics />
           </SWR>
         </SessionProvider>
       </body>

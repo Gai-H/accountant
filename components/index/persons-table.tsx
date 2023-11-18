@@ -22,7 +22,7 @@ function PersonsTable() {
 
   return (
     <div className="rounded-md border">
-      <Table>
+      <Table className="whitespace-nowrap">
         <TableHeader>
           <TableRow>
             <TableHead className="w-52">時間</TableHead>
@@ -41,7 +41,7 @@ function PersonsTable() {
         <TableBody>
           <TableRow className="bg-slate-100">
             <TableCell />
-            <TableCell className="shrink-0 font-semibold">合計</TableCell>
+            <TableCell className="font-semibold">合計</TableCell>
             {Object.keys(users).map((userId) => (
               <PersonsTableTotalAmountTableCell
                 key={userId}
@@ -59,7 +59,7 @@ function PersonsTable() {
                 <TableCell>
                   <Timestamp timestamp={transactions[transactionId].timestamp} />
                 </TableCell>
-                <TableCell className="shrink-0 font-semibold">{transactions[transactionId].title}</TableCell>
+                <TableCell className="font-semibold">{transactions[transactionId].title}</TableCell>
                 {Object.keys(users).map((userId) => (
                   <PersonsTableCell
                     key={userId}

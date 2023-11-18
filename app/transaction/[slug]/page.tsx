@@ -88,7 +88,7 @@ function Page({ params: { slug } }: PageProps) {
         </div>
         <div className="flex gap-2">
           <ItemTitle>説明</ItemTitle>
-          {transaction.description ? <div className="text-lg">{transaction.description}</div> : <div className="text-lg italic">なし</div>}
+          {transaction.description ? <div className="whitespace-pre-line text-lg">{transaction.description}</div> : <div className="text-lg italic">なし</div>}
         </div>
         <RemoveButton id={slug} />
       </div>

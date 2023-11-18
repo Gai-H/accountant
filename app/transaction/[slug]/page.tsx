@@ -1,12 +1,18 @@
 "use client"
 
+import { useState } from "react"
+import useSWR from "swr"
+import { notFound, useRouter } from "next/navigation"
+import { Loader2, Trash2 } from "lucide-react"
 import Amount from "@/components/amount"
 import PageTitle from "@/components/page-title"
 import Timestamp from "@/components/timestamp"
-import { Transactions } from "@/types/firebase"
+import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { notFound } from "next/navigation"
-import useSWR from "swr"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import { useToast } from "@/components/ui/use-toast"
+import { Transactions } from "@/types/firebase"
+import { Response } from "@/types/api"
 
 type PageProps = {
   params: {
@@ -26,7 +32,9 @@ function Page({ params: { slug } }: PageProps) {
 
   return (
     <>
-      <PageTitle>記録 {transaction.title}</PageTitle>
+      <PageTitle>
+        記録<span className="ml-2">{transaction.title}</span>
+      </PageTitle>
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <ItemTitle>日時</ItemTitle>
@@ -80,8 +88,9 @@ function Page({ params: { slug } }: PageProps) {
         </div>
         <div className="flex gap-2">
           <ItemTitle>説明</ItemTitle>
-          {transaction.description ? <div>{transaction.description}</div> : <div className="italic">なし</div>}
+          {transaction.description ? <div className="text-lg">{transaction.description}</div> : <div className="text-lg italic">なし</div>}
         </div>
+        <RemoveButton id={slug} />
       </div>
     </>
   )
@@ -147,5 +156,76 @@ function FromToTable({ data, currency }: FromToTableProps) {
         ))}
       </tbody>
     </table>
+  )
+}
+
+type RemoveButtonProps = {
+  id: string
+}
+
+function RemoveButton({ id }: RemoveButtonProps) {
+  const [sending, setSending] = useState<boolean>(false)
+  const router = useRouter()
+  const { toast } = useToast()
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger
+        asChild
+        disabled={sending}
+      >
+        <Button
+          variant="destructive"
+          className="mt-4 w-32"
+          disabled={sending}
+        >
+          {sending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              削除中...
+            </>
+          ) : (
+            <>
+              <Trash2 className="mr-2 h-4 w-4" />
+              記録を削除
+            </>
+          )}
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>本当に削除しますか？</AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>いいえ</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={async () => {
+              setSending(true)
+              const res = await fetch("/api/transactions/remove", { method: "POST", body: JSON.stringify({ id }) })
+              const json: Response<null, string> = await res.json()
+              if (json.message === "ok") {
+                setTimeout(() => {
+                  toast({
+                    title: "削除に成功しました",
+                    duration: 4000,
+                  })
+                }, 100)
+                router.back()
+              } else {
+                setTimeout(() => {
+                  toast({
+                    title: "削除に失敗しました",
+                    description: json.error,
+                    variant: "destructive",
+                    duration: 4000,
+                  })
+                }, 100)
+              }
+              setSending(false)
+            }}
+          >
+            はい
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }

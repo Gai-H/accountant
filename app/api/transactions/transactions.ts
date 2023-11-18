@@ -35,3 +35,23 @@ export const insertTransaction = async (transaction: Transaction): Promise<boole
   await updateTransactions()
   return true
 }
+
+export const removeTransaction = async (id: string): Promise<boolean> => {
+  if (id.includes("/") || !id.startsWith("-")) return false
+
+  const transactions = await getTransactions()
+  if (!(transactions && id in transactions)) {
+    console.error("Failed to remove transaction: transaction not found")
+    return false
+  }
+
+  const ref = db.ref(`transactions/${id}`)
+  await ref.remove((error) => {
+    if (error) {
+      console.error("Failed to remove transaction: " + error)
+      return false
+    }
+  })
+  await updateTransactions()
+  return true
+}

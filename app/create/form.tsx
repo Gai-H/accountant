@@ -457,7 +457,7 @@ function DescriptionFormField({ control }: UseFormReturn<z.infer<typeof schema>>
           <FormLabel className={LABEL_CSS}>説明</FormLabel>
           <FormControl>
             <Textarea
-              placeholder="説明を入力"
+              placeholder="説明を入力 (任意)"
               {...field}
             />
           </FormControl>

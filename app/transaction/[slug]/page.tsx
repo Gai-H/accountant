@@ -210,7 +210,7 @@ function RemoveButton({ id }: RemoveButtonProps) {
                     duration: 4000,
                   })
                 }, 100)
-                router.back()
+                router.push("/")
               } else {
                 setTimeout(() => {
                   toast({

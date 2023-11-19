@@ -8,12 +8,14 @@ function Login() {
   const { data, status } = useSession()
 
   if (status === "loading") {
-    return <PageTitle>Loading...</PageTitle>
+    return <div className="text-center">Loading...</div>
   } else if (status === "authenticated") {
     return (
       <>
         <PageTitle>ログイン済み</PageTitle>
-        <p>Discord ID: {data.user.name}</p>
+        <p>
+          Discord ID <span className="font-semibold">{data.user.name}</span>
+        </p>
         <Button
           onClick={() => signOut()}
           className="mt-5"
@@ -24,7 +26,16 @@ function Login() {
     )
   } else {
     // status === "unauthenticated"
-    return <Button onClick={() => signIn()}>Discordでログイン</Button>
+    return (
+      <div className="flex justify-center">
+        <Button
+          onClick={() => signIn()}
+          className="mt-10 block"
+        >
+          Discordでログイン
+        </Button>
+      </div>
+    )
   }
 }
 

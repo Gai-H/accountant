@@ -12,7 +12,7 @@ function Header() {
         >
           Accountant
         </Link>
-        <span className="hidden md:inline">
+        <span>
           <Link
             href={"https://github.com/Gai-H/accountant"}
             target={"_blank"}
@@ -25,25 +25,6 @@ function Header() {
             </Button>
           </Link>
         </span>
-        <Button
-          variant={"link"}
-          className="ml-auto mr-1"
-        >
-          <Link
-            href={"/"}
-            className="text-md border-b"
-          >
-            全員の記録
-          </Link>
-        </Button>
-        <Button variant={"link"}>
-          <Link
-            href={"/user"}
-            className="text-md border-b"
-          >
-            個人の記録
-          </Link>
-        </Button>
       </div>
     </header>
   )

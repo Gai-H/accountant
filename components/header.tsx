@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Github } from "lucide-react"
+import { Github, User2 } from "lucide-react"
 
 function Header() {
   return (
@@ -25,6 +25,17 @@ function Header() {
             </Button>
           </Link>
         </span>
+        <Link
+          href="/login"
+          className="ml-auto"
+        >
+          <Button
+            variant="outline"
+            size="icon"
+          >
+            <User2 className="h-4 w-4" />
+          </Button>
+        </Link>
       </div>
     </header>
   )

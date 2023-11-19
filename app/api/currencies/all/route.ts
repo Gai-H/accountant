@@ -5,6 +5,8 @@ import { Response } from "@/types/api"
 
 const dynamic = "force-dynamic"
 
+const revalidate = 0
+
 async function GET(): Promise<NextResponse<Response<Currencies>>> {
   const currencies = await getCurrencies()
 
@@ -30,4 +32,4 @@ async function GET(): Promise<NextResponse<Response<Currencies>>> {
   )
 }
 
-export { GET, dynamic }
+export { GET, dynamic, revalidate }

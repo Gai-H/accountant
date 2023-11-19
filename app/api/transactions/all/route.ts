@@ -5,6 +5,8 @@ import { Transactions } from "@/types/firebase"
 
 const dynamic = "force-dynamic"
 
+const revalidate = 0
+
 async function GET(): Promise<NextResponse<Response<Transactions>>> {
   const transactions = await getTransactions()
 
@@ -21,4 +23,4 @@ async function GET(): Promise<NextResponse<Response<Transactions>>> {
   return NextResponse.json(res)
 }
 
-export { GET, dynamic }
+export { GET, dynamic, revalidate }

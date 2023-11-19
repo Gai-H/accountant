@@ -5,6 +5,8 @@ import { Response } from "@/types/api"
 
 const dynamic = "force-dynamic"
 
+const revalidate = 0
+
 async function GET(): Promise<NextResponse<Response<UsersAllResponse>>> {
   const users = await getUsers()
 
@@ -35,4 +37,4 @@ async function GET(): Promise<NextResponse<Response<UsersAllResponse>>> {
   )
 }
 
-export { GET, dynamic }
+export { GET, dynamic, revalidate }

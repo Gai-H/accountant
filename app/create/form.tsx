@@ -18,6 +18,7 @@ import PageTitle from "@/components/page-title"
 import schema from "./schema"
 import { Currencies, UsersAllResponse } from "@/types/firebase"
 import { useToast } from "@/components/ui/use-toast"
+import { useRouter } from "next/navigation"
 
 const defaultValues: z.infer<typeof schema> = {
   title: "",
@@ -36,6 +37,7 @@ function Form() {
   const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users/all")
   const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies/all")
   const { toast } = useToast()
+  const router = useRouter()
 
   if (usersError || currenciesError) return <div className="text-center">Failed to Load</div>
 
@@ -49,9 +51,8 @@ function Form() {
       toast({
         title: "記録を追加しました",
       })
-      form.reset(defaultValues)
-      form.setValue("currency", undefined as unknown as string)
-      mutate("/api/transactions/all")
+      await mutate("/api/transactions/all")
+      router.push("/")
     } else {
       toast({
         title: "エラーが発生しました",

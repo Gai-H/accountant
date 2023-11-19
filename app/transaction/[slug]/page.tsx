@@ -210,7 +210,7 @@ function RemoveButton({ id }: RemoveButtonProps) {
                     duration: 4000,
                   })
                 }, 100)
-                mutate("/api/transactions/all")
+                await mutate("/api/transactions/all")
                 router.push("/")
               } else {
                 setTimeout(() => {

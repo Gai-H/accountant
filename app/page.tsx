@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
       <div className="mb-2 flex justify-between">
-        <PageTitle>全員の記録</PageTitle>
+        <PageTitle>記録一覧</PageTitle>
         <TableToggleButton toggleMainTable={toggleMainTable} />
         <Button asChild>
           <Link href="/create">

@@ -1,27 +1,13 @@
 import { Transaction, Transactions } from "@/types/firebase"
 import db from "@/app/api/firebase"
 
-const CACHE_DURATION = 1000 * 60 * 3 // 3 minutes
-
-let cache: Transactions | null = null
-let lastUpdated: number = 0
-
 export const getTransactions = async (): Promise<Transactions | null> => {
-  if (cache && Date.now() - lastUpdated <= CACHE_DURATION) {
-    return cache
-  }
-
-  await updateTransactions()
-
-  return cache
-}
-
-export const updateTransactions = async () => {
   const ref = db.ref("transactions")
+  let transactions = null
   await ref.orderByChild("timestamp").once("value", (data) => {
-    cache = data.val()
-    lastUpdated = Date.now()
+    transactions = data.val()
   })
+  return transactions
 }
 
 export const insertTransaction = async (transaction: Transaction): Promise<boolean> => {
@@ -32,18 +18,11 @@ export const insertTransaction = async (transaction: Transaction): Promise<boole
       return false
     }
   })
-  await updateTransactions()
   return true
 }
 
 export const removeTransaction = async (id: string): Promise<boolean> => {
   if (id.includes("/") || !id.startsWith("-")) return false
-
-  const transactions = await getTransactions()
-  if (!(transactions && id in transactions)) {
-    console.error("Failed to remove transaction: transaction not found")
-    return false
-  }
 
   const ref = db.ref(`transactions/${id}`)
   await ref.remove((error) => {
@@ -52,6 +31,5 @@ export const removeTransaction = async (id: string): Promise<boolean> => {
       return false
     }
   })
-  await updateTransactions()
   return true
 }

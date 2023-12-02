@@ -1,5 +1,5 @@
 import db from "@/app/api/firebase"
-import { Currencies } from "@/types/firebase"
+import { Currencies, Currency } from "@/types/firebase"
 
 export const getCurrencies = async (): Promise<Currencies | null> => {
   const ref = db.ref("currencies")
@@ -8,4 +8,17 @@ export const getCurrencies = async (): Promise<Currencies | null> => {
     currencies = data.val()
   })
   return currencies
+}
+
+export const updateCurrency = async (id: string, currency: Currency): Promise<boolean> => {
+  const ref = db.ref(`currencies/${id}`)
+  let success = false
+  await ref.update(currency, (error) => {
+    if (error) {
+      console.error(error)
+    } else {
+      success = true
+    }
+  })
+  return success
 }

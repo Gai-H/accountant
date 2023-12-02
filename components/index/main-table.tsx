@@ -41,6 +41,10 @@ function MainTable() {
     }
   }, {})
 
+  const totalAmountInJPY = Object.keys(totalAmountByCurrency).reduce((acc, currency) => {
+    return acc + totalAmountByCurrency[currency] * currencies[currency].oneInJPY
+  }, 0)
+
   return (
     <>
       <div className="rounded-md border">
@@ -67,6 +71,11 @@ function MainTable() {
                     currency={currency}
                   />
                 ))}
+                <div className="my-2 h-[1px] w-full bg-slate-300" />
+                <Amount
+                  amount={totalAmountInJPY}
+                  currency="JPY"
+                />
               </TableCell>
               <TableCell />
               <TableCell />

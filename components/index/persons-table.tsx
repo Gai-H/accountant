@@ -113,6 +113,10 @@ function PersonsTableTotalAmountTableCell({ transactions, currencies, userId }: 
     {} as { [currencyId: string]: number },
   )
 
+  const totalAmountInJPY = Object.keys(totalAmounts).reduce((acc, currencyId) => {
+    return acc + totalAmounts[currencyId] * currencies[currencyId].oneInJPY
+  }, 0)
+
   return (
     <TableCell className="text-right">
       {Object.keys(currencies).map((currencyId) => (
@@ -123,6 +127,12 @@ function PersonsTableTotalAmountTableCell({ transactions, currencies, userId }: 
           colored={true}
         />
       ))}
+      <div className="my-2 h-[1px] w-full bg-slate-300" />
+      <Amount
+        amount={totalAmountInJPY}
+        currency="JPY"
+        colored={true}
+      />
     </TableCell>
   )
 }

@@ -29,7 +29,7 @@ function Login() {
     return (
       <div className="flex justify-center">
         <Button
-          onClick={() => signIn()}
+          onClick={() => signIn("discord", { callbackUrl: "/" })}
           className="mt-10 block"
         >
           Discordでログイン

@@ -1,4 +1,5 @@
 ## Accountant
+
 複数人で海外旅行するときに使う会計アプリ
 
 - React
@@ -11,7 +12,9 @@
 - Vercel
 
 ## Setup
+
 ### Environmental Variables
+
 ```bash
 DISCORD_CLIENT_ID=""
 DISCORD_CLIENT_SECRET=""
@@ -25,9 +28,11 @@ FIREBASE_DATABASE_URL=""
 ```
 
 ### Prerequisites
+
 - Node.js 18
 
 ### Start
+
 ```bash
 npm install
 npm run dev

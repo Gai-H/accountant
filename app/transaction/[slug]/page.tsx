@@ -1,18 +1,18 @@
 "use client"
 
 import { useState } from "react"
-import useSWR, { mutate } from "swr"
 import { notFound, useRouter } from "next/navigation"
+import useSWR, { mutate } from "swr"
 import { Loader2, Trash2 } from "lucide-react"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/use-toast"
 import Amount from "@/components/amount"
 import PageTitle from "@/components/page-title"
 import Timestamp from "@/components/timestamp"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTrigger } from "@/components/ui/alert-dialog"
-import { useToast } from "@/components/ui/use-toast"
-import { Transactions } from "@/types/firebase"
 import { Response } from "@/types/api"
+import { Transactions } from "@/types/firebase"
 
 type PageProps = {
   params: {

@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { ArrowLeftRight, Plus } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import MainTable from "@/components/index/main-table"
 import PersonsTable from "@/components/index/persons-table"
 import PageTitle from "@/components/page-title"
-import { Button } from "@/components/ui/button"
-import { Plus, ArrowLeftRight } from "lucide-react"
 
 export default function Home() {
   const { isMainTable, toggleMainTable } = useMainTable()

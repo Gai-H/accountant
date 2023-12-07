@@ -1,7 +1,7 @@
-import { getTransactions } from "../transactions"
 import { NextResponse } from "next/server"
 import { Response } from "@/types/api"
 import { Transactions } from "@/types/firebase"
+import { getTransactions } from "../transactions"
 
 const dynamic = "force-dynamic"
 

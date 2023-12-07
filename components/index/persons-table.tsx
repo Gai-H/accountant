@@ -1,10 +1,10 @@
 import Link from "next/link"
 import useSWR from "swr"
+import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Amount from "@/components/amount"
-import { Button } from "@/components/ui/button"
-import Timestamp from "@/components/timestamp"
 import Pop from "@/components/pop"
+import Timestamp from "@/components/timestamp"
 import { Currencies, Transaction, Transactions, UsersAllResponse } from "@/types/firebase"
 
 function PersonsTable() {

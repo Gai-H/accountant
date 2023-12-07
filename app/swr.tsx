@@ -1,7 +1,7 @@
 "use client"
 
-import { Response } from "@/types/api"
 import { SWRConfig } from "swr"
+import { Response } from "@/types/api"
 
 type Props = {
   children: React.ReactNode

@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { Github, User2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 function Header() {
   return (

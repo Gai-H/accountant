@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import schema from "@/app/settings/currencySettingSchema"
-import { getCurrencies, updateCurrency } from "../currencies"
 import { Response } from "@/types/api"
 import { Currency } from "@/types/firebase"
+import { getCurrencies, updateCurrency } from "../currencies"
 
 async function POST(req: NextRequest): Promise<NextResponse<Response<null, string>>> {
   const session = await getServerSession(authOptions)

@@ -1,8 +1,8 @@
 "use client"
 
-import PageTitle from "@/components/page-title"
-import { Button } from "@/components/ui/button"
 import { signIn, signOut, useSession } from "next-auth/react"
+import { Button } from "@/components/ui/button"
+import PageTitle from "@/components/page-title"
 
 function Login() {
   const { data, status } = useSession()

@@ -3,9 +3,9 @@
 import { ReactNode } from "react"
 import useSWR from "swr"
 import PageTitle from "@/components/page-title"
-import { Currencies } from "@/types/firebase"
 import CurrencySettingCard from "@/components/settings/currency/currencySettingCard"
 import CurrencySettingCardSkeleton from "@/components/settings/currency/currencySettingCardSkeleton"
+import { Currencies } from "@/types/firebase"
 
 function Settings() {
   return (

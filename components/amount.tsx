@@ -1,5 +1,5 @@
-import { Currencies } from "@/types/firebase"
 import useSWR from "swr"
+import { Currencies } from "@/types/firebase"
 
 type Props = {
   amount: number

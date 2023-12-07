@@ -1,5 +1,5 @@
 // DO NOT IMPORT THIS FILE FROM ANYWHERE EXCEPT /app/api/*
-import { initializeApp, cert, getApps } from "firebase-admin/app"
+import { cert, getApps, initializeApp } from "firebase-admin/app"
 import { getDatabase } from "firebase-admin/database"
 
 if (getApps().length === 0) {

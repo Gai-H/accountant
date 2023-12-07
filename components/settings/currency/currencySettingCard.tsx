@@ -1,8 +1,8 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Currency } from "@/types/firebase"
 import CurrencySettingForm from "./currencySettingForm"
 import CurrencySettingFormSkeleton from "./currencySettingFormSkeleton"
-import { Currency } from "@/types/firebase"
 
 type CurrencySettingCardProps =
   | {

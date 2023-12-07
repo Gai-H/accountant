@@ -1,11 +1,11 @@
 import Link from "next/link"
 import useSWR from "swr"
-import { Table, TableBody, TableHead, TableCell, TableHeader, TableRow } from "@/components/ui/table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import Timestamp from "@/components/timestamp"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Amount from "@/components/amount"
 import Pop from "@/components/pop"
+import Timestamp from "@/components/timestamp"
 import { Currencies, Transactions, UsersAllResponse } from "@/types/firebase"
 
 function MainTable() {

@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
-import SWR from "./swr"
-import { Analytics } from "@vercel/analytics/react"
-import SessionProvider from "./session-provider"
-import { cn } from "@/lib/utils"
-import Header from "@/components/header"
-import { Toaster } from "@/components/ui/toaster"
 import { Noto_Sans_JP as FontSans } from "next/font/google"
+import { Analytics } from "@vercel/analytics/react"
+import { Toaster } from "@/components/ui/toaster"
+import Header from "@/components/header"
+import { cn } from "@/lib/utils"
 import "./globals.css"
+import SessionProvider from "./session-provider"
+import SWR from "./swr"
 
 const fontSans = FontSans({
   weight: ["400", "500", "600", "700"],

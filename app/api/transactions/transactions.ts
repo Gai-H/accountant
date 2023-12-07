@@ -1,5 +1,5 @@
-import { Transaction, Transactions } from "@/types/firebase"
 import db from "@/app/api/firebase"
+import { Transaction, Transactions } from "@/types/firebase"
 
 export const getTransactions = async (): Promise<Transactions | null> => {
   const ref = db.ref("transactions")

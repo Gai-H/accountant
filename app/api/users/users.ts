@@ -1,5 +1,5 @@
-import { User } from "@/types/firebase"
 import db from "@/app/api/firebase"
+import { User } from "@/types/firebase"
 
 export const getUsers = async (): Promise<User[] | null> => {
   const ref = db.ref("users")

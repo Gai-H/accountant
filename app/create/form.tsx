@@ -1,24 +1,22 @@
-// TODO: コンポーネント分割する
-
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import useSWR, { mutate } from "swr"
-import { useController, useForm, UseFormReturn, useWatch } from "react-hook-form"
-import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Plus, Trash2, Loader2 } from "lucide-react"
+import { Loader2, Plus, Trash2 } from "lucide-react"
+import { UseFormReturn, useController, useForm, useWatch } from "react-hook-form"
+import * as z from "zod"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form as ShadcnForm } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Checkbox } from "@/components/ui/checkbox"
-import PageTitle from "@/components/page-title"
-import schema from "./schema"
-import { Currencies, UsersAllResponse } from "@/types/firebase"
 import { useToast } from "@/components/ui/use-toast"
-import { useRouter } from "next/navigation"
+import PageTitle from "@/components/page-title"
+import { Currencies, UsersAllResponse } from "@/types/firebase"
+import schema from "./schema"
 
 const defaultValues: z.infer<typeof schema> = {
   title: "",

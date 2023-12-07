@@ -5,6 +5,7 @@ import useSWR from "swr"
 import PageTitle from "@/components/page-title"
 import { Currencies } from "@/types/firebase"
 import CurrencySettingCard from "@/components/settings/currency/currencySettingCard"
+import CurrencySettingCardSkeleton from "@/components/settings/currency/currencySettingCardSkeleton"
 
 function Settings() {
   return (
@@ -37,22 +38,6 @@ function CurrencySettingSection() {
     )
   }
 
-  if (isLoading) {
-    return (
-      <section>
-        <SectionTitle>通貨設定</SectionTitle>
-        <div className="grid grid-cols-3 gap-2">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <CurrencySettingCard
-              loading
-              key={i}
-            />
-          ))}
-        </div>
-      </section>
-    )
-  }
-
   const propCurrencies = Object.entries(currencies ?? {}).map(([id, currency]) => ({
     id,
     ...currency,
@@ -62,12 +47,14 @@ function CurrencySettingSection() {
     <section>
       <SectionTitle>通貨設定</SectionTitle>
       <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
-        {propCurrencies.map((pc, i) => (
-          <CurrencySettingCard
-            currency={pc}
-            key={i}
-          />
-        ))}
+        {isLoading
+          ? Array.from({ length: 3 }).map((_, i) => <CurrencySettingCardSkeleton key={i} />)
+          : propCurrencies.map((pc, i) => (
+              <CurrencySettingCard
+                currency={pc}
+                key={i}
+              />
+            ))}
       </div>
     </section>
   )

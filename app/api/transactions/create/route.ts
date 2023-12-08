@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth"
 import * as z from "zod"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getCurrencies } from "@/app/api/currencies/currencies"
+import { getLock } from "@/app/api/lock/lock"
 import { getUsers } from "@/app/api/users/users"
 import schema from "@/app/create/schema"
 import { Response } from "@/types/api"
@@ -19,6 +20,30 @@ async function POST(req: NextRequest): Promise<NextResponse<Response<null, strin
       },
       {
         status: 401,
+      },
+    )
+  }
+
+  const lock = await getLock()
+  if (!lock) {
+    return NextResponse.json(
+      {
+        message: "error",
+        error: "internal server error while fetching lock",
+      },
+      {
+        status: 500,
+      },
+    )
+  }
+  if (lock) {
+    return NextResponse.json(
+      {
+        message: "error",
+        error: "project is locked",
+      },
+      {
+        status: 403,
       },
     )
   }

@@ -3,13 +3,14 @@
 import { useState } from "react"
 import { notFound, useRouter } from "next/navigation"
 import useSWR, { mutate } from "swr"
-import { Loader2, Trash2 } from "lucide-react"
+import { Loader2, Plus, Trash2 } from "lucide-react"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import Amount from "@/components/amount"
 import PageTitle from "@/components/page-title"
+import Pop from "@/components/pop"
 import Timestamp from "@/components/timestamp"
 import { Response } from "@/types/api"
 import { Transactions } from "@/types/firebase"
@@ -166,9 +167,38 @@ type RemoveButtonProps = {
 }
 
 function RemoveButton({ id }: RemoveButtonProps) {
+  const { data: lock, isLoading, error } = useSWR("/api/lock")
   const [sending, setSending] = useState<boolean>(false)
   const router = useRouter()
   const { toast } = useToast()
+
+  if (isLoading || error || lock) {
+    return (
+      <div className="mt-4">
+        <Pop
+          trigger={
+            <Button
+              variant="destructive"
+              className="w-32 opacity-50 pointer-events-none"
+              disabled={true}
+            >
+              <>
+                <Trash2 className="mr-2 h-4 w-4" />
+                記録を削除
+              </>
+            </Button>
+          }
+          content={
+            <>
+              {isLoading && <div>読み込み中...</div>}
+              {error && <div>エラーが発生しました</div>}
+              {lock && <div>このプロジェクトはロックされています</div>}
+            </>
+          }
+        />
+      </div>
+    )
+  }
 
   return (
     <AlertDialog>

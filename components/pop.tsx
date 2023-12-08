@@ -25,6 +25,7 @@ function Pop({ trigger, content }: PopProps) {
       <PopoverTrigger
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        className="h-fit w-fit"
       >
         {trigger}
       </PopoverTrigger>

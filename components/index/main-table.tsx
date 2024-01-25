@@ -10,7 +10,7 @@ import { Currencies, Transactions, UsersAllResponse } from "@/types/firebase"
 
 function MainTable() {
   const { data: res, error: resError, isLoading: resIsLoading } = useSWR<Transactions>("/api/transactions/all", { refreshInterval: 10000 })
-  const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies/all")
+  const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies")
 
   if (resError || currenciesError) return <div className="text-center">Failed to load</div>
 

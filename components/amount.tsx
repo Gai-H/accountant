@@ -8,7 +8,7 @@ type Props = {
 }
 
 function Amount({ amount, currency, colored }: Props) {
-  const { data: currencies } = useSWR<Currencies>("/api/currencies/all")
+  const { data: currencies } = useSWR<Currencies>("/api/currencies")
 
   const formatter = new Intl.NumberFormat("ja-JP", {
     maximumFractionDigits: 2,

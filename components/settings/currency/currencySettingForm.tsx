@@ -31,14 +31,14 @@ function CurrencySettingForm({ currency }: CurrencySettingFormProps) {
 
   const onSubmit = async (values: z.infer<typeof currencySettingSchema>) => {
     setSending(true)
-    const res = await fetch("/api/currencies/update", { method: "POST", body: JSON.stringify(values) })
+    const res = await fetch("/api/currencies", { method: "POST", body: JSON.stringify(values) })
     const json = await res.json()
     if (json.message === "ok") {
       toast({
         title: `${values.id}の設定を更新しました`,
         duration: 4000,
       })
-      await mutate("/api/currencies/all")
+      await mutate("/api/currencies")
     } else {
       toast({
         title: "エラーが発生しました",

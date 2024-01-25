@@ -33,7 +33,7 @@ function Form() {
     defaultValues,
   })
   const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users/all")
-  const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies/all")
+  const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies")
   const { toast } = useToast()
   const router = useRouter()
 

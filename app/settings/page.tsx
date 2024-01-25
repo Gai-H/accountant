@@ -32,7 +32,7 @@ function SectionTitle({ children }: SectionTitleProps) {
 }
 
 function CurrencySettingSection() {
-  const { data: currencies, error, isLoading } = useSWR<Currencies>("/api/currencies/all")
+  const { data: currencies, error, isLoading } = useSWR<Currencies>("/api/currencies")
 
   if (error) {
     return (

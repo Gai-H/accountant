@@ -10,7 +10,7 @@ import { Currencies, Transaction, Transactions, UsersAllResponse } from "@/types
 function PersonsTable() {
   const { data: transactions, error: transactionsError, isLoading: transactionsIsLoading } = useSWR<Transactions>("/api/transactions/all", { refreshInterval: 10000 })
   const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users/all")
-  const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies/all")
+  const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies")
 
   if (transactionsError || usersError || currenciesError) {
     return <div className="text-center">Failed to load</div>

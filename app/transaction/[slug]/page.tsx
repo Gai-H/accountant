@@ -112,7 +112,7 @@ type AvatarWithNameProps = {
 }
 
 function AvatarWithName({ id }: AvatarWithNameProps) {
-  const { data: users } = useSWR("/api/users/all")
+  const { data: users } = useSWR("/api/users")
 
   return (
     <div className="flex items-center gap-2">

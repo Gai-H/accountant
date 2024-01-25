@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { Response } from "@/types/api"
 import { UsersAllResponse } from "@/types/firebase"
-import { getUsers } from "../users"
+import { getUsers } from "./users"
 
 const dynamic = "force-dynamic"
 

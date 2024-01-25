@@ -134,7 +134,7 @@ type AvatarsProps = {
 }
 
 function Avatars({ data, currency }: AvatarsProps) {
-  const { data: res } = useSWR<UsersAllResponse>("/api/users/all")
+  const { data: res } = useSWR<UsersAllResponse>("/api/users")
 
   return (
     <div className="flex gap-2">

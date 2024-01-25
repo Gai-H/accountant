@@ -8,7 +8,7 @@ import { getUsers } from "@/app/api/users/users"
 import schema from "@/app/create/schema"
 import { Response } from "@/types/api"
 import { Transaction } from "@/types/firebase"
-import { insertTransaction } from "../transactions"
+import { insertTransaction } from "./transactions"
 
 async function POST(req: NextRequest): Promise<NextResponse<Response<null, string>>> {
   const session = await getServerSession(authOptions)
@@ -25,7 +25,7 @@ async function POST(req: NextRequest): Promise<NextResponse<Response<null, strin
   }
 
   const lock = await getLock()
-  if (!lock) {
+  if (lock == null) {
     return NextResponse.json(
       {
         message: "error",

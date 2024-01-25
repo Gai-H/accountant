@@ -8,7 +8,7 @@ import Timestamp from "@/components/timestamp"
 import { Currencies, Transaction, Transactions, UsersAllResponse } from "@/types/firebase"
 
 function PersonsTable() {
-  const { data: transactions, error: transactionsError, isLoading: transactionsIsLoading } = useSWR<Transactions>("/api/transactions/all", { refreshInterval: 10000 })
+  const { data: transactions, error: transactionsError, isLoading: transactionsIsLoading } = useSWR<Transactions>("/api/transactions", { refreshInterval: 10000 })
   const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users/all")
   const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies")
 

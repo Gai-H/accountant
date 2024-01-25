@@ -3,10 +3,9 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getLock } from "@/app/api/lock/lock"
 import { Response } from "@/types/api"
-import { TransactionRemoveRequest } from "@/types/firebase"
 import { removeTransaction } from "../transactions"
 
-async function POST(req: NextRequest): Promise<NextResponse<Response<null, string>>> {
+async function DELETE(_: NextRequest, { params }: { params: { slug: string } }): Promise<NextResponse<Response<null, string>>> {
   const session = await getServerSession(authOptions)
   if (!session) {
     return NextResponse.json(
@@ -21,7 +20,7 @@ async function POST(req: NextRequest): Promise<NextResponse<Response<null, strin
   }
 
   const lock = await getLock()
-  if (!lock) {
+  if (lock == null) {
     return NextResponse.json(
       {
         message: "error",
@@ -44,20 +43,8 @@ async function POST(req: NextRequest): Promise<NextResponse<Response<null, strin
     )
   }
 
-  const json: TransactionRemoveRequest = await req.json()
-  if (!json.id) {
-    return NextResponse.json(
-      {
-        message: "error",
-        error: "invalid data structure",
-      },
-      {
-        status: 400,
-      },
-    )
-  }
-
-  const res = await removeTransaction(json.id)
+  const id = params.slug
+  const res = await removeTransaction(id)
   if (res) {
     return NextResponse.json(
       {
@@ -81,4 +68,4 @@ async function POST(req: NextRequest): Promise<NextResponse<Response<null, strin
   }
 }
 
-export { POST }
+export { DELETE }

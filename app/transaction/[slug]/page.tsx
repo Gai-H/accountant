@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { notFound, useRouter } from "next/navigation"
 import useSWR, { mutate } from "swr"
-import { Loader2, Plus, Trash2 } from "lucide-react"
+import { Loader2, Trash2 } from "lucide-react"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -22,7 +22,7 @@ type PageProps = {
 }
 
 function Page({ params: { slug } }: PageProps) {
-  const { data: res, error, isLoading } = useSWR<Transactions>("/api/transactions/all", { refreshInterval: 10000 })
+  const { data: res, error, isLoading } = useSWR<Transactions>("/api/transactions", { refreshInterval: 10000 })
 
   if (error) return <div className="text-center">Failed to load</div>
 
@@ -231,7 +231,7 @@ function RemoveButton({ id }: RemoveButtonProps) {
           <AlertDialogAction
             onClick={async () => {
               setSending(true)
-              const res = await fetch("/api/transactions/remove", { method: "POST", body: JSON.stringify({ id }) })
+              const res = await fetch(`/api/transactions/${id}`, { method: "DELETE" })
               const json: Response<null, string> = await res.json()
               if (json.message === "ok") {
                 setTimeout(() => {
@@ -240,7 +240,7 @@ function RemoveButton({ id }: RemoveButtonProps) {
                     duration: 4000,
                   })
                 }, 100)
-                await mutate("/api/transactions/all")
+                await mutate("/api/transactions")
                 router.push("/")
               } else {
                 setTimeout(() => {

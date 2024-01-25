@@ -43,13 +43,13 @@ function Form() {
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     setSending(true)
-    const res = await fetch("/api/transactions/create", { method: "POST", body: JSON.stringify(values) })
+    const res = await fetch("/api/transactions", { method: "POST", body: JSON.stringify(values) })
     const json = await res.json()
     if (json.message === "ok") {
       toast({
         title: "記録を追加しました",
       })
-      await mutate("/api/transactions/all")
+      await mutate("/api/transactions")
       router.push("/")
     } else {
       toast({

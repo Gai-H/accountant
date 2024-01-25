@@ -18,10 +18,6 @@ export type Transactions = {
   [id: string]: Transaction
 }
 
-export type TransactionRemoveRequest = {
-  id: string
-}
-
 export type User = {
   id: string
   global_name: string

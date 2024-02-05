@@ -2,7 +2,7 @@
   "plugins": ["prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"],
   "tabWidth": 2,
   "useTabs": false,
-  "printWidth": 200,
+  "printWidth": 150,
   "singleAttributePerLine": true,
   "semi": false,
   "importOrderSortSpecifiers": true,

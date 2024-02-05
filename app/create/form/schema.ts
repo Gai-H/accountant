@@ -47,4 +47,4 @@ const schema = z
     { message: "貸し借りの金額が一致しません", path: ["to"] },
   )
 
-export default schema
+export { schema }

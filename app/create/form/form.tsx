@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import PageTitle from "@/components/page-title"
 import { Currencies, UsersGetResponse } from "@/types/firebase"
-import schema from "./schema"
+import { schema } from "./schema"
 
 type UseFormData = {
   users: UsersGetResponse | undefined
@@ -149,7 +149,7 @@ function Form() {
   )
 }
 
-export default Form
+export { Form }
 
 const LABEL_CSS = "text-lg font-semibold text-inherit"
 

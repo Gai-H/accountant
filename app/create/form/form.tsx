@@ -9,13 +9,14 @@ import { UseFormReturn, useController, useForm, useWatch } from "react-hook-form
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form as ShadcnForm } from "@/components/ui/form"
+import { FormControl, FormField, FormItem, FormMessage, Form as ShadcnForm } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import PageTitle from "@/components/page-title"
 import { Currencies, UsersGetResponse } from "@/types/firebase"
+import FormLabel from "./form-label"
 import { schema } from "./schema"
 
 type UseFormData = {
@@ -151,8 +152,6 @@ function Form() {
 
 export { Form }
 
-const LABEL_CSS = "text-lg font-semibold text-inherit"
-
 function TitleFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
   return (
     <FormField
@@ -161,7 +160,7 @@ function TitleFormField({ control }: UseFormReturn<z.infer<typeof schema>>) {
       render={({ field }) => (
         <FormItem>
           <div className="flex items-center gap-2">
-            <FormLabel className={LABEL_CSS}>項目名</FormLabel>
+            <FormLabel>項目名</FormLabel>
             <FormMessage />
           </div>
           <FormControl>
@@ -188,7 +187,7 @@ function CurrencyFormField({ control, currencies }: CurrencyFormFieldProps) {
       render={({ field }) => (
         <FormItem>
           <div className="flex items-center gap-2">
-            <FormLabel className={LABEL_CSS}>通貨</FormLabel>
+            <FormLabel>通貨</FormLabel>
             <FormMessage />
           </div>
           <div className="md:w-32">
@@ -239,7 +238,7 @@ function FromFormField({ control, users }: FromFormFieldProps) {
         <FormItem>
           {/* <p>{JSON.stringify(field.value)}</p> */}
           <div className="flex items-center gap-2">
-            <FormLabel className={LABEL_CSS}>貸す人</FormLabel>
+            <FormLabel>貸す人</FormLabel>
             <FormMessage />
           </div>
           {field.value.map((_, index) => (
@@ -357,7 +356,7 @@ function ToFormField({ control, users }: ToFormFieldProps) {
         <FormItem>
           {/* <p>{JSON.stringify(field.value)}</p> */}
           <div className="flex items-center gap-2">
-            <FormLabel className={LABEL_CSS}>借りる人</FormLabel>
+            <FormLabel>借りる人</FormLabel>
             <FormMessage />
           </div>
           <div className="flex w-fit items-center gap-2 rounded-md border px-3 py-3">
@@ -472,7 +471,7 @@ function DescriptionFormField({ control }: UseFormReturn<z.infer<typeof schema>>
       name="description"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className={LABEL_CSS}>説明</FormLabel>
+          <FormLabel>説明</FormLabel>
           <FormControl>
             <Textarea
               placeholder="説明を入力 (任意)"

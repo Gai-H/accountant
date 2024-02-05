@@ -88,23 +88,9 @@ function Form() {
         >
           <div className="flex justify-between">
             <PageTitle>記録を追加する</PageTitle>
-            <Button
-              disabled={sending}
-              type="submit"
-              className="md:hidden md:w-32"
-            >
-              {sending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  追加中...
-                </>
-              ) : (
-                <>
-                  <Plus className="mr-1 h-4 w-4" />
-                  追加
-                </>
-              )}
-            </Button>
+            <div className="md:hidden">
+              <AddButton sending={sending} />
+            </div>
           </div>
           <div className="md:w-80">
             <TitleFormField {...form} />
@@ -125,20 +111,7 @@ function Form() {
             <DescriptionFormField {...form} />
           </div>
           <div className="hidden md:mt-5 md:block">
-            <Button
-              disabled={sending}
-              type="submit"
-              className="w-32"
-            >
-              {sending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  追加中...
-                </>
-              ) : (
-                <>追加</>
-              )}
-            </Button>
+            <AddButton sending={sending} />
           </div>
         </fieldset>
       </form>
@@ -147,3 +120,29 @@ function Form() {
 }
 
 export { Form }
+
+type AddButtonProps = {
+  sending: boolean
+}
+
+function AddButton({ sending }: AddButtonProps) {
+  return (
+    <Button
+      disabled={sending}
+      type="submit"
+      className="md:w-32 w-20"
+    >
+      {sending ? (
+        <>
+          <Loader2 className="md:mr-2 h-4 w-4 animate-spin" />
+          <span className="hidden md:inline">追加中...</span>
+        </>
+      ) : (
+        <>
+          <Plus className="mr-2 h-4 w-4" />
+          追加
+        </>
+      )}
+    </Button>
+  )
+}

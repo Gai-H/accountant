@@ -18,6 +18,25 @@ import PageTitle from "@/components/page-title"
 import { Currencies, UsersAllResponse } from "@/types/firebase"
 import schema from "./schema"
 
+type UseFormData = {
+  users: UsersAllResponse | undefined
+  currencies: Currencies | undefined
+  error: boolean
+  isLoading: boolean
+}
+
+const useFormData = (): UseFormData => {
+  const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users")
+  const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies")
+
+  return {
+    users,
+    currencies,
+    error: usersError || currenciesError,
+    isLoading: usersIsLoading || currenciesIsLoading,
+  }
+}
+
 const defaultValues: z.infer<typeof schema> = {
   title: "",
   description: "",
@@ -32,14 +51,13 @@ function Form() {
     resolver: zodResolver(schema),
     defaultValues,
   })
-  const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users")
-  const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies")
+  const { users, currencies, error, isLoading } = useFormData()
   const { toast } = useToast()
   const router = useRouter()
 
-  if (usersError || currenciesError) return <div className="text-center">Failed to Load</div>
+  if (error) return <div className="text-center">Failed to Load</div>
 
-  if (usersIsLoading || currenciesIsLoading || !users || !currencies) return <div className="text-center">Loading...</div>
+  if (isLoading || users === undefined || currencies === undefined) return <div className="text-center">Loading...</div>
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     setSending(true)

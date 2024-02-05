@@ -186,7 +186,7 @@ function UserSelect({ field, users, index }: UserSelectProps) {
       onValueChange={handleValueChange}
       value={value}
     >
-      <SelectTrigger className="w-24">
+      <SelectTrigger className="w-24 flex-grow md:flex-grow-0">
         <SelectValue placeholder="人" />
       </SelectTrigger>
       <SelectContent>

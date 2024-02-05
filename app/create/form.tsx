@@ -15,18 +15,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import PageTitle from "@/components/page-title"
-import { Currencies, UsersAllResponse } from "@/types/firebase"
+import { Currencies, UsersGetResponse } from "@/types/firebase"
 import schema from "./schema"
 
 type UseFormData = {
-  users: UsersAllResponse | undefined
+  users: UsersGetResponse | undefined
   currencies: Currencies | undefined
   error: boolean
   isLoading: boolean
 }
 
 const useFormData = (): UseFormData => {
-  const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users")
+  const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersGetResponse>("/api/users")
   const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies")
 
   return {
@@ -227,7 +227,7 @@ function CurrencyFormField({ control, currencies }: CurrencyFormFieldProps) {
 }
 
 type FromFormFieldProps = UseFormReturn<z.infer<typeof schema>> & {
-  users: UsersAllResponse
+  users: UsersGetResponse
 }
 
 function FromFormField({ control, users }: FromFormFieldProps) {
@@ -315,7 +315,7 @@ function FromFormField({ control, users }: FromFormFieldProps) {
 }
 
 type ToFormFieldProps = UseFormReturn<z.infer<typeof schema>> & {
-  users: UsersAllResponse
+  users: UsersGetResponse
 }
 
 function ToFormField({ control, users }: ToFormFieldProps) {

@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server"
 import { Response } from "@/types/api"
-import { UsersAllResponse } from "@/types/firebase"
+import { UsersGetResponse } from "@/types/firebase"
 import { getUsers } from "./users"
 
 const dynamic = "force-dynamic"
 
 const revalidate = 0
 
-async function GET(): Promise<NextResponse<Response<UsersAllResponse>>> {
+async function GET(): Promise<NextResponse<Response<UsersGetResponse>>> {
   const users = await getUsers()
 
   if (users == null) {
@@ -21,7 +21,7 @@ async function GET(): Promise<NextResponse<Response<UsersAllResponse>>> {
     )
   }
 
-  const res: UsersAllResponse = {}
+  const res: UsersGetResponse = {}
   users.forEach(({ id, global_name, image_url }) => {
     res[id] = { global_name, image_url }
   })

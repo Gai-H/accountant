@@ -5,11 +5,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Amount from "@/components/amount"
 import Pop from "@/components/pop"
 import Timestamp from "@/components/timestamp"
-import { Currencies, Transaction, Transactions, UsersAllResponse } from "@/types/firebase"
+import { Currencies, Transaction, Transactions, UsersGetResponse } from "@/types/firebase"
 
 function PersonsTable() {
   const { data: transactions, error: transactionsError, isLoading: transactionsIsLoading } = useSWR<Transactions>("/api/transactions", { refreshInterval: 10000 })
-  const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersAllResponse>("/api/users")
+  const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersGetResponse>("/api/users")
   const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies")
 
   if (transactionsError || usersError || currenciesError) {

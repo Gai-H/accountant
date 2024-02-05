@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Amount from "@/components/amount"
 import Pop from "@/components/pop"
 import Timestamp from "@/components/timestamp"
-import { Currencies, Transactions, UsersAllResponse } from "@/types/firebase"
+import { Currencies, Transactions, UsersGetResponse } from "@/types/firebase"
 
 function MainTable() {
   const { data: res, error: resError, isLoading: resIsLoading } = useSWR<Transactions>("/api/transactions", { refreshInterval: 10000 })
@@ -134,7 +134,7 @@ type AvatarsProps = {
 }
 
 function Avatars({ data, currency }: AvatarsProps) {
-  const { data: res } = useSWR<UsersAllResponse>("/api/users")
+  const { data: res } = useSWR<UsersGetResponse>("/api/users")
 
   return (
     <div className="flex gap-2">

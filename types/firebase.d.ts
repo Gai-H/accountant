@@ -25,7 +25,7 @@ export type User = {
   lastLogin: number
 }
 
-export type UsersAllResponse = {
+export type UsersGetResponse = {
   [id: string]: {
     global_name: string
     image_url: string

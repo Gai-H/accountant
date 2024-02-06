@@ -37,8 +37,8 @@ const useFormData = (): UseFormData => {
 const defaultValues: z.infer<typeof schema> = {
   title: "",
   description: "",
-  from: [],
-  to: [],
+  from: [{ id: "", amount: Number.MIN_SAFE_INTEGER }],
+  to: [{ id: "", amount: Number.MIN_SAFE_INTEGER }],
   currency: "",
 }
 

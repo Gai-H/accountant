@@ -107,7 +107,7 @@ function Form() {
             {...form}
             users={users}
           />
-          <div className="md:w-[40em]">
+          <div className="w-full max-w-[40em]">
             <DescriptionFormField {...form} />
           </div>
           <div className="hidden md:mt-5 md:block">

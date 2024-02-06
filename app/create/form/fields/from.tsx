@@ -167,6 +167,8 @@ type RemoveItemButtonProps = {
 }
 
 function RemoveItemButton({ field, index }: RemoveItemButtonProps) {
+  const disabled = field.value.length === 1
+
   const handleClick = () => {
     field.onChange(field.value.filter((_, i) => i !== index))
   }
@@ -177,6 +179,7 @@ function RemoveItemButton({ field, index }: RemoveItemButtonProps) {
       variant="destructive"
       type="button"
       onClick={handleClick}
+      disabled={disabled}
     >
       <Trash2 className="h-4 w-4" />
     </Button>

@@ -68,10 +68,16 @@ function ToFormField({ control, users }: ToFormFieldProps) {
               split={split}
             />
           ))}
-          <AddItemButton
-            field={field}
-            users={users}
-          />
+          <div className="flex gap-2">
+            <AddItemButton
+              field={field}
+              users={users}
+            />
+            <AddEveryoneButton
+              field={field}
+              users={users}
+            />
+          </div>
         </FormItem>
       )}
     />
@@ -103,7 +109,33 @@ function AddItemButton({ field, users }: AddItemButtonProps) {
       onClick={handleClick}
       className="block w-32"
     >
-      貸りる人を追加
+      一人を追加
+    </Button>
+  )
+}
+
+type AddEveryoneButtonProps = {
+  field: Field
+  users: UsersGetResponse
+}
+
+function AddEveryoneButton({ field, users }: AddEveryoneButtonProps) {
+  const disabled = field.value?.length === Object.keys(users).length && field.value.every((item) => item.id !== "")
+
+  const handleClick = () => {
+    const updated = Object.keys(users).map((id) => ({ id, amount: Number.MIN_SAFE_INTEGER }))
+    field.onChange(updated)
+  }
+
+  return (
+    <Button
+      variant="secondary"
+      type="button"
+      disabled={disabled}
+      onClick={handleClick}
+      className="block w-32"
+    >
+      全員を追加
     </Button>
   )
 }

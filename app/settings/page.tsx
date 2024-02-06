@@ -37,7 +37,7 @@ function CurrencySettingSection() {
   if (error) {
     return (
       <section>
-        <SectionTitle>通貨設定</SectionTitle>
+        <SectionTitle>通貨</SectionTitle>
         <p>Failed to load currencies</p>
       </section>
     )
@@ -50,7 +50,7 @@ function CurrencySettingSection() {
 
   return (
     <section>
-      <SectionTitle>通貨設定</SectionTitle>
+      <SectionTitle>通貨</SectionTitle>
       <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
         {isLoading
           ? Array.from({ length: 3 }).map((_, i) => <CurrencySettingCardSkeleton key={i} />)
@@ -71,7 +71,7 @@ function LockSettingSection() {
   if (error) {
     return (
       <section>
-        <SectionTitle>ロック設定</SectionTitle>
+        <SectionTitle>ロック</SectionTitle>
         <p>Failed to load lock</p>
       </section>
     )
@@ -79,8 +79,10 @@ function LockSettingSection() {
 
   return (
     <section>
-      <SectionTitle>ロック設定</SectionTitle>
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-3">{isLoading ? <LockSettingCardSkeleton /> : <LockSettingCard lock={lock as boolean} />}</div>
+      <SectionTitle>ロック</SectionTitle>
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
+        {isLoading ? <LockSettingCardSkeleton /> : <LockSettingCard lock={lock as boolean} />}
+      </div>
     </section>
   )
 }

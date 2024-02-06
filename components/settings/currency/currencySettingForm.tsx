@@ -111,7 +111,7 @@ function CurrencySettingForm({ currency }: CurrencySettingFormProps) {
           <div className="mt-4 flex justify-between">
             <Button
               type="reset"
-              variant="ghost"
+              variant="outline"
               onClick={() => form.reset()}
               disabled={!form.formState.isDirty || sending}
             >

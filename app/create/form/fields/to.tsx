@@ -110,34 +110,6 @@ function AddItemButton({ field, users }: AddItemButtonProps) {
   )
 }
 
-type ItemProps = {
-  field: Field
-  users: UsersGetResponse
-  index: number
-  split: boolean
-}
-
-function Item({ field, users, index, split }: ItemProps) {
-  return (
-    <div className="flex gap-2">
-      <UserSelect
-        field={field}
-        users={users}
-        index={index}
-      />
-      <AmountInput
-        field={field}
-        index={index}
-        split={split}
-      />
-      <RemoveItemButton
-        field={field}
-        index={index}
-      />
-    </div>
-  )
-}
-
 type SplitCheckboxProps = {
   split: boolean
   setSplit: (newSplit: boolean) => void
@@ -163,6 +135,34 @@ function SplitCheckbox({ split, setSplit }: SplitCheckboxProps) {
         割り勘する
       </label>
     </>
+  )
+}
+
+type ItemProps = {
+  field: Field
+  users: UsersGetResponse
+  index: number
+  split: boolean
+}
+
+function Item({ field, users, index, split }: ItemProps) {
+  return (
+    <div className="flex gap-2">
+      <UserSelect
+        field={field}
+        users={users}
+        index={index}
+      />
+      <AmountInput
+        field={field}
+        index={index}
+        split={split}
+      />
+      <RemoveItemButton
+        field={field}
+        index={index}
+      />
+    </div>
   )
 }
 

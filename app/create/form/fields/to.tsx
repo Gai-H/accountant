@@ -152,7 +152,7 @@ function SplitCheckbox({ split, setSplit }: SplitCheckboxProps) {
   }
 
   return (
-    <div className="flex w-fit items-center gap-2 rounded-md border px-3 py-3">
+    <div className="flex w-32 items-center gap-2 rounded-md border px-3 justify-around h-10">
       <Checkbox
         id="to-checkbox-split"
         checked={split}

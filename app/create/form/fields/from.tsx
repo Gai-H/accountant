@@ -67,7 +67,7 @@ function AddItemButton({ field, users }: AddItemButtonProps) {
       onClick={handleClick}
       className="block w-32"
     >
-      貸す人を追加
+      一人を追加
     </Button>
   )
 }

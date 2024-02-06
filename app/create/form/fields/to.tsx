@@ -55,12 +55,10 @@ function ToFormField({ control, users }: ToFormFieldProps) {
             <FormLabel>借りる人</FormLabel>
             <FormMessage />
           </div>
-          <div className="flex w-fit items-center gap-2 rounded-md border px-3 py-3">
-            <SplitCheckbox
-              split={split}
-              setSplit={setSplit}
-            />
-          </div>
+          <SplitCheckbox
+            split={split}
+            setSplit={setSplit}
+          />
           {field.value.map((_, index) => (
             <Item
               key={index}
@@ -122,7 +120,7 @@ function SplitCheckbox({ split, setSplit }: SplitCheckboxProps) {
   }
 
   return (
-    <>
+    <div className="flex w-fit items-center gap-2 rounded-md border px-3 py-3">
       <Checkbox
         id="to-checkbox-split"
         checked={split}
@@ -134,7 +132,7 @@ function SplitCheckbox({ split, setSplit }: SplitCheckboxProps) {
       >
         割り勘する
       </label>
-    </>
+    </div>
   )
 }
 

@@ -101,4 +101,4 @@ function LockSettingCard({ lock }: LockSettingCardProps) {
   )
 }
 
-export default LockSettingCard
+export { LockSettingCard }

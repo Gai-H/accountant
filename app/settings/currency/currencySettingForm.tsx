@@ -137,4 +137,4 @@ function CurrencySettingForm({ currency }: CurrencySettingFormProps) {
   )
 }
 
-export default CurrencySettingForm
+export { CurrencySettingForm }

@@ -43,4 +43,4 @@ function LockSettingCardSkeleton() {
   )
 }
 
-export default LockSettingCardSkeleton
+export { LockSettingCardSkeleton }

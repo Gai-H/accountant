@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Currency } from "@/types/firebase"
-import CurrencySettingForm from "./currencySettingForm"
+import { CurrencySettingForm } from "./currencySettingForm"
 
 type CurrencySettingCardProps = {
   currency: Currency & {
@@ -21,4 +21,4 @@ function CurrencySettingCard(props: CurrencySettingCardProps) {
   )
 }
 
-export default CurrencySettingCard
+export { CurrencySettingCard }

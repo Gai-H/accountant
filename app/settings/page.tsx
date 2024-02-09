@@ -3,11 +3,9 @@
 import { ReactNode } from "react"
 import useSWR from "swr"
 import PageTitle from "@/components/page-title"
-import CurrencySettingCard from "@/components/settings/currency/currencySettingCard"
-import CurrencySettingCardSkeleton from "@/components/settings/currency/currencySettingCardSkeleton"
-import LockSettingCard from "@/components/settings/lock/lockSettingCard"
-import LockSettingCardSkeleton from "@/components/settings/lock/lockSettingCardSkeleton"
 import { Currencies } from "@/types/firebase"
+import { CurrencySettingCard, CurrencySettingCardSkeleton } from "./currency"
+import { LockSettingCard, LockSettingCardSkeleton } from "./lock"
 
 function Settings() {
   return (

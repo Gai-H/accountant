@@ -56,4 +56,4 @@ function CurrencySettingFormSkeleton() {
   )
 }
 
-export default CurrencySettingFormSkeleton
+export { CurrencySettingFormSkeleton }

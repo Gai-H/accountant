@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import currencySettingSchema from "@/app/settings/currencySettingSchema"
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { Skeleton } from "@/components/ui/skeleton"
+import currencySettingSchema from "./currencySettingSchema"
 
 function CurrencySettingFormSkeleton() {
   const form = useForm<z.infer<typeof currencySettingSchema>>({

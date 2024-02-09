@@ -4,12 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import currencySettingSchema from "@/app/settings/currencySettingSchema"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import { Currency } from "@/types/firebase"
+import currencySettingSchema from "./currencySettingSchema"
 
 type CurrencySettingFormProps = {
   currency: Currency & {

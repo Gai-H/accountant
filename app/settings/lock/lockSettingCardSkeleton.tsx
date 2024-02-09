@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import lockSettingSchema from "@/app/settings/lockSettingSchema"
 import { Card, CardContent } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import { Skeleton } from "@/components/ui/skeleton"
+import lockSettingSchema from "./lockSettingSchema"
 
 function LockSettingCardSkeleton() {
   const form = useForm<z.infer<typeof lockSettingSchema>>({

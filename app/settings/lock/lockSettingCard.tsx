@@ -4,12 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import lockSettingSchema from "@/app/settings/lockSettingSchema"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { useToast } from "@/components/ui/use-toast"
+import lockSettingSchema from "./lockSettingSchema"
 
 type LockSettingCardProps = {
   lock: boolean

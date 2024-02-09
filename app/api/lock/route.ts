@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import schema from "@/app/settings/lock/lockSettingSchema"
+import { schema } from "@/app/settings/lock"
 import { Response } from "@/types/api"
 import { getLock, updateLock } from "./lock"
 

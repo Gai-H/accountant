@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react"
 import { mutate } from "swr"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -9,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { useToast } from "@/components/ui/use-toast"
-import lockSettingSchema from "./lockSettingSchema"
+import { schema } from "./schema"
 
 type LockSettingCardProps = {
   lock: boolean
@@ -19,14 +21,14 @@ function LockSettingCard({ lock }: LockSettingCardProps) {
   const [sending, setSending] = useState<boolean>(false)
   const { toast } = useToast()
 
-  const form = useForm<z.infer<typeof lockSettingSchema>>({
-    resolver: zodResolver(lockSettingSchema),
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
     values: {
       lock,
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof lockSettingSchema>) => {
+  const onSubmit = async (values: z.infer<typeof schema>) => {
     setSending(true)
     const res = await fetch("/api/lock", { method: "PUT", body: JSON.stringify(values) })
     const json = await res.json()

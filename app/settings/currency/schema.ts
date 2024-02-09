@@ -6,4 +6,4 @@ const schema = z.object({
   oneInJPY: z.number().gt(0, { message: "0より大きい数値を入力してください" }),
 })
 
-export default schema
+export { schema }

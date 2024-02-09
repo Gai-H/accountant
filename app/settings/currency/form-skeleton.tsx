@@ -1,13 +1,15 @@
+"use client"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { Skeleton } from "@/components/ui/skeleton"
-import currencySettingSchema from "./currencySettingSchema"
+import { schema } from "./schema"
 
 function CurrencySettingFormSkeleton() {
-  const form = useForm<z.infer<typeof currencySettingSchema>>({
-    resolver: zodResolver(currencySettingSchema),
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
     defaultValues: {
       id: "",
     },

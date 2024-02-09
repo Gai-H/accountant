@@ -4,4 +4,4 @@ const schema = z.object({
   lock: z.boolean(),
 })
 
-export default schema
+export { schema }

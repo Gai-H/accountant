@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Currency } from "@/types/firebase"
-import { CurrencySettingForm } from "./currencySettingForm"
+import { CurrencySettingForm } from "./form"
 
 type CurrencySettingCardProps = {
   currency: Currency & {

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import schema from "@/app/settings/currency/currencySettingSchema"
+import { schema } from "@/app/settings/currency"
 import { Response } from "@/types/api"
 import { Currency } from "@/types/firebase"
 import { getCurrencies, updateCurrency } from "./currencies"

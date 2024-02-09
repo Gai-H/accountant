@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react"
 import { mutate } from "swr"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -9,7 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import { Currency } from "@/types/firebase"
-import currencySettingSchema from "./currencySettingSchema"
+import { schema } from "./schema"
 
 type CurrencySettingFormProps = {
   currency: Currency & {
@@ -21,15 +23,15 @@ function CurrencySettingForm({ currency }: CurrencySettingFormProps) {
   const [sending, setSending] = useState<boolean>(false)
   const { toast } = useToast()
 
-  const form = useForm<z.infer<typeof currencySettingSchema>>({
-    resolver: zodResolver(currencySettingSchema),
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
     values: currency,
     resetOptions: {
       keepDirtyValues: true,
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof currencySettingSchema>) => {
+  const onSubmit = async (values: z.infer<typeof schema>) => {
     setSending(true)
     const res = await fetch("/api/currencies", { method: "POST", body: JSON.stringify(values) })
     const json = await res.json()

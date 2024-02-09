@@ -1,14 +1,16 @@
+"use client"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Card, CardContent } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import { Skeleton } from "@/components/ui/skeleton"
-import lockSettingSchema from "./lockSettingSchema"
+import { schema } from "./schema"
 
 function LockSettingCardSkeleton() {
-  const form = useForm<z.infer<typeof lockSettingSchema>>({
-    resolver: zodResolver(lockSettingSchema),
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
     defaultValues: {
       lock: false,
     },

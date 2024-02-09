@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { CurrencySettingFormSkeleton } from "./currencySettingFormSkeleton"
+import { CurrencySettingFormSkeleton } from "./form-skeleton"
 
 function CurrencySettingCardSkeleton() {
   return (

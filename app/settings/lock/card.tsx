@@ -67,7 +67,7 @@ function LockSettingCard({ lock }: LockSettingCardProps) {
                       />
                     </FormControl>
                     <div className="space-y-1 leading-none">
-                      <FormLabel>ロックする</FormLabel>
+                      <FormLabel>記録の追加と削除を不可能にする</FormLabel>
                     </div>
                   </FormItem>
                 )}

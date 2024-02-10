@@ -4,7 +4,15 @@ import { useState } from "react"
 import { notFound, useRouter } from "next/navigation"
 import useSWR, { mutate } from "swr"
 import { Loader2, Trash2 } from "lucide-react"
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
@@ -13,7 +21,7 @@ import PageTitle from "@/components/page-title"
 import Pop from "@/components/pop"
 import Timestamp from "@/components/timestamp"
 import { Response } from "@/types/api"
-import { Transactions } from "@/types/firebase"
+import { Transactions, UsersGetResponse } from "@/types/firebase"
 
 type PageProps = {
   params: {
@@ -89,7 +97,11 @@ function Page({ params: { slug } }: PageProps) {
         </div>
         <div className="flex gap-2">
           <ItemTitle>説明</ItemTitle>
-          {transaction.description ? <div className="whitespace-pre-line text-lg">{transaction.description}</div> : <div className="text-lg italic">なし</div>}
+          {transaction.description ? (
+            <div className="whitespace-pre-line text-lg">{transaction.description}</div>
+          ) : (
+            <div className="text-lg italic">なし</div>
+          )}
         </div>
         <RemoveButton id={slug} />
       </div>
@@ -112,20 +124,20 @@ type AvatarWithNameProps = {
 }
 
 function AvatarWithName({ id }: AvatarWithNameProps) {
-  const { data: users } = useSWR("/api/users")
+  const { data: users } = useSWR<UsersGetResponse>("/api/users")
 
   return (
     <div className="flex items-center gap-2">
       <Avatar className="block h-6 w-6">
         {users && (
           <AvatarImage
-            src={users[id].image_url}
-            alt={users[id].global_name}
+            src={users[id].imageUrl}
+            alt={users[id].globalName}
           />
         )}
-        {users ? <AvatarFallback>{users[id].global_name.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
+        {users ? <AvatarFallback>{users[id].globalName.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
       </Avatar>
-      <div>{users ? users[id].global_name : "..."}</div>
+      <div>{users ? users[id].globalName : "..."}</div>
     </div>
   )
 }

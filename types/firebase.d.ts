@@ -20,15 +20,15 @@ export type Transactions = {
 
 export type User = {
   id: string
-  global_name: string
-  image_url: string
+  globalName: string
+  imageUrl: string
   lastLogin: number
 }
 
 export type UsersGetResponse = {
   [id: string]: {
-    global_name: string
-    image_url: string
+    globalName: string
+    imageUrl: string
   }
 }
 

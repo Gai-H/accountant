@@ -8,7 +8,11 @@ import Timestamp from "@/components/timestamp"
 import { Currencies, Transaction, Transactions, UsersGetResponse } from "@/types/firebase"
 
 function PersonsTable() {
-  const { data: transactions, error: transactionsError, isLoading: transactionsIsLoading } = useSWR<Transactions>("/api/transactions", { refreshInterval: 10000 })
+  const {
+    data: transactions,
+    error: transactionsError,
+    isLoading: transactionsIsLoading,
+  } = useSWR<Transactions>("/api/transactions", { refreshInterval: 10000 })
   const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersGetResponse>("/api/users")
   const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies")
 
@@ -32,7 +36,7 @@ function PersonsTable() {
                 key={key}
                 className="text-center"
               >
-                {users[key].global_name}
+                {users[key].globalName}
               </TableHead>
             ))}
             <TableHead className="w-20"></TableHead>

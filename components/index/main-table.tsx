@@ -37,7 +37,9 @@ function MainTable() {
     return {
       ...acc,
       [totalAmountByTransaction[key].currency]:
-        totalAmountByTransaction[key].currency in acc ? acc[totalAmountByTransaction[key].currency as keyof typeof acc] + totalAmountByTransaction[key].amount : totalAmountByTransaction[key].amount,
+        totalAmountByTransaction[key].currency in acc
+          ? acc[totalAmountByTransaction[key].currency as keyof typeof acc] + totalAmountByTransaction[key].amount
+          : totalAmountByTransaction[key].amount,
     }
   }, {})
 
@@ -147,16 +149,16 @@ function Avatars({ data, currency }: AvatarsProps) {
               <Avatar className="inline-block h-9 w-9">
                 {res && (
                   <AvatarImage
-                    src={res[d.id].image_url}
-                    alt={res[d.id].global_name}
+                    src={res[d.id].imageUrl}
+                    alt={res[d.id].globalName}
                   />
                 )}
-                {res ? <AvatarFallback>{res[d.id].global_name.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
+                {res ? <AvatarFallback>{res[d.id].globalName.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
               </Avatar>
             }
             content={
               <>
-                <div className="mb-1 text-center font-semibold">{res ? res[d.id].global_name : "Loading..."}</div>
+                <div className="mb-1 text-center font-semibold">{res ? res[d.id].globalName : "Loading..."}</div>
                 <Amount
                   amount={d.amount}
                   currency={currency}

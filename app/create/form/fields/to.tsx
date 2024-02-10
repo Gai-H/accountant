@@ -226,7 +226,7 @@ function UserSelect({ field, users, index }: UserSelectProps) {
             value={id}
             disabled={field.value.some((item) => item.id === id)}
           >
-            {users[id].global_name}
+            {users[id].globalName}
           </SelectItem>
         ))}
       </SelectContent>

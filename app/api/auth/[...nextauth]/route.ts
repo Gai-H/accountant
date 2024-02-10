@@ -75,8 +75,8 @@ const insertUser = async (profile: DiscordProfile): Promise<boolean> => {
   const ref = db.ref("users")
   await ref.child(profile.id).set(
     {
-      global_name: profile.global_name,
-      image_url: profile.image_url,
+      globalName: profile.global_name,
+      imageUrl: profile.image_url,
       lastLogin: Date.now() / 1000,
     },
     (error) => {

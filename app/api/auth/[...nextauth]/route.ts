@@ -1,17 +1,10 @@
-import NextAuth, { NextAuthOptions } from "next-auth"
-import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord"
+import NextAuth, { NextAuthOptions, User } from "next-auth"
 import db from "@/app/api/firebase"
+import { provider as discordProvider } from "./providers/discord"
+import { provider as lineProvider } from "./providers/line"
 
 export const authOptions: NextAuthOptions = {
-  providers: [
-    DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID as string,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
-      authorization: {
-        params: { scope: "identify email" },
-      },
-    }),
-  ],
+  providers: [discordProvider, lineProvider],
   callbacks: {
     jwt: async ({ token, profile }) => {
       if (profile) {
@@ -25,10 +18,10 @@ export const authOptions: NextAuthOptions = {
       }
       return session
     },
-    async signIn({ account, profile }) {
-      if (account == null || account.access_token == null || profile === undefined) return false
+    async signIn({ user, account }) {
+      if (account == null || account.access_token == null || user === undefined) return false
 
-      return await insertUser(profile as DiscordProfile)
+      return await insertUser(user)
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
@@ -38,12 +31,11 @@ const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }
 
-const insertUser = async (profile: DiscordProfile): Promise<boolean> => {
+const insertUser = async (user: User): Promise<boolean> => {
   const ref = db.ref("users")
-  await ref.child(profile.id).set(
+  await ref.child(user.id).set(
     {
-      globalName: profile.global_name,
-      imageUrl: profile.image_url,
+      ...user,
       lastLogin: Date.now() / 1000,
     },
     (error) => {

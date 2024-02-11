@@ -150,15 +150,15 @@ function Avatars({ data, currency }: AvatarsProps) {
                 {res && (
                   <AvatarImage
                     src={res[d.id].imageUrl}
-                    alt={res[d.id].globalName}
+                    alt={res[d.id].displayName}
                   />
                 )}
-                {res ? <AvatarFallback>{res[d.id].globalName.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
+                {res ? <AvatarFallback>{res[d.id].displayName.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
               </Avatar>
             }
             content={
               <>
-                <div className="mb-1 text-center font-semibold">{res ? res[d.id].globalName : "Loading..."}</div>
+                <div className="mb-1 text-center font-semibold">{res ? res[d.id].displayName : "Loading..."}</div>
                 <Amount
                   amount={d.amount}
                   currency={currency}

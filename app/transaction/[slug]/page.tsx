@@ -132,12 +132,12 @@ function AvatarWithName({ id }: AvatarWithNameProps) {
         {users && (
           <AvatarImage
             src={users[id].imageUrl}
-            alt={users[id].globalName}
+            alt={users[id].displayName}
           />
         )}
-        {users ? <AvatarFallback>{users[id].globalName.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
+        {users ? <AvatarFallback>{users[id].displayName.substring(0, 3)}</AvatarFallback> : <AvatarFallback>...</AvatarFallback>}
       </Avatar>
-      <div>{users ? users[id].globalName : "..."}</div>
+      <div>{users ? users[id].displayName : "..."}</div>
     </div>
   )
 }

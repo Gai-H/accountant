@@ -36,7 +36,7 @@ function PersonsTable() {
                 key={key}
                 className="text-center"
               >
-                {users[key].globalName}
+                {users[key].displayName}
               </TableHead>
             ))}
             <TableHead className="w-20"></TableHead>

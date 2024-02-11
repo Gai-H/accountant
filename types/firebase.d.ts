@@ -19,15 +19,17 @@ export type Transactions = {
 }
 
 export type User = {
+  provider: string
   id: string
-  globalName: string
+  providerName: string
+  displayName: string
   imageUrl: string
   lastLogin: number
 }
 
 export type UsersGetResponse = {
   [id: string]: {
-    globalName: string
+    displayName: string
     imageUrl: string
   }
 }

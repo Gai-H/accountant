@@ -6,6 +6,7 @@ import PageTitle from "@/components/page-title"
 import { Currencies } from "@/types/firebase"
 import { CurrencySettingCard, CurrencySettingCardSkeleton } from "./currency"
 import { LockSettingCard, LockSettingCardSkeleton } from "./lock"
+import { NewUserLockSettingCard, NewUserLockSettingCardSkeleton } from "./new-user-lock"
 
 function Settings() {
   return (
@@ -13,6 +14,7 @@ function Settings() {
       <PageTitle>プロジェクト設定</PageTitle>
       <div className="flex flex-col gap-3">
         <LockSettingSection />
+        <UserSettingSection />
         <CurrencySettingSection />
       </div>
     </>
@@ -80,6 +82,28 @@ function LockSettingSection() {
       <SectionTitle>ロック</SectionTitle>
       <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
         {isLoading ? <LockSettingCardSkeleton /> : <LockSettingCard lock={lock as boolean} />}
+      </div>
+    </section>
+  )
+}
+
+function UserSettingSection() {
+  const { data: newUserLock, error, isLoading } = useSWR<boolean>("/api/new-user-lock")
+
+  if (error) {
+    return (
+      <section>
+        <SectionTitle>ユーザ</SectionTitle>
+        <p>Failed to load user settings</p>
+      </section>
+    )
+  }
+
+  return (
+    <section>
+      <SectionTitle>ユーザ</SectionTitle>
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
+        {isLoading ? <NewUserLockSettingCardSkeleton /> : <NewUserLockSettingCard newUserLock={newUserLock as boolean} />}
       </div>
     </section>
   )

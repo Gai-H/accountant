@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions, User } from "next-auth"
 import db from "@/app/api/firebase"
+import { getNewUserLock } from "@/app/api/new-user-lock/new-user-lock"
 import { provider as discordProvider } from "./providers/discord"
 import { provider as lineProvider } from "./providers/line"
 
@@ -8,6 +9,13 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     signIn: async ({ user, account }) => {
       if (account == null || account.access_token == null || user === undefined) return false
+
+      const isNewUser = await checkIfNewUser(user.id)
+      const newUserLock = await getNewUserLock()
+
+      if (isNewUser && (newUserLock === null || newUserLock)) {
+        return false
+      }
 
       return await insertUser(user)
     },
@@ -28,6 +36,12 @@ export const authOptions: NextAuthOptions = {
 const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }
+
+const checkIfNewUser = async (id: string): Promise<boolean> => {
+  const ref = db.ref("users")
+  const snapshot = await ref.child(id).get()
+  return !snapshot.exists()
+}
 
 const insertUser = async (user: User): Promise<boolean> => {
   const ref = db.ref("users")

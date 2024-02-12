@@ -149,7 +149,7 @@ function Avatars({ data, currency }: AvatarsProps) {
               <Avatar className="inline-block h-9 w-9">
                 {res && (
                   <AvatarImage
-                    src={res[d.id].imageUrl}
+                    src={res[d.id].image}
                     alt={res[d.id].displayName}
                   />
                 )}

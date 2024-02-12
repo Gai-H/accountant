@@ -131,7 +131,7 @@ function AvatarWithName({ id }: AvatarWithNameProps) {
       <Avatar className="block h-6 w-6">
         {users && (
           <AvatarImage
-            src={users[id].imageUrl}
+            src={users[id].image}
             alt={users[id].displayName}
           />
         )}

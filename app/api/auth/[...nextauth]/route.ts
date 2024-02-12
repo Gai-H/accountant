@@ -6,20 +6,20 @@ import { provider as lineProvider } from "./providers/line"
 export const authOptions: NextAuthOptions = {
   providers: [discordProvider, lineProvider],
   callbacks: {
-    jwt: async ({ token, profile }) => {
-      if (profile) {
-        token.id = profile.id
-      }
-      return token
-    },
-    session: async ({ session, user }) => {
-      session.user = user
-      return session
-    },
-    async signIn({ user, account }) {
+    signIn: async ({ user, account }) => {
       if (account == null || account.access_token == null || user === undefined) return false
 
       return await insertUser(user)
+    },
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.user = user
+      }
+      return token
+    },
+    session: async ({ session, token }) => {
+      session.user = token.user
+      return session
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
@@ -33,7 +33,10 @@ const insertUser = async (user: User): Promise<boolean> => {
   const ref = db.ref("users")
   await ref.child(user.id).set(
     {
-      ...user,
+      provider: user.provider,
+      providerName: user.providerName,
+      displayName: user.displayName,
+      image: user.image,
       lastLogin: Date.now() / 1000,
     },
     (error) => {

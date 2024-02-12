@@ -23,14 +23,14 @@ export type User = {
   id: string
   providerName: string
   displayName: string
-  imageUrl: string
+  image: string
   lastLogin: number
 }
 
 export type UsersGetResponse = {
   [id: string]: {
     displayName: string
-    imageUrl: string
+    image: string
   }
 }
 

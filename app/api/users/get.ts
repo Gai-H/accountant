@@ -22,8 +22,8 @@ async function GET(): Promise<NextResponse<Response<UsersGetResponse>>> {
   }
 
   const res: UsersGetResponse = {}
-  users.forEach(({ id, displayName, imageUrl }) => {
-    res[id] = { displayName, imageUrl }
+  users.forEach(({ id, displayName, image }) => {
+    res[id] = { displayName, image }
   })
 
   return NextResponse.json(

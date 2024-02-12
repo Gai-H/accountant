@@ -14,8 +14,8 @@ const provider = DiscordProvider({
     return {
       provider: "Discord",
       id: `DISC-${profile.id}`,
-      providerName: profile.global_name,
-      displayName: profile.username,
+      providerName: profile.username,
+      displayName: profile.global_name,
       image: profile.image_url,
     }
   },

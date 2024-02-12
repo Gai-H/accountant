@@ -35,7 +35,7 @@ function Login() {
       <div className="flex items-center flex-col gap-4">
         <button
           onClick={() => signIn("discord", { callbackUrl: "/" })}
-          className="block w-[250px] h-[41px] overflow-hidden relative"
+          className="block w-[250px] h-[40px] overflow-hidden relative"
         >
           <Image
             src={DiscordDefaultButtonImage}
@@ -50,7 +50,7 @@ function Login() {
         </button>
         <button
           onClick={() => signIn("line", { callbackUrl: "/" })}
-          className="block w-[250px] h-[41px] overflow-hidden relative"
+          className="block w-[250px] h-[40px] overflow-hidden relative"
         >
           <Image
             src={LineDefaultButtonImage}

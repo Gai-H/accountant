@@ -11,6 +11,15 @@ export const getUsers = async (): Promise<User[] | null> => {
   return users
 }
 
+export const getUser = async (id: string): Promise<User | null> => {
+  const ref = db.ref(`users/${id}`)
+  let users = null
+  await ref.once("value", (data) => {
+    users = data.val()
+  })
+  return users
+}
+
 export const removeUser = async (id: string): Promise<boolean> => {
   if (id.includes("/")) return false
 

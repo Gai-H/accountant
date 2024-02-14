@@ -7,6 +7,7 @@ import { Currencies } from "@/types/firebase"
 import { CurrencySettingCard, CurrencySettingCardSkeleton } from "./currency"
 import { LockSettingCard, LockSettingCardSkeleton } from "./lock"
 import { NewUserLockSettingCard, NewUserLockSettingCardSkeleton } from "./new-user-lock"
+import { UserSettingCard } from "./user"
 
 function Settings() {
   return (
@@ -102,6 +103,9 @@ function UserSettingSection() {
   return (
     <section>
       <SectionTitle>ユーザ</SectionTitle>
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-3 mb-2">
+        <UserSettingCard />
+      </div>
       <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
         {isLoading ? <NewUserLockSettingCardSkeleton /> : <NewUserLockSettingCard newUserLock={newUserLock as boolean} />}
       </div>

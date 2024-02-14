@@ -10,3 +10,16 @@ export const getUsers = async (): Promise<User[] | null> => {
   })
   return users
 }
+
+export const removeUser = async (id: string): Promise<boolean> => {
+  if (id.includes("/")) return false
+
+  const ref = db.ref(`users/${id}`)
+  await ref.remove((error) => {
+    if (error) {
+      console.error("Failed to remove user: " + error)
+      return false
+    }
+  })
+  return true
+}

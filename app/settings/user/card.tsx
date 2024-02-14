@@ -20,7 +20,7 @@ import { Transactions, UsersGetResponse } from "@/types/firebase"
 function UserSettingCard() {
   return (
     <Card>
-      <CardContent className="pt-6">
+      <CardContent className="p-3">
         <UserSettingList />
       </CardContent>
     </Card>

@@ -5,7 +5,7 @@ export const getTransactions = async (): Promise<Transactions | null> => {
   const ref = db.ref("transactions")
   let transactions = null
   await ref.orderByChild("timestamp").once("value", (data) => {
-    transactions = data.val()
+    transactions = data.val() ?? {}
   })
   return transactions
 }

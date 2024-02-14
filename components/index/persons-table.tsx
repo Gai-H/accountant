@@ -7,7 +7,15 @@ import Pop from "@/components/pop"
 import Timestamp from "@/components/timestamp"
 import { Currencies, Transaction, Transactions, UsersGetResponse } from "@/types/firebase"
 
-function PersonsTable() {
+type UseData = {
+  transactions: Transactions | undefined
+  users: UsersGetResponse | undefined
+  currencies: Currencies | undefined
+  error: boolean
+  isLoading: boolean
+}
+
+const useData = (): UseData => {
   const {
     data: transactions,
     error: transactionsError,
@@ -16,11 +24,23 @@ function PersonsTable() {
   const { data: users, error: usersError, isLoading: usersIsLoading } = useSWR<UsersGetResponse>("/api/users")
   const { data: currencies, error: currenciesError, isLoading: currenciesIsLoading } = useSWR<Currencies>("/api/currencies")
 
-  if (transactionsError || usersError || currenciesError) {
+  return {
+    transactions,
+    users,
+    currencies,
+    error: transactionsError || usersError || currenciesError,
+    isLoading: transactionsIsLoading || usersIsLoading || currenciesIsLoading,
+  }
+}
+
+function PersonsTable() {
+  const { transactions, users, currencies, error, isLoading } = useData()
+
+  if (error) {
     return <div className="text-center">Failed to load</div>
   }
 
-  if (transactionsIsLoading || usersIsLoading || currenciesIsLoading || !transactions || !users || !currencies) {
+  if (isLoading || transactions === undefined || users === undefined || currencies === undefined) {
     return <div className="text-center">Loading...</div>
   }
 

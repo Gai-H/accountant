@@ -6,7 +6,7 @@ export const getUsers = async (): Promise<User[] | null> => {
   let users = null
   await ref.once("value", (data) => {
     const val = data.val()
-    users = Object.keys(val).map((key) => ({ ...val[key], id: key }))
+    users = val == null ? [] : Object.keys(val).map((key) => ({ ...val[key], id: key }))
   })
   return users
 }

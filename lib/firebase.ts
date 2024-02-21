@@ -1,4 +1,3 @@
-// DO NOT IMPORT THIS FILE FROM ANYWHERE EXCEPT /app/api/*
 import { cert, getApps, initializeApp } from "firebase-admin/app"
 import { getDatabase } from "firebase-admin/database"
 

@@ -1,4 +1,4 @@
-import db from "@/app/api/firebase"
+import db from "@/lib/firebase"
 
 export const getLock = async (): Promise<boolean | null> => {
   const ref = db.ref("lock")

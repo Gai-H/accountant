@@ -1,4 +1,4 @@
-import db from "@/app/api/firebase"
+import db from "@/lib/firebase"
 import { User } from "@/types/firebase"
 
 export const getUsers = async (): Promise<User[] | null> => {

@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { getTransactions } from "@/app/api/transactions/transactions"
+import { auth } from "@/lib/next-auth/auth"
 import { Response } from "@/types/api"
 import { removeUser } from "../users"
 
 async function DELETE(_: NextRequest, { params }: { params: { slug: string } }): Promise<NextResponse<Response<null, string>>> {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   if (!session) {
     return NextResponse.json(
       {

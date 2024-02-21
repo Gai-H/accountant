@@ -1,4 +1,4 @@
-import db from "@/app/api/firebase"
+import db from "@/lib/firebase"
 
 export const getNewUserLock = async (): Promise<boolean | null> => {
   const ref = db.ref("new-user-lock")

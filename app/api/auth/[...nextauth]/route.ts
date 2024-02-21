@@ -1,64 +1,6 @@
-import NextAuth, { NextAuthOptions, User } from "next-auth"
-import db from "@/app/api/firebase"
-import { getNewUserLock } from "@/app/api/new-user-lock/new-user-lock"
-import { provider as discordProvider } from "./providers/discord"
-import { provider as lineProvider } from "./providers/line"
+import NextAuth from "next-auth"
+import { config } from "@/lib/next-auth/auth"
 
-export const authOptions: NextAuthOptions = {
-  providers: [discordProvider, lineProvider],
-  callbacks: {
-    signIn: async ({ user, account }) => {
-      if (account == null || account.access_token == null || user === undefined) return false
-
-      const isNewUser = await checkIfNewUser(user.id)
-      const newUserLock = await getNewUserLock()
-
-      if (isNewUser && (newUserLock === null || newUserLock)) {
-        return false
-      }
-
-      return await insertUser(user)
-    },
-    jwt: async ({ token, user }) => {
-      if (user) {
-        token.user = user
-      }
-      return token
-    },
-    session: async ({ session, token }) => {
-      session.user = token.user
-      return session
-    },
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-}
-
-const handler = NextAuth(authOptions)
+const handler = NextAuth(config)
 
 export { handler as GET, handler as POST }
-
-const checkIfNewUser = async (id: string): Promise<boolean> => {
-  const ref = db.ref("users")
-  const snapshot = await ref.child(id).get()
-  return !snapshot.exists()
-}
-
-const insertUser = async (user: User): Promise<boolean> => {
-  const ref = db.ref("users")
-  await ref.child(user.id).set(
-    {
-      provider: user.provider,
-      providerName: user.providerName,
-      displayName: user.displayName,
-      image: user.image,
-      lastLogin: Date.now() / 1000,
-    },
-    (error) => {
-      if (error) {
-        console.error("Failed to insert user: " + error)
-        return false
-      }
-    },
-  )
-  return true
-}

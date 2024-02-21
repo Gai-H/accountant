@@ -1,4 +1,4 @@
-import db from "@/app/api/firebase"
+import db from "@/lib/firebase"
 import { Transaction, Transactions } from "@/types/firebase"
 
 export const getTransactions = async (): Promise<Transactions | null> => {

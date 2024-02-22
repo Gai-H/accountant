@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getTransactions } from "@/app/api/transactions/transactions"
+import { getTransactions } from "@/lib/firebase/transactions"
+import { removeUser } from "@/lib/firebase/users"
 import { auth } from "@/lib/next-auth/auth"
 import { Response } from "@/types/api"
-import { removeUser } from "../users"
 
 async function DELETE(_: NextRequest, { params }: { params: { slug: string } }): Promise<NextResponse<Response<null, string>>> {
   const session = await auth()

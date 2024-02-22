@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
+import { getCurrencies } from "@/lib/firebase/currencies"
 import { Response } from "@/types/api"
 import { Currencies } from "@/types/firebase"
-import { getCurrencies } from "./currencies"
 
 const dynamic = "force-dynamic"
 

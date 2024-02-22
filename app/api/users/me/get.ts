@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
+import { getUser } from "@/lib/firebase/users"
 import { Response } from "@/types/api"
-import { getUser } from "../users"
 
 const revalidate = 5
 

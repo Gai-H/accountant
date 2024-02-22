@@ -1,8 +1,8 @@
 import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next"
 import type { NextAuthOptions, User } from "next-auth"
 import { getServerSession } from "next-auth"
-import { getNewUserLock } from "@/app/api/new-user-lock/new-user-lock"
 import db from "@/lib/firebase"
+import { getNewUserLock } from "@/lib/firebase/new-user-lock"
 import { provider as discordProvider } from "./providers/discord"
 import { provider as lineProvider } from "./providers/line"
 

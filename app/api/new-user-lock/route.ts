@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { schema } from "@/app/settings/new-user-lock"
+import { getNewUserLock, updateNewUserLock } from "@/lib/firebase/new-user-lock"
 import { Response } from "@/types/api"
-import { getNewUserLock, updateNewUserLock } from "./new-user-lock"
 
 const dynamic = "force-dynamic"
 

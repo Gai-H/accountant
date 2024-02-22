@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { schema } from "@/app/settings/currency"
+import { getCurrencies, updateCurrency } from "@/lib/firebase/currencies"
 import { auth } from "@/lib/next-auth/auth"
 import { Response } from "@/types/api"
 import { Currency } from "@/types/firebase"
-import { getCurrencies, updateCurrency } from "./currencies"
 
 async function POST(req: NextRequest): Promise<NextResponse<Response<null, string>>> {
   const session = await auth()

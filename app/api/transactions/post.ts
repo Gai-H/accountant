@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import * as z from "zod"
-import { getCurrencies } from "@/app/api/currencies/currencies"
-import { getLock } from "@/app/api/lock/lock"
-import { getUsers } from "@/app/api/users/users"
 import { schema } from "@/app/create/form"
+import { getCurrencies } from "@/lib/firebase/currencies"
+import { getLock } from "@/lib/firebase/lock"
+import { insertTransaction } from "@/lib/firebase/transactions"
+import { getUsers } from "@/lib/firebase/users"
 import { auth } from "@/lib/next-auth/auth"
 import { Response } from "@/types/api"
 import { Transaction } from "@/types/firebase"
-import { insertTransaction } from "./transactions"
 
 async function POST(req: NextRequest): Promise<NextResponse<Response<null, string>>> {
   const session = await auth()

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getLock } from "@/app/api/lock/lock"
+import { getLock } from "@/lib/firebase/lock"
+import { removeTransaction } from "@/lib/firebase/transactions"
 import { auth } from "@/lib/next-auth/auth"
 import { Response } from "@/types/api"
-import { removeTransaction } from "../transactions"
 
 async function DELETE(_: NextRequest, { params }: { params: { slug: string } }): Promise<NextResponse<Response<null, string>>> {
   const session = await auth()

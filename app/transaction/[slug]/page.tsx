@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import PageTitle from "@/components/page-title"
 import { getLock } from "@/lib/firebase/lock"
-import { getTransactions } from "@/lib/firebase/transactions"
+import { getTransaction } from "@/lib/firebase/transactions"
 import { Description } from "./description"
 import { MoneyTable } from "./money-table"
 import { RemoveButton } from "./remove-button"
@@ -14,14 +14,12 @@ type PageProps = {
 }
 
 async function Page({ params: { slug } }: PageProps) {
-  const transactions = await getTransactions()
+  const transaction = await getTransaction(slug)
   const lock = await getLock()
 
-  if (transactions === null || !(slug in transactions) || lock === null) {
+  if (transaction === null || lock === null) {
     notFound()
   }
-
-  const transaction = transactions[slug]
 
   return (
     <>

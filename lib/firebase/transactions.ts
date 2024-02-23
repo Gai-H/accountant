@@ -12,6 +12,15 @@ export const getTransactions = async (): Promise<Transactions | null> => {
   return transactions
 }
 
+export const getTransaction = async (transactionId: string): Promise<Transaction | null> => {
+  const ref = db.ref(`transactions/${transactionId}`)
+  let transaction = null
+  await ref.once("value", (data) => {
+    transaction = data.val()
+  })
+  return transaction
+}
+
 export const insertTransaction = async (transaction: Transaction): Promise<boolean> => {
   const ref = db.ref("transactions")
   await ref.push(transaction, (error) => {

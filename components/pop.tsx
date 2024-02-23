@@ -1,12 +1,15 @@
+"use client"
+
 import { useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 type PopProps = {
   trigger: React.ReactNode
   content: React.ReactNode
+  disabled?: boolean
 }
 
-function Pop({ trigger, content }: PopProps) {
+function Pop({ trigger, content, disabled }: PopProps) {
   const [open, setOpen] = useState<boolean>(false)
 
   const handleMouseEnter = () => {
@@ -19,7 +22,7 @@ function Pop({ trigger, content }: PopProps) {
 
   return (
     <Popover
-      open={open}
+      open={open && !disabled}
       onOpenChange={setOpen}
     >
       <PopoverTrigger
@@ -29,7 +32,7 @@ function Pop({ trigger, content }: PopProps) {
       >
         {trigger}
       </PopoverTrigger>
-      <PopoverContent className="w-fit p-2 text-sm">{content}</PopoverContent>
+      <PopoverContent className="p-2 text-sm w-fit">{content}</PopoverContent>
     </Popover>
   )
 }

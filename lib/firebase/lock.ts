@@ -1,3 +1,5 @@
+"use server"
+
 import db from "@/lib/firebase"
 
 export const getLock = async (): Promise<boolean | null> => {

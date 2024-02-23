@@ -1,3 +1,5 @@
+"use server"
+
 import db from "@/lib/firebase"
 import { Transaction, Transactions } from "@/types/firebase"
 

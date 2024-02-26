@@ -1,9 +1,10 @@
 "use server"
 
+import { cache } from "react"
 import db from "@/lib/firebase"
 import { User } from "@/types/firebase"
 
-export const getUsers = async (): Promise<User[] | null> => {
+export const getUsers = cache(async (): Promise<User[] | null> => {
   const ref = db.ref("users")
   let users = null
   await ref.once("value", (data) => {
@@ -11,16 +12,16 @@ export const getUsers = async (): Promise<User[] | null> => {
     users = val == null ? [] : Object.keys(val).map((key) => ({ ...val[key], id: key }))
   })
   return users
-}
+})
 
-export const getUser = async (id: string): Promise<User | null> => {
+export const getUser = cache(async (id: string): Promise<User | null> => {
   const ref = db.ref(`users/${id}`)
   let users = null
   await ref.once("value", (data) => {
     users = data.val()
   })
   return users
-}
+})
 
 export const removeUser = async (id: string): Promise<boolean> => {
   if (id.includes("/")) return false

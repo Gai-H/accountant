@@ -1,25 +1,26 @@
 "use server"
 
+import { cache } from "react"
 import db from "@/lib/firebase"
 import { Transaction, Transactions } from "@/types/firebase"
 
-export const getTransactions = async (): Promise<Transactions | null> => {
+export const getTransactions = cache(async (): Promise<Transactions | null> => {
   const ref = db.ref("transactions")
   let transactions = null
   await ref.orderByChild("timestamp").once("value", (data) => {
     transactions = data.val() ?? {}
   })
   return transactions
-}
+})
 
-export const getTransaction = async (transactionId: string): Promise<Transaction | null> => {
+export const getTransaction = cache(async (transactionId: string): Promise<Transaction | null> => {
   const ref = db.ref(`transactions/${transactionId}`)
   let transaction = null
   await ref.once("value", (data) => {
     transaction = data.val()
   })
   return transaction
-}
+})
 
 export const insertTransaction = async (transaction: Transaction): Promise<boolean> => {
   const ref = db.ref("transactions")

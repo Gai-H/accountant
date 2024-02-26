@@ -1,7 +1,5 @@
-"use client"
-
-import useSWR from "swr"
-import { Currencies } from "@/types/firebase"
+import { notFound } from "next/navigation"
+import { getCurrencies } from "@/lib/firebase/currencies"
 
 type Props = {
   amount: number
@@ -9,9 +7,12 @@ type Props = {
   colored?: boolean
 }
 
-// TODO: RSC化
-function Amount({ amount, currency, colored }: Props) {
-  const { data: currencies } = useSWR<Currencies>("/api/currencies")
+async function Amount({ amount, currency, colored }: Props) {
+  const currencies = await getCurrencies()
+
+  if (currencies === null) {
+    notFound()
+  }
 
   const formatter = new Intl.NumberFormat("ja-JP", {
     maximumFractionDigits: 2,
@@ -20,11 +21,7 @@ function Amount({ amount, currency, colored }: Props) {
 
   return (
     <div>
-      {!currencies || (currencies && !(currency in currencies)) ? (
-        <span className="inline-block mr-1">?</span>
-      ) : (
-        <span className="inline-block mr-1">{currencies[currency].symbol}</span>
-      )}
+      <span className="inline-block mr-1">{currencies[currency].symbol}</span>
       {colored && amount > 0 && <span className="text-green-600">{formatter.format(amount)}</span>}
       {colored && amount < 0 && <span className="text-red-600">{formatter.format(amount)}</span>}
       {(!colored || amount == 0) && <span>{formatter.format(amount)}</span>}

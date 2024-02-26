@@ -2,14 +2,24 @@
 
 import { cache } from "react"
 import db from "@/lib/firebase"
-import { User } from "@/types/firebase"
+import { User, Users } from "@/types/firebase"
 
-export const getUsers = cache(async (): Promise<User[] | null> => {
+// TODO: 消す
+export const getUsersArray = cache(async (): Promise<User[] | null> => {
   const ref = db.ref("users")
   let users = null
   await ref.once("value", (data) => {
     const val = data.val()
     users = val == null ? [] : Object.keys(val).map((key) => ({ ...val[key], id: key }))
+  })
+  return users
+})
+
+export const getUsers = cache(async (): Promise<Users | null> => {
+  const ref = db.ref("users")
+  let users = null
+  await ref.once("value", (data) => {
+    users = data.val()
   })
   return users
 })

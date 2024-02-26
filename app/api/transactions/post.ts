@@ -4,7 +4,7 @@ import { schema } from "@/app/create/form"
 import { getCurrencies } from "@/lib/firebase/currencies"
 import { getLock } from "@/lib/firebase/lock"
 import { insertTransaction } from "@/lib/firebase/transactions"
-import { getUsers } from "@/lib/firebase/users"
+import { getUsersArray } from "@/lib/firebase/users"
 import { auth } from "@/lib/next-auth/auth"
 import { Response } from "@/types/api"
 import { Transaction } from "@/types/firebase"
@@ -134,7 +134,7 @@ const validateTransaction = async (transaction: Transaction): Promise<Validation
   }
 
   // check from and to
-  const users = await getUsers()
+  const users = await getUsersArray()
   let fromSum = 0
   let toSum = 0
   if (!users) {

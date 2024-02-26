@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getUsers } from "@/lib/firebase/users"
+import { getUsersArray } from "@/lib/firebase/users"
 import { Response } from "@/types/api"
 import { UsersGetResponse } from "@/types/firebase"
 
@@ -8,7 +8,7 @@ const dynamic = "force-dynamic"
 const revalidate = 0
 
 async function GET(): Promise<NextResponse<Response<UsersGetResponse>>> {
-  const users = await getUsers()
+  const users = await getUsersArray()
 
   if (users == null) {
     return NextResponse.json(

@@ -20,13 +20,18 @@ export type Transactions = {
 
 export type User = {
   provider: string
-  id: string
+  id: string // TODO: 消す
   providerName: string
   displayName: string
   image: string
   lastLogin: number
 }
 
+export type Users = {
+  [id: string]: User
+}
+
+// TODO: 消す
 export type UsersGetResponse = {
   [id: string]: {
     displayName: string

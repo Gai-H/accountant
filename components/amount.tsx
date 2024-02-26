@@ -1,3 +1,5 @@
+"use client"
+
 import useSWR from "swr"
 import { Currencies } from "@/types/firebase"
 
@@ -7,6 +9,7 @@ type Props = {
   colored?: boolean
 }
 
+// TODO: RSC化
 function Amount({ amount, currency, colored }: Props) {
   const { data: currencies } = useSWR<Currencies>("/api/currencies")
 
@@ -17,7 +20,11 @@ function Amount({ amount, currency, colored }: Props) {
 
   return (
     <div>
-      {!currencies || (currencies && !(currency in currencies)) ? <span className="mr-1 inline-block">?</span> : <span className="mr-1 inline-block">{currencies[currency].symbol}</span>}
+      {!currencies || (currencies && !(currency in currencies)) ? (
+        <span className="inline-block mr-1">?</span>
+      ) : (
+        <span className="inline-block mr-1">{currencies[currency].symbol}</span>
+      )}
       {colored && amount > 0 && <span className="text-green-600">{formatter.format(amount)}</span>}
       {colored && amount < 0 && <span className="text-red-600">{formatter.format(amount)}</span>}
       {(!colored || amount == 0) && <span>{formatter.format(amount)}</span>}

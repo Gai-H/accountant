@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import { DataRevalidator } from "@/components/data-revalidator"
 import { AddTransactionButton } from "@/components/index/add-transaction-button"
 import { PersonsTable } from "@/components/index/persons-table/table"
 import PageTitle from "@/components/page-title"
@@ -18,6 +19,7 @@ async function Page() {
         <AddTransactionButton lock={lock} />
       </div>
       <PersonsTable />
+      <DataRevalidator />
     </>
   )
 }

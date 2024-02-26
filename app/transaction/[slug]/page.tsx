@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import { DataRevalidator } from "@/components/data-revalidator"
 import PageTitle from "@/components/page-title"
 import { getLock } from "@/lib/firebase/lock"
 import { getTransaction } from "@/lib/firebase/transactions"
@@ -38,6 +39,7 @@ async function Page({ params: { slug } }: PageProps) {
         transactionId={slug}
         lock={lock}
       />
+      <DataRevalidator />
     </>
   )
 }

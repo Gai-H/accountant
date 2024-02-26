@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { Toaster } from "@/components/ui/toaster"
 import Header from "@/components/header"
 import { cn } from "@/lib/utils"
+import { DataRevalidator } from "./data-revalidator"
 import "./globals.css"
 import SessionProvider from "./session-provider"
 import SWR from "./swr"
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="p-5 lg:mx-auto lg:w-3/5 lg:p-10">{children}</main>
             <Toaster />
             <Analytics />
+            <DataRevalidator />
           </SWR>
         </SessionProvider>
       </body>

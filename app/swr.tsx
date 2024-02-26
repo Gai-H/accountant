@@ -31,7 +31,7 @@ function SWR({ children }: Props) {
           }
           return json.data
         },
-        refreshInterval: 3 * 60 * 1000, // 3 minutes
+        refreshInterval: 10 * 1000, // 10 seconds
       }}
     >
       {children}

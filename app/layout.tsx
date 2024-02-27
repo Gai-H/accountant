@@ -31,3 +31,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 
 // export const revalidate = 10
+export const revalidate = 0

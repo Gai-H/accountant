@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 import { schema } from "@/app/settings/currency"
 import { getCurrencies, updateCurrency } from "@/lib/firebase/currencies"
@@ -47,6 +48,7 @@ async function POST(req: NextRequest): Promise<NextResponse<Response<null, strin
   }
 
   const res = await updateCurrency(id, currency)
+  revalidatePath("/", "layout")
   if (res) {
     return NextResponse.json(
       {

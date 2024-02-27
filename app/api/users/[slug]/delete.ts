@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 import { getTransactions } from "@/lib/firebase/transactions"
 import { removeUser } from "@/lib/firebase/users"
@@ -48,6 +49,7 @@ async function DELETE(_: NextRequest, { params }: { params: { slug: string } }):
   }
 
   const res = await removeUser(id)
+  revalidatePath("/", "layout")
   if (res) {
     return NextResponse.json(
       {

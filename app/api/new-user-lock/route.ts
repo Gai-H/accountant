@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 import { schema } from "@/app/settings/new-user-lock"
 import { getNewUserLock, updateNewUserLock } from "@/lib/firebase/new-user-lock"
@@ -43,7 +44,7 @@ async function PUT(req: NextRequest): Promise<NextResponse<Response<null, string
   }
 
   const updated = updateNewUserLock(json["new-user-lock"])
-
+  revalidatePath("/", "layout")
   if (!updated) {
     return NextResponse.json(
       {

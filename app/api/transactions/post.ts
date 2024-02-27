@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 import * as z from "zod"
 import { schema } from "@/app/create/form"
@@ -75,6 +76,7 @@ async function POST(req: NextRequest): Promise<NextResponse<Response<null, strin
   }
 
   const res = await insertTransaction(transaction)
+  revalidatePath("/")
   if (res) {
     return NextResponse.json(
       {

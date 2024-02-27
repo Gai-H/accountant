@@ -3,6 +3,7 @@
 import { ReactNode } from "react"
 import useSWR from "swr"
 import PageTitle from "@/components/page-title"
+import SWR from "@/components/swr"
 import { Currencies } from "@/types/firebase"
 import { CurrencySettingCard, CurrencySettingCardSkeleton } from "./currency"
 import { LockSettingCard, LockSettingCardSkeleton } from "./lock"
@@ -11,14 +12,14 @@ import { UserSettingCard } from "./user"
 
 function Settings() {
   return (
-    <>
+    <SWR>
       <PageTitle>プロジェクト設定</PageTitle>
       <div className="flex flex-col gap-3">
         <LockSettingSection />
         <UserSettingSection />
         <CurrencySettingSection />
       </div>
-    </>
+    </SWR>
   )
 }
 
@@ -92,7 +93,7 @@ function UserSettingSection() {
   return (
     <section>
       <SectionTitle>ユーザ</SectionTitle>
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-3 mb-2">
+      <div className="grid grid-cols-1 gap-2 mb-2 md:grid-cols-3">
         <UserSettingCard />
         <NewUserLockSettingCard />
       </div>

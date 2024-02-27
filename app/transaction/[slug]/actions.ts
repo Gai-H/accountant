@@ -11,6 +11,7 @@ const remove = async (transactionId: string): Promise<boolean> => {
 
   const res = await removeTransaction(transactionId)
   log.info("Trying to remove a transaction", { transactionId, userId: session!.user.id })
+  await log.flush()
   if (res) {
     revalidatePath(`/transaction/${transactionId}`)
     revalidatePath("/")

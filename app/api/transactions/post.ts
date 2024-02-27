@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
+import { AxiomRequest, withAxiom } from "next-axiom"
 import * as z from "zod"
 import { schema } from "@/app/create/form"
 import { getCurrencies } from "@/lib/firebase/currencies"
@@ -10,7 +11,7 @@ import { auth } from "@/lib/next-auth/auth"
 import { Response } from "@/types/api"
 import { Transaction } from "@/types/firebase"
 
-async function POST(req: NextRequest): Promise<NextResponse<Response<null, string>>> {
+const POST = withAxiom(async (req: AxiomRequest): Promise<NextResponse<Response<null, string>>> => {
   const session = await auth()
   if (!session) {
     return NextResponse.json(
@@ -77,6 +78,7 @@ async function POST(req: NextRequest): Promise<NextResponse<Response<null, strin
 
   const res = await insertTransaction(transaction)
   revalidatePath("/")
+  req.log.info("Trying to insert a transaction", { transaction, userId: session.user.id })
   if (res) {
     return NextResponse.json(
       {
@@ -98,7 +100,7 @@ async function POST(req: NextRequest): Promise<NextResponse<Response<null, strin
       },
     )
   }
-}
+})
 
 export { POST }
 

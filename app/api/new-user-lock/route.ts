@@ -1,7 +1,9 @@
 import { revalidatePath } from "next/cache"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
+import { AxiomRequest, withAxiom } from "next-axiom"
 import { schema } from "@/app/settings/new-user-lock"
 import { getNewUserLock, updateNewUserLock } from "@/lib/firebase/new-user-lock"
+import { auth } from "@/lib/next-auth/auth"
 import { Response } from "@/types/api"
 
 const dynamic = "force-dynamic"
@@ -28,7 +30,20 @@ async function GET(): Promise<NextResponse<Response<boolean>>> {
   })
 }
 
-async function PUT(req: NextRequest): Promise<NextResponse<Response<null, string>>> {
+const PUT = withAxiom(async (req: AxiomRequest): Promise<NextResponse<Response<null, string>>> => {
+  const session = await auth()
+  if (!session) {
+    return NextResponse.json(
+      {
+        message: "error",
+        error: "not signed in",
+      },
+      {
+        status: 401,
+      },
+    )
+  }
+
   const json = await req.json()
 
   if (!schema.safeParse(json).success) {
@@ -43,8 +58,10 @@ async function PUT(req: NextRequest): Promise<NextResponse<Response<null, string
     )
   }
 
-  const updated = updateNewUserLock(json["new-user-lock"])
+  const value = json["new-user-lock"]
+  const updated = updateNewUserLock(value)
   revalidatePath("/", "layout")
+  req.log.info("Trying to update new-user-lock", { lock: value, userId: session.user.id })
   if (!updated) {
     return NextResponse.json(
       {
@@ -61,6 +78,6 @@ async function PUT(req: NextRequest): Promise<NextResponse<Response<null, string
     message: "ok",
     data: null,
   })
-}
+})
 
 export { GET, dynamic, revalidate, PUT }

@@ -3,7 +3,7 @@ import { Form, FormSkeleton } from "@/components/form"
 
 function Create() {
   return (
-    <Suspense fallback={<FormSkeleton />}>
+    <Suspense fallback={<FormSkeleton edit={false} />}>
       <Form />
     </Suspense>
   )

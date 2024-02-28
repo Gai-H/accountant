@@ -1,4 +1,7 @@
+import Link from "next/link"
 import { notFound } from "next/navigation"
+import { Pencil } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { DataRevalidator } from "@/components/data-revalidator"
 import PageTitle from "@/components/page-title"
 import { getLock } from "@/lib/firebase/lock"
@@ -35,10 +38,21 @@ async function Page({ params: { slug } }: PageProps) {
           timestamp={transaction.timestamp}
         />
       </div>
-      <RemoveButton
-        transactionId={slug}
-        lock={lock}
-      />
+      <div className="flex gap-2">
+        <Button
+          className="w-32"
+          asChild={true}
+        >
+          <Link href={`/transaction/${slug}/edit`}>
+            <Pencil className="w-4 h-4 mr-2" />
+            編集
+          </Link>
+        </Button>
+        <RemoveButton
+          transactionId={slug}
+          lock={lock}
+        />
+      </div>
       <DataRevalidator />
     </>
   )

@@ -11,24 +11,18 @@ import { Form as ShadcnForm } from "@/components/ui/form"
 import { useToast } from "@/components/ui/use-toast"
 import PageTitle from "@/components/page-title"
 import { Currencies, Users } from "@/types/firebase"
-import { insert } from "./actions"
+import { insert, update } from "./actions"
 import { CurrencyFormField, DescriptionFormField, FromFormField, TitleFormField, ToFormField } from "./fields"
 import { schema } from "./schema"
 
 type InteractiveFormProps = {
   users: Users<"displayName" | "image">
   currencies: Currencies
+  defaultValues: z.infer<typeof schema>
+  transactionId?: string
 }
 
-const defaultValues: z.infer<typeof schema> = {
-  title: "",
-  description: "",
-  from: [{ id: "", amount: Number.MIN_SAFE_INTEGER }],
-  to: [{ id: "", amount: Number.MIN_SAFE_INTEGER }],
-  currency: "",
-}
-
-function InteractiveForm({ users, currencies }: InteractiveFormProps) {
+function InteractiveForm({ users, currencies, defaultValues, transactionId }: InteractiveFormProps) {
   const [sending, setSending] = useState<boolean>(false)
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -37,8 +31,7 @@ function InteractiveForm({ users, currencies }: InteractiveFormProps) {
   const { toast } = useToast()
   const router = useRouter()
 
-  const onSubmit = async (values: z.infer<typeof schema>) => {
-    setSending(true)
+  const insertTransaction = async (values: z.infer<typeof schema>) => {
     const res = await insert(values)
     if (res.ok) {
       toast({
@@ -51,6 +44,31 @@ function InteractiveForm({ users, currencies }: InteractiveFormProps) {
         description: res.message,
         variant: "destructive",
       })
+    }
+  }
+
+  const updateTransaction = async (values: z.infer<typeof schema>, transactionId: string) => {
+    const res = await update(values, transactionId)
+    if (res.ok) {
+      toast({
+        title: "記録を更新しました",
+      })
+      router.push("/")
+    } else {
+      toast({
+        title: "エラーが発生しました",
+        description: res.message,
+        variant: "destructive",
+      })
+    }
+  }
+
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    setSending(true)
+    if (transactionId === undefined) {
+      await insertTransaction(values)
+    } else {
+      await updateTransaction(values, transactionId)
     }
     setSending(false)
   }

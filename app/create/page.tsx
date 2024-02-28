@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { Form, FormSkeleton } from "./form"
+import { Form, FormSkeleton } from "@/components/form"
 
 function Create() {
   return (

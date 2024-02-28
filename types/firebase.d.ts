@@ -14,6 +14,12 @@ export type Transaction = {
   }[]
   description?: string
   addedBy: string
+  editHistory?: {
+    [editHistoryId: string]: {
+      timestamp: number
+      editedBy: string
+    }
+  }
 }
 
 export type Transactions = {

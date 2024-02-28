@@ -5,7 +5,7 @@ import { schema } from "."
 import { z } from "zod"
 import { getCurrencies } from "@/lib/firebase/currencies"
 import { getLock } from "@/lib/firebase/lock"
-import { insertTransaction } from "@/lib/firebase/transactions"
+import { getTransaction, insertTransaction, updateTransaction } from "@/lib/firebase/transactions"
 import { getUsersArray } from "@/lib/firebase/users"
 import { auth } from "@/lib/next-auth/auth"
 import { logger } from "@/lib/server-action-logger"
@@ -61,7 +61,78 @@ const insert = logger(async (formValue: FormValue): Promise<ServerActionResponse
   }
 })
 
-export { insert }
+const update = logger(async (formValue: FormValue, transactionId: string): Promise<ServerActionResponse<null>> => {
+  const session = await auth()
+
+  if (!session) {
+    return {
+      ok: false,
+      message: "Not signed in",
+    }
+  }
+
+  const lock = await getLock()
+  if (lock === null || lock) {
+    return {
+      ok: false,
+      message: "Project is locked",
+    }
+  }
+
+  if (!schema.safeParse(formValue).success) {
+    return {
+      ok: false,
+      message: "Invalid data structure",
+    }
+  }
+
+  const target = await getTransaction(transactionId)
+  if (target === null) {
+    return {
+      ok: false,
+      message: "Transaction not found",
+    }
+  }
+
+  const updatedEditHistory: Transaction["editHistory"] = {
+    ...target.editHistory,
+    [`${Date.now()}-${session.user.id}`]: {
+      timestamp: Date.now() / 1000,
+      editedBy: session.user.id,
+    },
+  }
+  const updatedTransaction: Transaction = {
+    ...target,
+    title: formValue.title,
+    description: formValue.description,
+    from: formValue.from,
+    to: formValue.to,
+    currency: formValue.currency,
+    editHistory: updatedEditHistory,
+  }
+
+  const validationResult = await validateTransaction(updatedTransaction)
+  if (!validationResult.ok) {
+    return validationResult
+  }
+
+  const updateResult = await updateTransaction(updatedTransaction, transactionId)
+  revalidatePath("/")
+
+  if (updateResult) {
+    return {
+      ok: true,
+      data: null,
+    }
+  } else {
+    return {
+      ok: false,
+      message: "Internal server error while updating a transaction",
+    }
+  }
+})
+
+export { insert, update }
 
 type ValidationResult =
   | {

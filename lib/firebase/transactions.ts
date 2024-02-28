@@ -33,6 +33,19 @@ export const insertTransaction = async (transaction: Transaction): Promise<boole
   return true
 }
 
+export const updateTransaction = async (transaction: Transaction, id: string): Promise<boolean> => {
+  if (id.includes("/") || !id.startsWith("-")) return false
+
+  const ref = db.ref(`transactions/${id}`)
+  await ref.set(transaction, (error) => {
+    if (error) {
+      console.error("Failed to update transaction: " + error)
+      return false
+    }
+  })
+  return true
+}
+
 export const removeTransaction = async (id: string): Promise<boolean> => {
   if (id.includes("/") || !id.startsWith("-")) return false
 

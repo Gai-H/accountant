@@ -1,23 +1,33 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { Logger } from "next-axiom"
+import { getLock } from "@/lib/firebase/lock"
 import { removeTransaction } from "@/lib/firebase/transactions"
-import { auth } from "@/lib/next-auth/auth"
+import { ServerActionResponse } from "@/types/server-action"
 
-const remove = async (transactionId: string): Promise<boolean> => {
-  const session = await auth()
-  const log = new Logger()
+const remove = async (transactionId: string): Promise<ServerActionResponse<null>> => {
+  const lock = await getLock()
+  if (lock === null || lock) {
+    return {
+      ok: false,
+      message: "Project is locked",
+    }
+  }
 
   const res = await removeTransaction(transactionId)
-  log.info("Trying to remove a transaction", { transactionId, userId: session!.user.id })
-  await log.flush()
   if (res) {
     revalidatePath(`/transaction/${transactionId}`)
     revalidatePath("/")
+    return {
+      ok: true,
+      data: null,
+    }
+  } else {
+    return {
+      ok: false,
+      message: "Internal server error while removing a transaction",
+    }
   }
-
-  return res
 }
 
 export { remove }

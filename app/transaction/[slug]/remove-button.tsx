@@ -30,7 +30,7 @@ function RemoveButton({ transactionId, lock }: RemoveButtonProps) {
     setSending(true)
     router.prefetch("/")
     const res = await remove(transactionId)
-    if (res) {
+    if (res.ok) {
       toast({
         title: "削除に成功しました",
       })

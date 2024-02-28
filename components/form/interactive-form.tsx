@@ -54,7 +54,7 @@ function InteractiveForm({ users, currencies, defaultValues, transactionId }: In
       toast({
         title: "記録を更新しました",
       })
-      router.push("/")
+      router.push(`/transaction/${transactionId}`)
     } else {
       toast({
         title: "エラーが発生しました",

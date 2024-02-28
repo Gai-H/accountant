@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import useSWR, { mutate } from "swr"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2, Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -11,7 +10,8 @@ import { Button } from "@/components/ui/button"
 import { Form as ShadcnForm } from "@/components/ui/form"
 import { useToast } from "@/components/ui/use-toast"
 import PageTitle from "@/components/page-title"
-import { Currencies, Users, UsersGetResponse } from "@/types/firebase"
+import { Currencies, Users } from "@/types/firebase"
+import { insert } from "./actions"
 import { CurrencyFormField, DescriptionFormField, FromFormField, TitleFormField, ToFormField } from "./fields"
 import { schema } from "./schema"
 
@@ -39,18 +39,16 @@ function InteractiveForm({ users, currencies }: InteractiveFormProps) {
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     setSending(true)
-    const res = await fetch("/api/transactions", { method: "POST", body: JSON.stringify(values) })
-    const json = await res.json()
-    if (json.message === "ok") {
+    const res = await insert(values)
+    if (res.ok) {
       toast({
         title: "記録を追加しました",
       })
-      await mutate("/api/transactions")
       router.push("/")
     } else {
       toast({
         title: "エラーが発生しました",
-        description: json.error,
+        description: res.message,
         variant: "destructive",
       })
     }

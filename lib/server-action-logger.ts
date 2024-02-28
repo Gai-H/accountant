@@ -5,9 +5,8 @@ import { ServerActionResponse } from "@/types/server-action"
 type ServerAction<T extends any[] = any[], R = any> = (...args: T) => Promise<ServerActionResponse<R>>
 
 const logger = <T extends any[], R>(action: ServerAction<T, R>): ServerAction<T, R> => {
-  const log = new Logger()
-
   return async (...args) => {
+    const log = new Logger()
     const session = await auth()
 
     if (!session) {

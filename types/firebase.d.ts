@@ -1,3 +1,5 @@
+type PickOrAll<T, K extends keyof T | undefined = undefined> = [K] extends [never] ? T : Pick<T, Extract<K, keyof T>>
+
 export type Transaction = {
   timestamp: number
   title: string
@@ -27,8 +29,8 @@ export type User = {
   lastLogin: number
 }
 
-export type Users = {
-  [id: string]: User
+export type Users<K = keyof User> = {
+  [id: string]: PickOrAll<User, K>
 }
 
 // TODO: 消す

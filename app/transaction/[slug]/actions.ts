@@ -3,9 +3,10 @@
 import { revalidatePath } from "next/cache"
 import { getLock } from "@/lib/firebase/lock"
 import { removeTransaction } from "@/lib/firebase/transactions"
+import { logger } from "@/lib/server-action-logger"
 import { ServerActionResponse } from "@/types/server-action"
 
-const remove = async (transactionId: string): Promise<ServerActionResponse<null>> => {
+const remove = logger(async (transactionId: string): Promise<ServerActionResponse<null>> => {
   const lock = await getLock()
   if (lock === null || lock) {
     return {
@@ -28,6 +29,6 @@ const remove = async (transactionId: string): Promise<ServerActionResponse<null>
       message: "Internal server error while removing a transaction",
     }
   }
-}
+})
 
 export { remove }

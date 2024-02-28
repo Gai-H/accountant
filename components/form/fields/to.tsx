@@ -20,7 +20,7 @@ type UseSplit = {
 const useSplit = (): UseSplit => {
   const fromFieldValue = useWatch<z.infer<typeof schema>, "from">({ name: "from" })
   const { field: toField } = useController<z.infer<typeof schema>, "to">({ name: "to" })
-  const [split, setSplit] = useState<boolean>(true)
+  const [split, setSplit] = useState<boolean>(new Set(toField.value.map((f) => f.amount)).size === 1)
 
   const splitAmount =
     fromFieldValue.some((f) => f.amount === Number.MIN_SAFE_INTEGER) || fromFieldValue.length === 0
@@ -152,7 +152,7 @@ function SplitCheckbox({ split, setSplit }: SplitCheckboxProps) {
   }
 
   return (
-    <div className="flex w-32 items-center gap-2 rounded-md border px-3 justify-around h-10">
+    <div className="flex items-center justify-around w-32 h-10 gap-2 px-3 border rounded-md">
       <Checkbox
         id="to-checkbox-split"
         checked={split}
@@ -160,7 +160,7 @@ function SplitCheckbox({ split, setSplit }: SplitCheckboxProps) {
       />
       <label
         htmlFor="to-checkbox-split"
-        className="cursor-pointer text-sm font-medium leading-none"
+        className="text-sm font-medium leading-none cursor-pointer"
       >
         割り勘する
       </label>
@@ -216,7 +216,7 @@ function UserSelect({ field, users, index }: UserSelectProps) {
       onValueChange={handleValueChange}
       value={value}
     >
-      <SelectTrigger className="w-32 flex-grow md:flex-grow-0">
+      <SelectTrigger className="flex-grow w-32 md:flex-grow-0">
         <SelectValue placeholder="人" />
       </SelectTrigger>
       <SelectContent>
@@ -283,7 +283,7 @@ function RemoveItemButton({ field, index }: RemoveItemProps) {
       onClick={handleClick}
       disabled={disabled}
     >
-      <Trash2 className="h-4 w-4" />
+      <Trash2 className="w-4 h-4" />
     </Button>
   )
 }

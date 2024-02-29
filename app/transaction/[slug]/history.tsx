@@ -71,7 +71,7 @@ async function RecordItem({ record, latest, edit }: RecordItemProps) {
         )}
       </Avatar>
       <div>
-        <p className={emphasize ? "text-base" : "text-sm"}>
+        <div className={emphasize ? "text-base" : "text-sm"}>
           <span className="mr-1.5 font-medium">{user === undefined ? "unknown" : user.displayName}</span>
           によって{edit ? "編集" : "追加"}
           {latest && (
@@ -82,7 +82,7 @@ async function RecordItem({ record, latest, edit }: RecordItemProps) {
               最新版
             </Badge>
           )}
-        </p>
+        </div>
         <div className={`${emphasize ? "text-sm" : "text-xs"} text-muted-foreground`}>
           <Timestamp timestamp={record.timestamp} />
         </div>

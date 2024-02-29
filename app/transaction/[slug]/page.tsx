@@ -7,9 +7,9 @@ import PageTitle from "@/components/page-title"
 import { getLock } from "@/lib/firebase/lock"
 import { getTransaction } from "@/lib/firebase/transactions"
 import { Description } from "./description"
+import { History } from "./history"
 import { MoneyTable } from "./money-table"
 import { RemoveButton } from "./remove-button"
-import { Submitter } from "./submitter"
 
 type PageProps = {
   params: {
@@ -33,10 +33,7 @@ async function Page({ params: { slug } }: PageProps) {
           <MoneyTable transaction={transaction} />
         </div>
         <Description description={transaction.description} />
-        <Submitter
-          userId={transaction.addedBy}
-          timestamp={transaction.timestamp}
-        />
+        <History transaction={transaction} />
       </div>
       <div className="flex gap-2">
         <Button

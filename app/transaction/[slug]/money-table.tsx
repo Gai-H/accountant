@@ -63,7 +63,7 @@ async function PersonCard({ userId, amount, currencyId }: PersonCardProps) {
     notFound()
   }
 
-  const formattedAmount = Number.isInteger(amount) ? amount : amount.toFixed(3)
+  const formattedAmount = amount.toLocaleString("ja-JP", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
 
   return (
     <Card className="shadow-none py-2.5 px-4">
@@ -128,7 +128,7 @@ async function Sum({ sum, currencyId }: SumProps) {
       <h2 className="ml-auto text-lg font-medium">合計</h2>
       <p className="mx-3">
         <span className="mr-1.5">{currency.symbol}</span>
-        {sum}
+        {sum.toLocaleString("ja-JP")}
       </p>
     </div>
   )

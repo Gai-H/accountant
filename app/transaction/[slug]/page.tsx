@@ -28,27 +28,25 @@ async function Page({ params: { slug } }: PageProps) {
   return (
     <>
       <PageTitle>記録 {transaction.title}</PageTitle>
-      <div className="flex flex-col gap-4 mb-8 md:gap-6 md:grid md:grid-cols-2">
-        <div className="col-span-2">
-          <MoneyTable transaction={transaction} />
-        </div>
+      <MoneyTable transaction={transaction} />
+      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5 [&>*]:w-full [&>*]:h-fit">
         <Description description={transaction.description} />
         <History transaction={transaction} />
-      </div>
-      <div className="flex gap-2">
-        <Button
-          className="w-32"
-          asChild={true}
-        >
-          <Link href={`/transaction/${slug}/edit`}>
-            <Pencil className="w-4 h-4 mr-2" />
-            編集
-          </Link>
-        </Button>
-        <RemoveButton
-          transactionId={slug}
-          lock={lock}
-        />
+        <div className="flex gap-2">
+          <Button
+            className="w-32"
+            asChild={true}
+          >
+            <Link href={`/transaction/${slug}/edit`}>
+              <Pencil className="w-4 h-4 mr-2" />
+              編集
+            </Link>
+          </Button>
+          <RemoveButton
+            transactionId={slug}
+            lock={lock}
+          />
+        </div>
       </div>
       <DataRevalidator />
     </>

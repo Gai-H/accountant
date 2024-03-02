@@ -1,11 +1,9 @@
-import { notFound } from "next/navigation"
 import { ChevronsDown, ChevronsRight } from "lucide-react"
-import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { getCurrency } from "@/lib/firebase/currencies"
-import { getUser } from "@/lib/firebase/users"
 import { Transaction } from "@/types/firebase"
+import { PersonCardList } from "./person-card-list"
+import { Sum } from "./sum"
 
 type MoneyTableProps = {
   transaction: Transaction
@@ -48,88 +46,3 @@ function MoneyTable({ transaction: { from, to, currency } }: MoneyTableProps) {
 }
 
 export { MoneyTable }
-
-type PersonCardProps = {
-  userId: string
-  amount: number
-  currencyId: string
-}
-
-async function PersonCard({ userId, amount, currencyId }: PersonCardProps) {
-  const user = await getUser(userId)
-  const currency = await getCurrency(currencyId)
-
-  if (user === null || currency === null) {
-    notFound()
-  }
-
-  const formattedAmount = amount.toLocaleString("ja-JP", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
-
-  return (
-    <Card className="shadow-none py-2.5 px-4">
-      <CardContent className="flex items-center p-0">
-        <Avatar className="mr-2.5">
-          <AvatarImage
-            src={user.image}
-            alt={user.displayName}
-          />
-        </Avatar>
-        <p className="mr-auto">{user.displayName}</p>
-        <p>
-          <span className="mr-1.5">{currency.symbol}</span>
-          {formattedAmount}
-        </p>
-      </CardContent>
-    </Card>
-  )
-}
-
-type PersonCardListProps = {
-  data: {
-    id: string
-    amount: number
-  }[]
-  currencyId: string
-}
-
-function PersonCardList({ data, currencyId }: PersonCardListProps) {
-  return (
-    <li className="flex flex-col gap-4 list-none">
-      {data.map(({ id, amount }) => (
-        <ul
-          className="w-full"
-          key={id}
-        >
-          <PersonCard
-            userId={id}
-            amount={amount}
-            currencyId={currencyId}
-          />
-        </ul>
-      ))}
-    </li>
-  )
-}
-
-type SumProps = {
-  sum: number
-  currencyId: string
-}
-
-async function Sum({ sum, currencyId }: SumProps) {
-  const currency = await getCurrency(currencyId)
-
-  if (currency === null) {
-    notFound()
-  }
-
-  return (
-    <div className="flex items-center w-full">
-      <h2 className="ml-auto text-lg font-medium">合計</h2>
-      <p className="mx-3">
-        <span className="mr-1.5">{currency.symbol}</span>
-        {sum.toLocaleString("ja-JP")}
-      </p>
-    </div>
-  )
-}

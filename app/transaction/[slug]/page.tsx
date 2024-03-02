@@ -6,9 +6,9 @@ import { DataRevalidator } from "@/components/data-revalidator"
 import PageTitle from "@/components/page-title"
 import { getLock } from "@/lib/firebase/lock"
 import { getTransaction } from "@/lib/firebase/transactions"
-import { Description } from "./description"
-import { History } from "./history"
-import { MoneyTable } from "./money-table"
+import { Description } from "./cards/description.tsx/description"
+import { History } from "./cards/history/history"
+import { MoneyTable } from "./cards/money-table/money-table"
 import { RemoveButton } from "./remove-button"
 
 type PageProps = {

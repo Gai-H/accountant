@@ -15,7 +15,7 @@ async function History({ transaction }: HistoryProps) {
   ]
 
   return (
-    <Card className="p-6 shadow-none min-h-[7rem] flex flex-col justify-center">
+    <Card className="p-6 shadow-none min-h-[7rem] flex flex-col justify-center h-fit">
       <CardContent className="flex flex-col p-0">
         {records.map((record, idx) => (
           <div key={idx}>

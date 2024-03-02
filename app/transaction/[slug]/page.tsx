@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Pencil } from "lucide-react"
@@ -6,9 +7,9 @@ import { DataRevalidator } from "@/components/data-revalidator"
 import PageTitle from "@/components/page-title"
 import { getLock } from "@/lib/firebase/lock"
 import { getTransaction } from "@/lib/firebase/transactions"
-import { Description } from "./cards/description.tsx/description"
-import { History } from "./cards/history/history"
-import { MoneyTable } from "./cards/money-table/money-table"
+import { Description, DescriptionSkeleton } from "./cards/description"
+import { History, HistorySkeleton } from "./cards/history"
+import { MoneyTable, MoneyTableSkeleton } from "./cards/money-table/"
 import { RemoveButton } from "./remove-button"
 
 type PageProps = {
@@ -28,10 +29,16 @@ async function Page({ params: { slug } }: PageProps) {
   return (
     <>
       <PageTitle>記録 {transaction.title}</PageTitle>
-      <MoneyTable transaction={transaction} />
-      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5 [&>*]:w-full [&>*]:h-fit">
-        <Description description={transaction.description} />
-        <History transaction={transaction} />
+      <Suspense fallback={<MoneyTableSkeleton />}>
+        <MoneyTable transaction={transaction} />
+      </Suspense>
+      <div className="grid grid-cols-1 gap-5 mt-5 md:grid-cols-2">
+        <Suspense fallback={<DescriptionSkeleton />}>
+          <Description description={transaction.description} />
+        </Suspense>
+        <Suspense fallback={<HistorySkeleton />}>
+          <History transaction={transaction} />
+        </Suspense>
         <div className="flex gap-2">
           <Button
             className="w-32"

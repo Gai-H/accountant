@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { TableCell, TableRow } from "@/components/ui/table"
-import Timestamp from "@/components/timestamp"
+import { Timestamp } from "@/components/timestamp"
 import { Transaction, Users } from "@/types/firebase"
 import { NormalAmountTableCell } from "./normal-amount-table-cell"
 

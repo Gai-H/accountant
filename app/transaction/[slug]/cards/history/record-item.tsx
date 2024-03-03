@@ -2,7 +2,7 @@ import { notFound } from "next/navigation"
 import { User } from "next-auth"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import Timestamp from "@/components/timestamp"
+import { Timestamp } from "@/components/timestamp"
 import { getUsers } from "@/lib/firebase/users"
 import type { Record } from "./types"
 

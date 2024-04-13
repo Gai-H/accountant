@@ -55,3 +55,8 @@ export type Currency = {
 export type Currencies = {
   [id: string]: Currency
 }
+
+export type Settings = {
+  newTransactionLock: boolean
+  newUserLock: boolean
+}

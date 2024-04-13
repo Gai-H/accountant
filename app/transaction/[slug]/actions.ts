@@ -1,14 +1,14 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { getLock } from "@/lib/firebase/lock"
+import { getSetting } from "@/lib/firebase/settings"
 import { removeTransaction } from "@/lib/firebase/transactions"
 import { logger } from "@/lib/server-action-logger"
 import { ServerActionResponse } from "@/types/server-action"
 
 const remove = logger(async (transactionId: string): Promise<ServerActionResponse<null>> => {
-  const lock = await getLock()
-  if (lock === null || lock) {
+  const newTransactionLock = await getSetting("newTransactionLock")
+  if (newTransactionLock === null || newTransactionLock) {
     return {
       ok: false,
       message: "Project is locked",

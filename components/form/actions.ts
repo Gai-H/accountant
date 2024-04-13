@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { schema } from "."
 import { z } from "zod"
 import { getCurrencies } from "@/lib/firebase/currencies"
-import { getLock } from "@/lib/firebase/lock"
+import { getSetting } from "@/lib/firebase/settings"
 import { getTransaction, insertTransaction, updateTransaction } from "@/lib/firebase/transactions"
 import { getUsersArray } from "@/lib/firebase/users"
 import { auth } from "@/lib/next-auth/auth"
@@ -24,8 +24,8 @@ const insert = logger(async (formValue: FormValue): Promise<ServerActionResponse
     }
   }
 
-  const lock = await getLock()
-  if (lock === null || lock) {
+  const newTransactionLock = await getSetting("newTransactionLock")
+  if (newTransactionLock === null || newTransactionLock) {
     return {
       ok: false,
       message: "Project is locked",
@@ -71,8 +71,8 @@ const update = logger(async (formValue: FormValue, transactionId: string): Promi
     }
   }
 
-  const lock = await getLock()
-  if (lock === null || lock) {
+  const newTransactionLock = await getSetting("newTransactionLock")
+  if (newTransactionLock === null || newTransactionLock) {
     return {
       ok: false,
       message: "Project is locked",

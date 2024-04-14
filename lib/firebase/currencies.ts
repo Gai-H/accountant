@@ -34,3 +34,16 @@ export const updateCurrency = async (id: string, currency: Currency): Promise<bo
   })
   return success
 }
+
+export const updateCurrencies = async (currencies: Currencies): Promise<boolean> => {
+  const ref = db.ref("currencies")
+  let success = false
+  await ref.update(currencies, (error) => {
+    if (error) {
+      console.error(error)
+    } else {
+      success = true
+    }
+  })
+  return success
+}

@@ -14,7 +14,7 @@ async function Page() {
         id="newTransactionLock"
       />
       <Item
-        title="新規ユーザのを制限する"
+        title="新規ユーザの参加を制限する"
         checked={settings["newUserLock"]}
         id="newUserLock"
       />

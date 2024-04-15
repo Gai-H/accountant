@@ -2,11 +2,13 @@ import { Suspense } from "react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Pencil } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import { ButtonLocker } from "@/components/button-locker"
 import { DataRevalidator } from "@/components/data-revalidator"
 import PageTitle from "@/components/page-title"
 import { getSetting } from "@/lib/firebase/settings"
 import { getTransaction } from "@/lib/firebase/transactions"
+import { cn } from "@/lib/utils"
 import { Description, DescriptionSkeleton } from "./cards/description"
 import { History, HistorySkeleton } from "./cards/history"
 import { MoneyTable, MoneyTableSkeleton } from "./cards/money-table/"
@@ -40,15 +42,15 @@ async function Page({ params: { slug } }: PageProps) {
           <History transaction={transaction} />
         </Suspense>
         <div className="flex gap-2">
-          <Button
-            className="w-32"
-            asChild={true}
-          >
-            <Link href={`/transaction/${slug}/edit`}>
+          <ButtonLocker lock={newTransactionLock}>
+            <Link
+              href={`/transaction/${slug}/edit`}
+              className={cn(buttonVariants({ variant: "default" }), newTransactionLock && "pointer-events-none opacity-50", "w-32")}
+            >
               <Pencil className="w-4 h-4 mr-2" />
               編集
             </Link>
-          </Button>
+          </ButtonLocker>
           <RemoveButton
             transactionId={slug}
             lock={newTransactionLock}

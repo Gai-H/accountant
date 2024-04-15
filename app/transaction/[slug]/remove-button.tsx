@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
-import Pop from "@/components/pop"
+import { ButtonLocker } from "@/components/button-locker"
 import { remove } from "./actions"
 
 type RemoveButtonProps = {
@@ -45,7 +45,7 @@ function RemoveButton({ transactionId, lock }: RemoveButtonProps) {
   }
 
   return (
-    <RemoveButtonFilter lock={lock}>
+    <ButtonLocker lock={lock}>
       <AlertDialog>
         <AlertDialogTrigger
           asChild={true}
@@ -53,7 +53,7 @@ function RemoveButton({ transactionId, lock }: RemoveButtonProps) {
         >
           <Button
             variant="destructive"
-            className={`w-32 ${(lock || sending) && "opacity-50 cursor-not-allowed"}`}
+            className={`w-32 ${(lock || sending) && "opacity-50 pointer-events-none"}`}
             asChild={true}
             disabled={sending}
           >
@@ -71,25 +71,8 @@ function RemoveButton({ transactionId, lock }: RemoveButtonProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </RemoveButtonFilter>
+    </ButtonLocker>
   )
 }
 
 export { RemoveButton }
-
-type RemoveButtonFilter = {
-  children: React.ReactNode
-  lock: boolean
-}
-
-function RemoveButtonFilter({ children, lock }: RemoveButtonFilter) {
-  return (
-    <Pop
-      trigger={children}
-      content={<div>この操作はロックされています</div>}
-      disabled={!lock}
-    />
-  )
-}
-
-export { RemoveButtonFilter }

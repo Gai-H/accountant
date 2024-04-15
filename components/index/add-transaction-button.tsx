@@ -2,8 +2,9 @@
 
 import Link from "next/link"
 import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Pop from "@/components/pop"
+import { buttonVariants } from "@/components/ui/button"
+import { ButtonLocker } from "@/components/button-locker"
+import { cn } from "@/lib/utils"
 
 type AddTransactionButtonProps = {
   lock: boolean
@@ -11,40 +12,16 @@ type AddTransactionButtonProps = {
 
 function AddTransactionButton({ lock }: AddTransactionButtonProps) {
   return (
-    <AddTransactionButtonFilter lock={lock}>
-      <Button
-        className={lock ? "opacity-50 cursor-not-allowed" : ""}
-        asChild={true}
+    <ButtonLocker lock={lock}>
+      <Link
+        href="/create"
+        className={cn(buttonVariants({ variant: "default" }), lock && "pointer-events-none opacity-50")}
       >
-        {lock ? (
-          <span>
-            <Plus className="w-4 h-4 mr-2" />
-            記録を追加
-          </span>
-        ) : (
-          <Link href="/create">
-            <Plus className="w-4 h-4 mr-2" />
-            記録を追加
-          </Link>
-        )}
-      </Button>
-    </AddTransactionButtonFilter>
+        <Plus className="w-4 h-4 mr-2" />
+        記録を追加
+      </Link>
+    </ButtonLocker>
   )
 }
 
 export { AddTransactionButton }
-
-type AddTransactionButtonFilterProps = {
-  lock: boolean
-  children: React.ReactNode
-}
-
-function AddTransactionButtonFilter({ lock, children }: AddTransactionButtonFilterProps) {
-  return (
-    <Pop
-      trigger={children}
-      content={<div>この操作はロックされています</div>}
-      disabled={!lock}
-    />
-  )
-}

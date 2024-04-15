@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Check, Loader2, Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Form as ShadcnForm } from "@/components/ui/form"
-import { useToast } from "@/components/ui/use-toast"
 import PageTitle from "@/components/page-title"
 import { Currencies, Users } from "@/types/firebase"
 import { insert, update } from "./actions"
@@ -29,21 +29,16 @@ function InteractiveForm({ users, currencies, defaultValues, transactionId }: In
     resolver: zodResolver(schema),
     defaultValues,
   })
-  const { toast } = useToast()
   const router = useRouter()
 
   const insertTransaction = async (values: z.infer<typeof schema>) => {
     const res = await insert(values)
     if (res.ok) {
-      toast({
-        title: "記録を追加しました",
-      })
+      toast.success("記録を追加しました")
       router.back()
     } else {
-      toast({
-        title: "エラーが発生しました",
+      toast.error("エラーが発生しました", {
         description: res.message,
-        variant: "destructive",
       })
     }
   }
@@ -51,15 +46,11 @@ function InteractiveForm({ users, currencies, defaultValues, transactionId }: In
   const updateTransaction = async (values: z.infer<typeof schema>, transactionId: string) => {
     const res = await update(values, transactionId)
     if (res.ok) {
-      toast({
-        title: "記録を更新しました",
-      })
+      toast.success("記録を更新しました")
       router.back()
     } else {
-      toast({
-        title: "エラーが発生しました",
+      toast.error("エラーが発生しました", {
         description: res.message,
-        variant: "destructive",
       })
     }
   }

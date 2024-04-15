@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Loader2, Trash2 } from "lucide-react"
+import { toast } from "sonner"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,7 +14,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { toast } from "@/components/ui/use-toast"
 import { ButtonLocker } from "@/components/button-locker"
 import { remove } from "./actions"
 
@@ -31,14 +31,11 @@ function RemoveButton({ transactionId, lock }: RemoveButtonProps) {
     router.prefetch("/")
     const res = await remove(transactionId)
     if (res.ok) {
-      toast({
-        title: "削除に成功しました",
-      })
+      toast.success("削除に成功しました")
       router.replace("/")
     } else {
-      toast({
-        title: "削除に失敗しました",
-        variant: "destructive",
+      toast.error("エラーが発生しました", {
+        description: "削除に失敗しました",
       })
     }
     setSending(false)

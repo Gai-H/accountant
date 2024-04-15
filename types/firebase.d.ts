@@ -26,7 +26,7 @@ export type Transactions = {
   [id: string]: Transaction
 }
 
-export type User = {
+export type U = {
   provider: string
   id: string // TODO: 消す
   providerName: string
@@ -35,8 +35,10 @@ export type User = {
   lastLogin: number
 }
 
-export type Users<K = keyof User> = {
-  [id: string]: PickOrAll<User, K>
+export type User<K = keyof U> = PickOrAll<U, K>
+
+export type Users<K = keyof U> = {
+  [id: string]: User<K>
 }
 
 // TODO: 消す

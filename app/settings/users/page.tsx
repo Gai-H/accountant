@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation"
+import { Lightbulb } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { getUsers } from "@/lib/firebase/users"
 import { Users } from "@/types/firebase"
@@ -21,7 +23,7 @@ async function Page() {
   )
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
       <Table>
         <TableHeader>
           <TableRow>
@@ -39,7 +41,12 @@ async function Page() {
           ))}
         </TableBody>
       </Table>
-    </>
+      <Alert>
+        <Lightbulb className="h-4 w-4" />
+        <AlertTitle>ユーザの参加を制限したいですか？</AlertTitle>
+        <AlertDescription>ロック設定より、新規ユーザの参加を制限できます。</AlertDescription>
+      </Alert>
+    </div>
   )
 }
 

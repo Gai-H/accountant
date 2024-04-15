@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Noto_Sans_JP as FontSans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
+import { Toaster as SonnerToaster } from "@/components/ui/sonner"
 import { Toaster } from "@/components/ui/toaster"
 import Header from "@/components/header"
 import { cn } from "@/lib/utils"
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main className="p-5 lg:mx-auto lg:w-3/5 lg:p-10">{children}</main>
         <Toaster />
+        <SonnerToaster />
         <Analytics />
       </body>
     </html>

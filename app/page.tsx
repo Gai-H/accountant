@@ -5,12 +5,12 @@ import { AddTransactionButton } from "@/components/index/add-transaction-button"
 import { PersonsTable } from "@/components/index/persons-table/table"
 import { PersonsTableSkeleton } from "@/components/index/persons-table/table-skeleton"
 import PageTitle from "@/components/page-title"
-import { getLock } from "@/lib/firebase/lock"
+import { getSetting } from "@/lib/firebase/settings"
 
 async function Page() {
-  const lock = await getLock()
+  const newTransactionLock = await getSetting("newTransactionLock")
 
-  if (lock === null) {
+  if (newTransactionLock === null) {
     notFound()
   }
 
@@ -18,7 +18,7 @@ async function Page() {
     <>
       <div className="flex justify-between mb-2">
         <PageTitle>記録一覧</PageTitle>
-        <AddTransactionButton lock={lock} />
+        <AddTransactionButton lock={newTransactionLock} />
       </div>
       <Suspense fallback={<PersonsTableSkeleton />}>
         <PersonsTable />

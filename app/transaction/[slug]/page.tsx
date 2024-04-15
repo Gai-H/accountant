@@ -5,7 +5,7 @@ import { Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DataRevalidator } from "@/components/data-revalidator"
 import PageTitle from "@/components/page-title"
-import { getLock } from "@/lib/firebase/lock"
+import { getSetting } from "@/lib/firebase/settings"
 import { getTransaction } from "@/lib/firebase/transactions"
 import { Description, DescriptionSkeleton } from "./cards/description"
 import { History, HistorySkeleton } from "./cards/history"
@@ -20,9 +20,9 @@ type PageProps = {
 
 async function Page({ params: { slug } }: PageProps) {
   const transaction = await getTransaction(slug)
-  const lock = await getLock()
+  const newTransactionLock = await getSetting("newTransactionLock")
 
-  if (transaction === null || lock === null) {
+  if (transaction === null || newTransactionLock === null) {
     notFound()
   }
 
@@ -51,7 +51,7 @@ async function Page({ params: { slug } }: PageProps) {
           </Button>
           <RemoveButton
             transactionId={slug}
-            lock={lock}
+            lock={newTransactionLock}
           />
         </div>
       </div>

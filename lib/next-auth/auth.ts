@@ -2,7 +2,7 @@ import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 
 import type { NextAuthOptions, User } from "next-auth"
 import { getServerSession } from "next-auth"
 import db from "@/lib/firebase"
-import { getNewUserLock } from "@/lib/firebase/new-user-lock"
+import { getSetting } from "@/lib/firebase/settings"
 import { provider as discordProvider } from "./providers/discord"
 import { provider as lineProvider } from "./providers/line"
 
@@ -13,7 +13,7 @@ export const config = {
       if (account == null || account.access_token == null || user === undefined) return false
 
       const isNewUser = await checkIfNewUser(user.id)
-      const newUserLock = await getNewUserLock()
+      const newUserLock = await getSetting("newUserLock")
 
       if (isNewUser && (newUserLock === null || newUserLock)) {
         return false

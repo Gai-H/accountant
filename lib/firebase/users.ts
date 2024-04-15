@@ -2,10 +2,10 @@
 
 import { cache } from "react"
 import db from "@/lib/firebase"
-import { User, Users } from "@/types/firebase"
+import { U, Users } from "@/types/firebase"
 
 // TODO: 消す
-export const getUsersArray = cache(async (): Promise<User[] | null> => {
+export const getUsersArray = cache(async (): Promise<U[] | null> => {
   const ref = db.ref("users")
   let users = null
   await ref.once("value", (data) => {
@@ -24,7 +24,7 @@ export const getUsers = cache(async (): Promise<Users | null> => {
   return users
 })
 
-export const getUser = cache(async (id: string): Promise<User | null> => {
+export const getUser = cache(async (id: string): Promise<U | null> => {
   const ref = db.ref(`users/${id}`)
   let users = null
   await ref.once("value", (data) => {

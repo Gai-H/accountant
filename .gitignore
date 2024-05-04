@@ -38,3 +38,5 @@ next-env.d.ts
 .tool-versions
 
 .env
+
+/samples

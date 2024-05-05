@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ja">
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <Header />
-        <main className="p-5 lg:mx-auto lg:w-3/5 lg:p-10">{children}</main>
+        <main className="p-5 lg:mx-auto lg:max-w-full lg:p-10 lg:min-w-[60%] lg:w-fit">{children}</main>
         <Toaster />
         <Analytics />
       </body>

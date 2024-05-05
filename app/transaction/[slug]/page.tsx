@@ -4,7 +4,6 @@ import { notFound } from "next/navigation"
 import { Pencil } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { ButtonLocker } from "@/components/button-locker"
-import { DataRevalidator } from "@/components/data-revalidator"
 import PageTitle from "@/components/page-title"
 import { getSetting } from "@/lib/firebase/settings"
 import { getTransaction } from "@/lib/firebase/transactions"
@@ -57,7 +56,6 @@ async function Page({ params: { slug } }: PageProps) {
           />
         </div>
       </div>
-      <DataRevalidator />
     </>
   )
 }

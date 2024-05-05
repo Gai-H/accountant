@@ -1,6 +1,5 @@
 import { Suspense } from "react"
 import { notFound } from "next/navigation"
-import { DataRevalidator } from "@/components/data-revalidator"
 import { AddTransactionButton } from "@/components/index/add-transaction-button"
 import { PersonsTable } from "@/components/index/persons-table/table"
 import { PersonsTableSkeleton } from "@/components/index/persons-table/table-skeleton"
@@ -23,7 +22,6 @@ async function Page() {
       <Suspense fallback={<PersonsTableSkeleton />}>
         <PersonsTable />
       </Suspense>
-      <DataRevalidator />
     </>
   )
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Noto_Sans_JP as FontSans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
 import { Toaster } from "@/components/ui/sonner"
+import { DataRevalidator } from "@/components/data-revalidator"
 import Header from "@/components/header"
 import { cn } from "@/lib/utils"
 import "./globals.css"
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="p-5 lg:mx-auto lg:max-w-full lg:p-10 lg:min-w-[60%] lg:w-fit">{children}</main>
         <Toaster />
         <Analytics />
+        <DataRevalidator />
       </body>
     </html>
   )

@@ -35,7 +35,7 @@ async function Form({ defaultValues: specifiedDefaultValues, transactionId }: Fo
     description: "",
     from: [{ id: "", amount: Number.MIN_SAFE_INTEGER }],
     to: [{ id: "", amount: Number.MIN_SAFE_INTEGER }],
-    currency: "",
+    currency: Object.entries(currencies).length === 1 ? Object.keys(currencies)[0] : "",
   }
 
   return (
